@@ -24,8 +24,5 @@ public class AccountDTO {
     private ClientDTO clientDTO;
     @NotNull(message = "Select currency")
     private CurrencyDTO currencyDTO;
-    @DateTimeFormat(pattern = "dd.MM.yyyy")
-    private Date createdAt;
-    @DateTimeFormat(pattern = "dd.MM.yyyy")
-    private Date updatedAt;
+
 }

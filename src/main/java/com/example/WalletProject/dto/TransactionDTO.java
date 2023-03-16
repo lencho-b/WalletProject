@@ -15,8 +15,6 @@ public class TransactionDTO {
     @Max(value = 150, message = "Max size of comment = 150 characters")
     private String message;
 
-    private LocalDateTime startDateTime;
-    private LocalDateTime finishDateTime;
     private boolean status;
     @NotNull
     private TransactionTypeDTO type;

@@ -17,21 +17,16 @@ public class ClientDTO {
     @NotBlank(message = "Enter lastname")
     @Size(min = 2, max = 30, message = "Lastname should be between 2 and 30 characters")
     private String lastname;
-
+    @NotBlank(message = "Enter lastname")
+    @Size(min = 2, max = 30, message = "Lastname should be between 2 and 30 characters")
     private String patronymic;
     @DateTimeFormat(pattern = "dd.MM.yyyy")
     private Date dateOfBirth;
     @NotNull(message = "Enter your email")
     @Email(message = "Email format is not valid")
     private String email;
-
-    private String phoneNumber;
-    @DateTimeFormat(pattern = "dd.MM.yyyy")
-    private Date createdAt;
-    @DateTimeFormat(pattern = "dd.MM.yyyy")
-    private Date updatedAt;
     @NotNull
-    private boolean isDelete;
+    private String phoneNumber;
     @NotNull
     private boolean isVerify;
 

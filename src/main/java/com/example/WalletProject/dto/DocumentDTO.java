@@ -13,8 +13,5 @@ public class DocumentDTO {
     private Date issueDate;
     @NotNull(message = "Select country")
     private CountryDTO countryDTO;
-    @DateTimeFormat(pattern = "dd.MM.yyyy")
-    private Date createdAt;
-    @DateTimeFormat(pattern = "dd.MM.yyyy")
-    private Date updatedAt;
+
 }
