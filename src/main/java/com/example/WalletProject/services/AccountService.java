@@ -27,7 +27,7 @@ public class AccountService {
 
     }
 
-    public List<Account> getAccountsByAccountType(AccountType type){}
+//    public List<Account> getAccountsByAccountType(AccountType type)
 
     public Account getAccountById(BigInteger accountId){
         return accountRepository.findById(accountId).orElse(null);
