@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "client")
@@ -65,6 +66,46 @@ public class Client {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "document_id", referencedColumnName = "id")
     private Document document;
+
+    @OneToMany(mappedBy = "client",fetch = FetchType.LAZY)
+    private List<Account>accounts;
+
+    public Client(String firstname, String lastname, String patronymic, LocalDate dateOfBirth, String email, String phoneNumber) {
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.patronymic = patronymic;
+        this.dateOfBirth = dateOfBirth;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+    }
+
+    public Client(List<Account> accounts) {
+        this.accounts = accounts;
+    }
+
+    public Boolean getDelete() {
+        return isDelete;
+    }
+
+    public void setDelete(Boolean delete) {
+        isDelete = delete;
+    }
+
+    public Boolean getVerify() {
+        return isVerify;
+    }
+
+    public void setVerify(Boolean verify) {
+        isVerify = verify;
+    }
+
+    public List<Account> getAccounts() {
+        return accounts;
+    }
+
+    public void setAccounts(List<Account> accounts) {
+        this.accounts = accounts;
+    }
 
     public Client(Long id, String firstname, String lastname, String patronymic, LocalDate dateOfBirth, String email, String phoneNumber, LocalDate createdAt, LocalDate updatedAt, Boolean frozen, Boolean isDelete, Boolean isVerify, Document document) {
         this.id = id;

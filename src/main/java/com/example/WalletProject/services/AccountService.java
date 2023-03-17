@@ -2,9 +2,9 @@ package com.example.WalletProject.services;
 
 import com.example.WalletProject.models.DTO.AccountDto;
 import com.example.WalletProject.models.Entity.Account;
-import com.example.WalletProject.models.Entity.Client;
-import com.example.WalletProject.models.Entity.Currency;
 import com.example.WalletProject.repositories.AccountRepository;
+import com.example.WalletProject.repositories.ClientRepository;
+import com.example.WalletProject.repositories.CurrencyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +16,10 @@ import java.util.List;
 public class AccountService {
     @Autowired
     private AccountRepository accountRepository;
+    @Autowired
+    private ClientRepository clientRepository;
+    @Autowired
+    private CurrencyRepository currencyRepository;
 
     public List<AccountDto> getAllAccounts() {
         List<Account> accounts = accountRepository.findAll();
@@ -54,18 +58,17 @@ public class AccountService {
     @Transactional
     public void createAccount(AccountDto accountDto) {
         Account account = new Account();
-//        account.setId(accountDto.getId());
         account.setComment(accountDto.getComment());
         account.setCreatedAt(accountDto.getCreatedAt());
         account.setFrozen(accountDto.getFrozen());
         account.setName(accountDto.getName());
         account.setUpdatedAt(accountDto.getUpdatedAt());
         account.setValue(accountDto.getValue());
-        account.setClient(new Client(accountDto.getClientId()));
-        account.setCurrency(new Currency(accountDto.getCurrencyId()));
+        account.setClient(clientRepository.getById(accountDto.getClientId()));
+        account.setCurrency(currencyRepository.getById(accountDto.getCurrencyId()));
         accountRepository.save(account);
     }
-
+    @Transactional
     public void updateAccountById(Long id, AccountDto accountDto) {
     Account account = accountRepository.getById(id);
     account.setComment(accountDto.getComment());
@@ -74,8 +77,8 @@ public class AccountService {
     account.setName(accountDto.getName());
     account.setUpdatedAt(accountDto.getUpdatedAt());
     account.setValue(accountDto.getValue());
-        account.setClient(new Client(accountDto.getClientId()));
-        account.setCurrency(new Currency(accountDto.getCurrencyId()));
+    account.setClient(clientRepository.getById(accountDto.getClientId()));
+    account.setCurrency(currencyRepository.getById(accountDto.getCurrencyId()));
     accountRepository.save(account);
     }
 

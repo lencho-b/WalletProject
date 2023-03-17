@@ -11,34 +11,34 @@ import java.util.Objects;
  * A DTO for the {@link com.example.WalletProject.models.Entity.Client} entity
  */
 public class ClientDto implements Serializable {
-    private final Long id;
+    private Long id;
     @Size(max = 50)
     @NotNull
-    private final String firstname;
+    private  String firstname;
     @Size(max = 50)
     @NotNull
-    private final String lastname;
+    private  String lastname;
     @Size(max = 50)
     @NotNull
-    private final String patronymic;
+    private  String patronymic;
     @NotNull
-    private final LocalDate dateOfBirth;
+    private  LocalDate dateOfBirth;
     @NotNull
-    private final String email;
+    private  String email;
     @Size(max = 50)
     @NotNull
-    private final String phoneNumber;
+    private String phoneNumber;
     @NotNull
-    private final LocalDate createdAt;
+    private LocalDate createdAt;
     @NotNull
-    private final LocalDate updatedAt;
+    private LocalDate updatedAt;
     @NotNull
-    private final Boolean frozen;
+    private Boolean frozen;
     @NotNull
-    private final Boolean isDelete;
+    private Boolean isDelete;
     @NotNull
-    private final Boolean isVerify;
-    private final DocumentDto document;
+    private  Boolean isVerify;
+    private DocumentDto document;
 
     public ClientDto(Long id, String firstname, String lastname, String patronymic, LocalDate dateOfBirth, String email, String phoneNumber, LocalDate createdAt, LocalDate updatedAt, Boolean frozen, Boolean isDelete, Boolean isVerify, DocumentDto document) {
         this.id = id;
@@ -53,6 +53,19 @@ public class ClientDto implements Serializable {
         this.frozen = frozen;
         this.isDelete = isDelete;
         this.isVerify = isVerify;
+        this.document = document;
+    }
+
+    public ClientDto(String firstname, String lastname, String patronymic, LocalDate dateOfBirth, String email, String phoneNumber) {
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.patronymic = patronymic;
+        this.dateOfBirth = dateOfBirth;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+    }
+
+    public ClientDto(DocumentDto document) {
         this.document = document;
     }
 

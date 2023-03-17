@@ -26,8 +26,8 @@ public class AccountController
         AccountDto accountDto = accountService.getAccountById(id);
         return accountDto;
     }
-    @PatchMapping("/{id}")
-    public void updateAccountById(@PathVariable("id")Long id,AccountDto accountDto)
+    @PatchMapping("/{id}/update")
+    public void updateAccountById(@PathVariable("id")Long id, @RequestBody AccountDto accountDto)
     {
         accountService.updateAccountById(id,accountDto);
     }
