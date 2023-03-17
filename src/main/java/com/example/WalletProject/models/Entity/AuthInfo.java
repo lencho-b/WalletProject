@@ -1,4 +1,4 @@
-package com.example.WalletProject.models;
+package com.example.WalletProject.models.Entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -7,16 +7,16 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
-@Table(name = "auth")
-public class Auth {
+@Table(name = "auth_info")
+public class AuthInfo {
     @Id
-    @Column(name = "id", nullable = false)
+    @Column(name = "client_id", nullable = false)
     private Long id;
 
     @MapsId
     @OneToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "id", nullable = false)
+    @JoinColumn(name = "client_id", nullable = false)
     private Client client;
 
     @Size(max = 50)

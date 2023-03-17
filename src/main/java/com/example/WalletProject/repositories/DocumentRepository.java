@@ -1,7 +1,9 @@
 package com.example.WalletProject.repositories;
 
-import com.example.WalletProject.models.Document;
+import com.example.WalletProject.models.Entity.Document;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public interface DocumentRepository extends JpaRepository<Document, Integer> {
+@Repository
+public interface DocumentRepository extends JpaRepository<Document, Long> {
 }

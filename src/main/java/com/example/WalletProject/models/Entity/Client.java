@@ -1,10 +1,8 @@
-package com.example.WalletProject.models;
+package com.example.WalletProject.models.Entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDate;
 
@@ -12,6 +10,7 @@ import java.time.LocalDate;
 @Table(name = "client")
 public class Client {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 
@@ -48,18 +47,56 @@ public class Client {
     private LocalDate createdAt;
 
     @NotNull
-    @Column(name = "status", nullable = false)
-    private Boolean status = false;
+    @Column(name = "updated_at", nullable = false)
+    private LocalDate updatedAt;
+
+    @NotNull
+    @Column(name = "frozen", nullable = false)
+    private Boolean frozen = false;
+
+    @NotNull
+    @Column(name = "is_delete", nullable = false)
+    private Boolean isDelete = false;
 
     @NotNull
     @Column(name = "is_verify", nullable = false)
     private Boolean isVerify = false;
 
-    @NotNull
-    @OneToOne(fetch = FetchType.LAZY, optional = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "document_id", nullable = false)
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "document_id", referencedColumnName = "id")
     private Document document;
+
+    public Client(Long id, String firstname, String lastname, String patronymic, LocalDate dateOfBirth, String email, String phoneNumber, LocalDate createdAt, LocalDate updatedAt, Boolean frozen, Boolean isDelete, Boolean isVerify, Document document) {
+        this.id = id;
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.patronymic = patronymic;
+        this.dateOfBirth = dateOfBirth;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.frozen = frozen;
+        this.isDelete = isDelete;
+        this.isVerify = isVerify;
+        this.document = document;
+    }
+
+    public Client() {
+
+    }
+
+    public Client(Long id) {
+        this.id = id;
+    }
+
+    public Document getDocument() {
+        return document;
+    }
+
+    public void setDocument(Document document) {
+        this.document = document;
+    }
 
     public Long getId() {
         return id;
@@ -125,12 +162,28 @@ public class Client {
         this.createdAt = createdAt;
     }
 
-    public Boolean getStatus() {
-        return status;
+    public LocalDate getUpdatedAt() {
+        return updatedAt;
     }
 
-    public void setStatus(Boolean status) {
-        this.status = status;
+    public void setUpdatedAt(LocalDate updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public Boolean getFrozen() {
+        return frozen;
+    }
+
+    public void setFrozen(Boolean frozen) {
+        this.frozen = frozen;
+    }
+
+    public Boolean getIsDelete() {
+        return isDelete;
+    }
+
+    public void setIsDelete(Boolean isDelete) {
+        this.isDelete = isDelete;
     }
 
     public Boolean getIsVerify() {
@@ -139,14 +192,6 @@ public class Client {
 
     public void setIsVerify(Boolean isVerify) {
         this.isVerify = isVerify;
-    }
-
-    public Document getDocument() {
-        return document;
-    }
-
-    public void setDocument(Document document) {
-        this.document = document;
     }
 
 }

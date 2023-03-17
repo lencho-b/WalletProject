@@ -1,4 +1,4 @@
-package com.example.WalletProject.models;
+package com.example.WalletProject.models.Entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

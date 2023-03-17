@@ -1,7 +1,6 @@
-package com.example.WalletProject.models;
+package com.example.WalletProject.models.Entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 @Entity
@@ -12,16 +11,13 @@ public class Country {
     private Integer id;
 
     @Size(max = 50)
-    @NotNull
     @Column(name = "name", nullable = false, length = 50)
     private String name;
 
     @Size(max = 50)
-    @NotNull
     @Column(name = "phone_code", nullable = false, length = 50)
     private String phoneCode;
 
-    @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "document_format", nullable = false)
     private DocumentFormat documentFormat;

@@ -1,4 +1,4 @@
-package com.example.WalletProject.dto;
+package com.example.WalletProject.models.DTO;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -8,9 +8,9 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 /**
- * A DTO for the {@link com.example.WalletProject.models.Client} entity
+ * A DTO for the {@link com.example.WalletProject.models.Entity.Client} entity
  */
-public class AdminDto implements Serializable {
+public class ClientDto implements Serializable {
     private final Long id;
     @Size(max = 50)
     @NotNull
@@ -31,17 +31,16 @@ public class AdminDto implements Serializable {
     @NotNull
     private final LocalDate createdAt;
     @NotNull
-    private final Boolean status;
+    private final LocalDate updatedAt;
+    @NotNull
+    private final Boolean frozen;
+    @NotNull
+    private final Boolean isDelete;
     @NotNull
     private final Boolean isVerify;
-    private final Integer documentId;
-    @Size(max = 50)
-    @NotNull
-    private final String documentDocumentNumber;
-    @NotNull
-    private final LocalDate documentIssueDate;
+    private final DocumentDto document;
 
-    public AdminDto(Long id, String firstname, String lastname, String patronymic, LocalDate dateOfBirth, String email, String phoneNumber, LocalDate createdAt, Boolean status, Boolean isVerify, Integer documentId, String documentDocumentNumber, LocalDate documentIssueDate) {
+    public ClientDto(Long id, String firstname, String lastname, String patronymic, LocalDate dateOfBirth, String email, String phoneNumber, LocalDate createdAt, LocalDate updatedAt, Boolean frozen, Boolean isDelete, Boolean isVerify, DocumentDto document) {
         this.id = id;
         this.firstname = firstname;
         this.lastname = lastname;
@@ -50,11 +49,11 @@ public class AdminDto implements Serializable {
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.createdAt = createdAt;
-        this.status = status;
+        this.updatedAt = updatedAt;
+        this.frozen = frozen;
+        this.isDelete = isDelete;
         this.isVerify = isVerify;
-        this.documentId = documentId;
-        this.documentDocumentNumber = documentDocumentNumber;
-        this.documentIssueDate = documentIssueDate;
+        this.document = document;
     }
 
     public Long getId() {
@@ -89,31 +88,31 @@ public class AdminDto implements Serializable {
         return createdAt;
     }
 
-    public Boolean getStatus() {
-        return status;
+    public LocalDate getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public Boolean getFrozen() {
+        return frozen;
+    }
+
+    public Boolean getIsDelete() {
+        return isDelete;
     }
 
     public Boolean getIsVerify() {
         return isVerify;
     }
 
-    public Integer getDocumentId() {
-        return documentId;
-    }
-
-    public String getDocumentDocumentNumber() {
-        return documentDocumentNumber;
-    }
-
-    public LocalDate getDocumentIssueDate() {
-        return documentIssueDate;
+    public DocumentDto getDocument() {
+        return document;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        AdminDto entity = (AdminDto) o;
+        ClientDto entity = (ClientDto) o;
         return Objects.equals(this.id, entity.id) &&
                 Objects.equals(this.firstname, entity.firstname) &&
                 Objects.equals(this.lastname, entity.lastname) &&
@@ -122,16 +121,16 @@ public class AdminDto implements Serializable {
                 Objects.equals(this.email, entity.email) &&
                 Objects.equals(this.phoneNumber, entity.phoneNumber) &&
                 Objects.equals(this.createdAt, entity.createdAt) &&
-                Objects.equals(this.status, entity.status) &&
+                Objects.equals(this.updatedAt, entity.updatedAt) &&
+                Objects.equals(this.frozen, entity.frozen) &&
+                Objects.equals(this.isDelete, entity.isDelete) &&
                 Objects.equals(this.isVerify, entity.isVerify) &&
-                Objects.equals(this.documentId, entity.documentId) &&
-                Objects.equals(this.documentDocumentNumber, entity.documentDocumentNumber) &&
-                Objects.equals(this.documentIssueDate, entity.documentIssueDate);
+                Objects.equals(this.document, entity.document);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, firstname, lastname, patronymic, dateOfBirth, email, phoneNumber, createdAt, status, isVerify, documentId, documentDocumentNumber, documentIssueDate);
+        return Objects.hash(id, firstname, lastname, patronymic, dateOfBirth, email, phoneNumber, createdAt, updatedAt, frozen, isDelete, isVerify, document);
     }
 
     @Override
@@ -145,10 +144,10 @@ public class AdminDto implements Serializable {
                 "email = " + email + ", " +
                 "phoneNumber = " + phoneNumber + ", " +
                 "createdAt = " + createdAt + ", " +
-                "status = " + status + ", " +
+                "updatedAt = " + updatedAt + ", " +
+                "frozen = " + frozen + ", " +
+                "isDelete = " + isDelete + ", " +
                 "isVerify = " + isVerify + ", " +
-                "documentId = " + documentId + ", " +
-                "documentDocumentNumber = " + documentDocumentNumber + ", " +
-                "documentIssueDate = " + documentIssueDate + ")";
+                "document = " + document + ")";
     }
 }

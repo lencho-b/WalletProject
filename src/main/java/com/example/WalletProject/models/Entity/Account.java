@@ -1,41 +1,43 @@
-package com.example.WalletProject.models;
+package com.example.WalletProject.models.Entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "account")
 public class Account {
     @Id
-    @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
     @Size(max = 50)
-    @NotNull
     @Column(name = "name", nullable = false, length = 50)
     private String name;
 
-    @NotNull
-    @Column(name = "status", nullable = false)
-    private Boolean status = false;
+    @Column(name = "frozen", nullable = false)
+    private Boolean frozen = false;
 
     @Size(max = 100)
-    @NotNull
     @Column(name = "comment", nullable = false, length = 100)
     private String comment;
 
-    @NotNull
     @Column(name = "value", nullable = false)
     private Long value;
 
-    @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @Column(name = "created_at", nullable = false)
+    private LocalDate createdAt;
+
+    @Column(name = "updated_at", nullable = false)
+    private LocalDate updatedAt;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.ALL)
     @JoinColumn(name = "client_id", nullable = false)
     private Client client;
 
-    @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false,  cascade = CascadeType.ALL)
     @JoinColumn(name = "currency_id", nullable = false)
     private Currency currency;
 
@@ -55,12 +57,12 @@ public class Account {
         this.name = name;
     }
 
-    public Boolean getStatus() {
-        return status;
+    public Boolean getFrozen() {
+        return frozen;
     }
 
-    public void setStatus(Boolean status) {
-        this.status = status;
+    public void setFrozen(Boolean frozen) {
+        this.frozen = frozen;
     }
 
     public String getComment() {
@@ -77,6 +79,22 @@ public class Account {
 
     public void setValue(Long value) {
         this.value = value;
+    }
+
+    public LocalDate getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDate createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDate getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDate updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
     public Client getClient() {

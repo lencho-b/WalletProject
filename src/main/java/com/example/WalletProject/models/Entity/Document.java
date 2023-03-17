@@ -1,4 +1,4 @@
-package com.example.WalletProject.models;
+package com.example.WalletProject.models.Entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -11,8 +11,7 @@ import java.time.LocalDate;
 public class Document {
     @Id
     @Column(name = "id", nullable = false)
-    private Integer id;
-
+    private Long id;
     @Size(max = 50)
     @NotNull
     @Column(name = "document_number", nullable = false, length = 50)
@@ -23,18 +22,25 @@ public class Document {
     private LocalDate issueDate;
 
     @NotNull
+    @Column(name = "created_at", nullable = false)
+    private LocalDate createdAt;
+
+    @NotNull
+    @Column(name = "updated_at", nullable = false)
+    private LocalDate updatedAt;
+
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "country_id", nullable = false)
     private Country country;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
-
     public String getDocumentNumber() {
         return documentNumber;
     }
@@ -49,6 +55,22 @@ public class Document {
 
     public void setIssueDate(LocalDate issueDate) {
         this.issueDate = issueDate;
+    }
+
+    public LocalDate getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDate createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDate getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDate updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
     public Country getCountry() {

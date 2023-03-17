@@ -1,4 +1,4 @@
-package com.example.WalletProject.models;
+package com.example.WalletProject.models.Entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;

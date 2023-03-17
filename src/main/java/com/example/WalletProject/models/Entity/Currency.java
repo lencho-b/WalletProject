@@ -1,26 +1,35 @@
-package com.example.WalletProject.models;
+package com.example.WalletProject.models.Entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "currency")
 public class Currency {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Integer id;
 
     @Size(max = 50)
-    @NotNull
     @Column(name = "name", nullable = false, length = 50)
     private String name;
 
     @Column(name = "index")
     private Integer index;
+
+    public Currency() {
+    }
+
+    public Currency(Integer id, String name, Integer index) {
+        this.id = id;
+        this.name = name;
+        this.index = index;
+    }
+
+    public Currency(Integer id) {
+        this.id = id;
+    }
 
     public Integer getId() {
         return id;
