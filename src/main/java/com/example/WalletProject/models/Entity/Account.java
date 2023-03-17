@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "account")
@@ -40,6 +41,26 @@ public class Account {
     @ManyToOne(fetch = FetchType.LAZY, optional = false,  cascade = CascadeType.ALL)
     @JoinColumn(name = "currency_id", nullable = false)
     private Currency currency;
+
+    @ManyToMany(fetch = FetchType.LAZY,cascade =CascadeType.ALL)
+    @JoinTable(name = "transaction_account",joinColumns = @JoinColumn (name = "account_id"),
+            inverseJoinColumns = @JoinColumn(name = "transaction_id"))
+    private List<Transaction> transactions;
+
+    public Account() {
+    }
+
+    public Account(List<Transaction> transactions) {
+        this.transactions = transactions;
+    }
+
+    public List<Transaction> getTransactions() {
+        return transactions;
+    }
+
+    public void setTransactions(List<Transaction> transactions) {
+        this.transactions = transactions;
+    }
 
     public Long getId() {
         return id;

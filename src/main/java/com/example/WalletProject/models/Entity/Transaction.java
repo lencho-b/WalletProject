@@ -5,11 +5,13 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 import java.time.Instant;
+import java.util.List;
 
 @Entity
 @Table(name = "transaction")
 public class Transaction {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 
@@ -37,6 +39,18 @@ public class Transaction {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "type", nullable = false)
     private TransactionType type;
+    @ManyToMany(fetch = FetchType.LAZY,cascade =CascadeType.ALL)
+    @JoinTable(name = "transaction_account",joinColumns = @JoinColumn (name = "transaction_id"),
+            inverseJoinColumns = @JoinColumn(name = "account_id"))
+    private List<Account> accounts;
+
+    public List<Account> getAccounts() {
+        return accounts;
+    }
+
+    public void setAccounts(List<Account> accounts) {
+        this.accounts = accounts;
+    }
 
     public Long getId() {
         return id;

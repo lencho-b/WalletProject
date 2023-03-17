@@ -11,21 +11,22 @@ import java.util.Objects;
  * A DTO for the {@link com.example.WalletProject.models.Entity.Transaction} entity
  */
 public class TransactionDto implements Serializable {
-    private final Long id;
+    private Long id;
     @NotNull
-    private final Long value;
+    private Long value;
     @Size(max = 100)
     @NotNull
-    private final String message;
+    private String message;
     @NotNull
-    private final Instant startDateTime;
-    private final Instant finishDateTime;
+    private Instant startDateTime;
+    private Instant finishDateTime;
     @NotNull
-    private final Boolean status;
+    private Boolean status;
     @NotNull
-    private final TransactionTypeDto type;
+    private Integer type;
 
-    public TransactionDto(Long id, Long value, String message, Instant startDateTime, Instant finishDateTime, Boolean status, TransactionTypeDto type) {
+
+    public TransactionDto(Long id, Long value, String message, Instant startDateTime, Instant finishDateTime, Boolean status, Integer type) {
         this.id = id;
         this.value = value;
         this.message = message;
@@ -59,7 +60,7 @@ public class TransactionDto implements Serializable {
         return status;
     }
 
-    public TransactionTypeDto getType() {
+    public Integer getType() {
         return type;
     }
 
