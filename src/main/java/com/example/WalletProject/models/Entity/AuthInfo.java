@@ -1,10 +1,11 @@
 package com.example.WalletProject.models.Entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Table(name = "auth_info")
@@ -12,12 +13,6 @@ public class AuthInfo {
     @Id
     @Column(name = "client_id", nullable = false)
     private Long id;
-
-    @MapsId
-    @OneToOne(fetch = FetchType.LAZY, optional = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "client_id", nullable = false)
-    private Client client;
 
     @Size(max = 50)
     @NotNull
@@ -34,14 +29,6 @@ public class AuthInfo {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Client getClient() {
-        return client;
-    }
-
-    public void setClient(Client client) {
-        this.client = client;
     }
 
     public String getLogin() {

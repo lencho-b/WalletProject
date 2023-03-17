@@ -1,6 +1,5 @@
 package com.example.WalletProject.models.DTO;
 
-import com.example.WalletProject.models.Entity.Country;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
@@ -12,7 +11,6 @@ import java.util.Objects;
  * A DTO for the {@link com.example.WalletProject.models.Entity.Document} entity
  */
 public class DocumentDto implements Serializable {
-    private final Long id;
     @Size(max = 50)
     @NotNull
     private final String documentNumber;
@@ -23,19 +21,14 @@ public class DocumentDto implements Serializable {
     @NotNull
     private final LocalDate updatedAt;
     @NotNull
-    private final Country country;
+    private final String country;
 
-    public DocumentDto(Long id, String documentNumber, LocalDate issueDate, LocalDate createdAt, LocalDate updatedAt, Country country) {
-        this.id = id;
+    public DocumentDto(String documentNumber, LocalDate issueDate, LocalDate createdAt, LocalDate updatedAt, String country) {
         this.documentNumber = documentNumber;
         this.issueDate = issueDate;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.country = country;
-    }
-
-    public Long getId() {
-        return id;
     }
 
     public String getDocumentNumber() {
@@ -54,32 +47,19 @@ public class DocumentDto implements Serializable {
         return updatedAt;
     }
 
-    public Country getCountry() {
+    public String getCountry() {
         return country;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        DocumentDto entity = (DocumentDto) o;
-        return Objects.equals(this.id, entity.id) &&
-                Objects.equals(this.documentNumber, entity.documentNumber) &&
-                Objects.equals(this.issueDate, entity.issueDate) &&
-                Objects.equals(this.createdAt, entity.createdAt) &&
-                Objects.equals(this.updatedAt, entity.updatedAt) &&
-                Objects.equals(this.country, entity.country);
-    }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, documentNumber, issueDate, createdAt, updatedAt, country);
+        return Objects.hash(documentNumber, issueDate, createdAt, updatedAt, country);
     }
 
     @Override
     public String toString() {
         return getClass().getSimpleName() + "(" +
-                "id = " + id + ", " +
                 "documentNumber = " + documentNumber + ", " +
                 "issueDate = " + issueDate + ", " +
                 "createdAt = " + createdAt + ", " +

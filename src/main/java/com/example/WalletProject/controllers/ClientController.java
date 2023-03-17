@@ -1,8 +1,6 @@
 package com.example.WalletProject.controllers;
 
-import com.example.WalletProject.models.DTO.AccountDto;
-import com.example.WalletProject.models.DTO.ClientDto;
-import com.example.WalletProject.models.DTO.TransactionDto;
+import com.example.WalletProject.models.DTO.*;
 import com.example.WalletProject.services.AccountService;
 import com.example.WalletProject.services.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +18,10 @@ public class ClientController
     private AccountService accountService;
 
     @GetMapping("/main/{id}/information")
-    public ClientDto showClientById(@PathVariable("id")Long id)
+    public ClientInformationForMainPageDTO  showClientById(@PathVariable("id")Long id)
     {
-        ClientDto clientDto = clientService.getClientById(id);
-        return clientDto;
+        ClientInformationForMainPageDTO  clientInformationForMainPageDTO = clientService.getClientById(id);
+        return clientInformationForMainPageDTO ;
     }
     @GetMapping("/main/{id}/transactions")
     public List<TransactionDto> showAllTransactionsById(@PathVariable("id")Long id)
@@ -36,8 +34,33 @@ public class ClientController
         return clientService.getAllAccountsByClientId(id);
     }
     @PostMapping("/main/{id}/create")
-    public void  createNewAccount(@PathVariable("id")Long id,@RequestBody AccountDto accountDto)
+    public void  createNewAccountByClientId(@PathVariable("id")Long id,@RequestBody AccountDto accountDto)
     {
         accountService.createAccountByClientId(accountDto,id);
     }
+    @GetMapping("/main/{id}/auth")
+    public AuthInfoDto showAuthInfoByClientId(@PathVariable("id")Long id)
+    {
+        return clientService.getAuthInfoByClientId(id);
+    }
+    @PatchMapping("/main/{id}/auth/update")
+    public void updateAuthClientById(@PathVariable("id")Long id,@RequestBody AuthInfoDto authInfoDto)
+    {
+        clientService.updateAuthClientById(authInfoDto,id);
+    }
+    @GetMapping("/main/{id}/document")
+    public DocumentDto showDocumentByClientId(@PathVariable("id")Long id)
+    {
+        return clientService.getDocumentByClientId(id);
+    }
+    @GetMapping("/main/{id}/manage-information")
+    public ClientInformationForManageDTO showClientInformationForManageByClientId(@PathVariable("id")Long id)
+    {
+        return clientService.getClientInformationForManageByClientId(id);
+    }
+//    @PatchMapping("/main/{id}/document/update")
+//    public void UpdateClientsDocumentById(@PathVariable("id")Long id,@RequestBody DocumentDto documentDto)
+//    {
+//        clientService.updateDocumentByClientId(id,documentDto);
+//    }
 }
