@@ -63,10 +63,6 @@ public class Client {
     @Column(name = "is_verify", nullable = false)
     private Boolean isVerify = false;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "document_id", referencedColumnName = "id")
-    private Document document;
-
     @OneToMany(mappedBy = "client",fetch = FetchType.LAZY)
     private List<Account>accounts;
 
@@ -120,23 +116,11 @@ public class Client {
         this.frozen = frozen;
         this.isDelete = isDelete;
         this.isVerify = isVerify;
-        this.document = document;
     }
-
     public Client() {
-
     }
-
     public Client(Long id) {
         this.id = id;
-    }
-
-    public Document getDocument() {
-        return document;
-    }
-
-    public void setDocument(Document document) {
-        this.document = document;
     }
 
     public Long getId() {

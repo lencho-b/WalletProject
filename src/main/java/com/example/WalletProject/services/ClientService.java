@@ -27,6 +27,8 @@ public class ClientService
     private DocumentRepository documentRepository;
     @Autowired
     private AccountService accountService;
+    @Autowired
+    private CountryRepository countryRepository;
     public ClientInformationForMainPageDTO  getClientById(Long id)
     {
         Client client = clientRepository.findById(id).get();
@@ -99,14 +101,14 @@ public class ClientService
 
     public DocumentDto getDocumentByClientId(Long id)
     {
-        Document document = clientRepository.getById(id).getDocument();
+        Document document = documentRepository.getById(id);
         DocumentDto documentDto =
                 new DocumentDto
                 (document.getDocumentNumber(),
                  document.getIssueDate(),
                  document.getCreatedAt(),
                  document.getUpdatedAt(),
-                 document.getCountry().getName());
+                 document.getCountry().getId());
         return documentDto;
     }
 
@@ -120,24 +122,26 @@ public class ClientService
                         client.getUpdatedAt(),
                         client.getFrozen(),
                         client.getIsDelete(),
-                        client.getIsVerify(),
-                        client.getDocument().getId()
+                        client.getIsVerify()
                 );
         return clientInformationForManageDTO;
 
     }
+    public void createDocumentByClientId(Long id,DocumentDto documentDto)
+    {
+        Document document = new Document();
+        document.setClient_id(id);
+        document.setDocumentNumber(documentDto.getDocumentNumber());
+        document.setIssueDate(documentDto.getIssueDate());
+        document.setUpdatedAt(documentDto.getUpdatedAt());
+        document.setCreatedAt(documentDto.getUpdatedAt());
+        document.setCountry(countryRepository.getById(documentDto.getCountryId()));
+        documentRepository.save(document);
+    }
 
-//    public void updateDocumentByClientId(Long id,DocumentDto documentDto)
-//    {
-//        List<Document>documents = documentRepository.findAll();
-//        Document document = clientRepository.getById(id).getDocument();
-//        document.setDocumentNumber(documentDto.getDocumentNumber());
-//        document.setIssueDate(documentDto.getIssueDate());
-//        document.setCreatedAt(documentDto.getUpdatedAt());
-//        for (Document doc:documents)
-//        {
-//            if (doc.getCountry().getName().equals(documentDto.getCountry()))
-//        }
-//        document.setCountry();
-//    }
+    public void deleteClientsDocumentByClientId(Long id)
+    {
+        Document document = documentRepository.getById(id);
+        documentRepository.delete(document);
+    }
 }

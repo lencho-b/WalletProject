@@ -56,6 +56,21 @@ public class AccountService {
                         ,account.getCurrency().getId());
         return accountDto;
     }
+    public AccountDto getClientsAccountById(Long id)
+    {
+        Account account = accountRepository.findById(id).get();
+        AccountDto accountDto = new AccountDto
+                (account.getId()
+                        ,account.getName()
+                        ,account.getFrozen()
+                        ,account.getComment()
+                        ,account.getValue()
+                        ,account.getCreatedAt()
+                        ,account.getUpdatedAt()
+                        ,account.getClient().getId()
+                        ,account.getCurrency().getId());
+        return accountDto;
+    }
 
     @Transactional
     public void createAccountByClientId(AccountDto accountDto,Long id) {

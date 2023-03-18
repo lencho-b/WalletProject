@@ -28,7 +28,7 @@ public class ClientController
     {
         return clientService.getAllTransactionByClientId(id);
     }
-    @GetMapping("/main/{id}/accounts")
+    @GetMapping("/main/{id}/account")
     public List<AccountDto> showAllAccountsByClienId(@PathVariable("id")Long id)
     {
         return clientService.getAllAccountsByClientId(id);
@@ -58,9 +58,19 @@ public class ClientController
     {
         return clientService.getClientInformationForManageByClientId(id);
     }
-//    @PatchMapping("/main/{id}/document/update")
-//    public void UpdateClientsDocumentById(@PathVariable("id")Long id,@RequestBody DocumentDto documentDto)
-//    {
-//        clientService.updateDocumentByClientId(id,documentDto);
-//    }
+    @PostMapping("/main/{id}/document/create")
+    public void updateClientsDocumentById(@PathVariable("id")Long id,@RequestBody DocumentDto documentDto)
+    {
+        clientService.createDocumentByClientId(id,documentDto);
+    }
+    @DeleteMapping("/main/{id}/document/delete")
+    public void deleteClientsDocumentById(@PathVariable("id")Long id)
+    {
+        clientService.deleteClientsDocumentByClientId(id);
+    }
+    @GetMapping("/main/{id}/account/{idAcc}")
+    public AccountDto showClientsAccountById(@PathVariable("idAcc") Long id)
+    {
+        return accountService.getClientsAccountById(id);
+    }
 }

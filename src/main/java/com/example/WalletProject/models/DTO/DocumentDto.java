@@ -21,14 +21,14 @@ public class DocumentDto implements Serializable {
     @NotNull
     private final LocalDate updatedAt;
     @NotNull
-    private final String country;
+    private final Integer countryId;
 
-    public DocumentDto(String documentNumber, LocalDate issueDate, LocalDate createdAt, LocalDate updatedAt, String country) {
+    public DocumentDto(String documentNumber, LocalDate issueDate, LocalDate createdAt, LocalDate updatedAt, Integer countryId) {
         this.documentNumber = documentNumber;
         this.issueDate = issueDate;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
-        this.country = country;
+        this.countryId = countryId;
     }
 
     public String getDocumentNumber() {
@@ -47,14 +47,14 @@ public class DocumentDto implements Serializable {
         return updatedAt;
     }
 
-    public String getCountry() {
-        return country;
+    public Integer getCountryId() {
+        return countryId;
     }
 
 
     @Override
     public int hashCode() {
-        return Objects.hash(documentNumber, issueDate, createdAt, updatedAt, country);
+        return Objects.hash(documentNumber, issueDate, createdAt, updatedAt, countryId);
     }
 
     @Override
@@ -64,6 +64,6 @@ public class DocumentDto implements Serializable {
                 "issueDate = " + issueDate + ", " +
                 "createdAt = " + createdAt + ", " +
                 "updatedAt = " + updatedAt + ", " +
-                "country = " + country + ")";
+                "country = " + countryId + ")";
     }
 }

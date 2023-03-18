@@ -5,13 +5,15 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Entity
 @Table(name = "document")
 public class Document {
     @Id
-    @Column(name = "id", nullable = false)
-    private Long id;
+    @JoinColumn(name = "client_id", referencedColumnName = "id")
+    @Column(name = "client_id", nullable = false)
+    private Long client_id;
     @Size(max = 50)
     @NotNull
     @Column(name = "document_number", nullable = false, length = 50)
@@ -34,12 +36,20 @@ public class Document {
     @JoinColumn(name = "country_id", nullable = false)
     private Country country;
 
+    public Long getClient_id() {
+        return client_id;
+    }
+
+    public void setClient_id(Long client_id) {
+        this.client_id = client_id;
+    }
+
     public Long getId() {
-        return id;
+        return client_id;
     }
 
     public void setId(Long id) {
-        this.id = id;
+        this.client_id = id;
     }
     public String getDocumentNumber() {
         return documentNumber;
@@ -81,4 +91,8 @@ public class Document {
         this.country = country;
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(getCountry());
+    }
 }
