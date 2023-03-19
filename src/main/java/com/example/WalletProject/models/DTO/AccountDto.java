@@ -20,7 +20,7 @@ public class AccountDto implements Serializable {
     @NotNull
     private Long value;
     @NotNull
-    private Integer currencyId;
+    private String currencyName;
 
     public String getName() {
         return name;
@@ -38,16 +38,16 @@ public class AccountDto implements Serializable {
         return value;
     }
 
-    public Integer getCurrencyId() {
-        return currencyId;
+    public String getCurrencyName() {
+        return currencyName;
     }
 
-    public AccountDto(String name, Boolean frozen, String comment, Long value,Integer currencyId) {
+    public AccountDto(String name, Boolean frozen, String comment, Long value,String currencyName) {
         this.name = name;
         this.frozen = frozen;
         this.comment = comment;
         this.value = value;
-        this.currencyId = currencyId;
+        this.currencyName = currencyName;
     }
 
     public AccountDto() {

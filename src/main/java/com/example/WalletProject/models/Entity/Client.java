@@ -47,25 +47,27 @@ public class Client {
     @Column(name = "created_at", nullable = false)
     private LocalDate createdAt;
 
-
     @Column(name = "updated_at")
     private LocalDate updatedAt;
 
     @NotNull
     @Column(name = "frozen", nullable = false)
-    private Boolean frozen = false;
+    private boolean frozen = false;
 
     @NotNull
     @Column(name = "is_delete", nullable = false)
-    private Boolean isDelete = false;
+    private boolean isDelete = false;
 
     @NotNull
     @Column(name = "is_verify", nullable = false)
-    private Boolean isVerify = false;
+    private boolean isVerify = false;
 
     @OneToMany(mappedBy = "client",fetch = FetchType.LAZY)
     private List<Account>accounts;
-
+    @ManyToMany(fetch = FetchType.LAZY,cascade =CascadeType.ALL)
+    @JoinTable(name = "client_role",joinColumns = @JoinColumn (name = "client_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private List<Role> roles;
     public Client(String firstname, String lastname, String patronymic, LocalDate dateOfBirth, String email, String phoneNumber) {
         this.firstname = firstname;
         this.lastname = lastname;
@@ -103,8 +105,7 @@ public class Client {
         this.accounts = accounts;
     }
 
-    public Client(Long id, String firstname, String lastname, String patronymic, LocalDate dateOfBirth, String email, String phoneNumber, LocalDate createdAt, LocalDate updatedAt, Boolean frozen, Boolean isDelete, Boolean isVerify, Document document) {
-        this.id = id;
+    public Client( String firstname, String lastname, String patronymic, LocalDate dateOfBirth, String email, String phoneNumber, LocalDate createdAt, LocalDate updatedAt, boolean frozen, boolean isDelete, boolean isVerify) {
         this.firstname = firstname;
         this.lastname = lastname;
         this.patronymic = patronymic;

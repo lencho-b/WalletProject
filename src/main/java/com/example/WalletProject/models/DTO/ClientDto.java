@@ -38,9 +38,8 @@ public class ClientDto implements Serializable {
     private Boolean isDelete;
     @NotNull
     private  Boolean isVerify;
-    private DocumentRequestDto document;
 
-    public ClientDto(Long id, String firstname, String lastname, String patronymic, LocalDate dateOfBirth, String email, String phoneNumber, LocalDate createdAt, LocalDate updatedAt, Boolean frozen, Boolean isDelete, Boolean isVerify, DocumentRequestDto document) {
+    public ClientDto(Long id, String firstname, String lastname, String patronymic, LocalDate dateOfBirth, String email, String phoneNumber, LocalDate createdAt, LocalDate updatedAt, Boolean frozen, Boolean isDelete, Boolean isVerify) {
         this.id = id;
         this.firstname = firstname;
         this.lastname = lastname;
@@ -53,7 +52,6 @@ public class ClientDto implements Serializable {
         this.frozen = frozen;
         this.isDelete = isDelete;
         this.isVerify = isVerify;
-        this.document = document;
     }
 
     public ClientDto(String firstname, String lastname, String patronymic, LocalDate dateOfBirth, String email, String phoneNumber) {
@@ -64,11 +62,6 @@ public class ClientDto implements Serializable {
         this.email = email;
         this.phoneNumber = phoneNumber;
     }
-
-    public ClientDto(DocumentRequestDto document) {
-        this.document = document;
-    }
-
     public Long getId() {
         return id;
     }
@@ -117,9 +110,6 @@ public class ClientDto implements Serializable {
         return isVerify;
     }
 
-    public DocumentRequestDto getDocument() {
-        return document;
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -137,13 +127,12 @@ public class ClientDto implements Serializable {
                 Objects.equals(this.updatedAt, entity.updatedAt) &&
                 Objects.equals(this.frozen, entity.frozen) &&
                 Objects.equals(this.isDelete, entity.isDelete) &&
-                Objects.equals(this.isVerify, entity.isVerify) &&
-                Objects.equals(this.document, entity.document);
+                Objects.equals(this.isVerify, entity.isVerify);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, firstname, lastname, patronymic, dateOfBirth, email, phoneNumber, createdAt, updatedAt, frozen, isDelete, isVerify, document);
+        return Objects.hash(id, firstname, lastname, patronymic, dateOfBirth, email, phoneNumber, createdAt, updatedAt, frozen, isDelete, isVerify);
     }
 
     @Override
@@ -160,7 +149,6 @@ public class ClientDto implements Serializable {
                 "updatedAt = " + updatedAt + ", " +
                 "frozen = " + frozen + ", " +
                 "isDelete = " + isDelete + ", " +
-                "isVerify = " + isVerify + ", " +
-                "document = " + document + ")";
+                "isVerify = " + isVerify +")";
     }
 }

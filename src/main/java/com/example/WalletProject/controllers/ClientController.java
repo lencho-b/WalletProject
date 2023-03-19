@@ -21,6 +21,12 @@ public class ClientController {
         ClientInformationForMainPageDTO clientInformationForMainPageDTO = clientService.getClientById(id);
         return clientInformationForMainPageDTO;
     }
+    @PatchMapping("/{id}/information/update")
+    public void updateInformationByClientId(@PathVariable("id")Long id,
+    @RequestBody ClientInformationForMainPageDTO clientInformationForMainPageDTO)
+    {
+        clientService.updateInformationByClientId(id,clientInformationForMainPageDTO);
+    }
 
     @GetMapping("/{id}/transactions")
     public List<TransactionDto> showAllTransactionsById(@PathVariable("id") Long id) {
@@ -29,12 +35,12 @@ public class ClientController {
 
     @GetMapping("/{id}/account")
     public List<AccountDto> showAllAccountsByClienId(@PathVariable("id") Long id) {
-        return clientService.getAllAccountsByClientId(id);
+        return accountService.getAllAccountsByClientId(id);
     }
 
     @PostMapping("/{id}/account/create")
     public void createNewAccountByClientId(@PathVariable("id") Long id, @RequestBody AccountDto accountDto) {
-        accountService.createAccountByClientId(accountDto, id);
+        accountService.createAccountByClientId(accountDto,id);
     }
 
     @GetMapping("/{id}/auth")

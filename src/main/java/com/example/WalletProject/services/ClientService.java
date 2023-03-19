@@ -58,26 +58,6 @@ public class ClientService
         }
         return transactionsByClientid;
     }
-    public List<AccountDto> getAllAccountsByClientId(Long id)
-    {
-        List<AccountDto>accountsByClientid = new ArrayList<>();
-        List<Account>accounts = accountRepository.findAll();
-
-        for (Account account:accounts)
-        {
-            if(account.getClient().getId() == (long)id) {
-                accountsByClientid.add
-                        (new AccountDto
-                        (
-                         account.getName()
-                        ,account.getFrozen()
-                        ,account.getComment()
-                        ,account.getValue()
-                        ,account.getCurrency().getId()));
-            }
-        }
-        return accountsByClientid;
-    }
     public AuthInfoDto getAuthInfoByClientId(Long id)
     {
         AuthInfo authInfo = authInfoRepository.getById(id);
@@ -127,7 +107,6 @@ public class ClientService
         document.setClient_id(id);
         document.setDocumentNumber(documentRequestDto.getDocumentNumber());
         document.setIssueDate(documentRequestDto.getIssueDate());
-        document.setUpdatedAt(null);
         document.setCreatedAt(LocalDate.now());
         document.setCountry(countryRepository.getById(documentRequestDto.getCountryId()));
         documentRepository.save(document);
@@ -137,5 +116,43 @@ public class ClientService
     {
         Document document = documentRepository.getById(id);
         documentRepository.delete(document);
+    }
+
+    public void createNewClient(RegistrationDto registrationDto)
+    {
+     Client client = new Client
+             (
+                     registrationDto.getFirstname(),
+                     registrationDto.getLastname(),
+                     registrationDto.getPatronymic(),
+                     registrationDto.getDateOfBirth(),
+                     registrationDto.getEmail(),
+                     registrationDto.getPhoneNumber(),
+                     LocalDate.now(),
+                     null,
+                     false,
+                     false,
+                     false
+             );
+     clientRepository.save(client);
+        AuthInfo authInfo = new AuthInfo(
+                client.getId(),
+                registrationDto.getLogin(),
+                registrationDto.getPassword()
+        );
+     authInfoRepository.save(authInfo);
+    }
+
+    public void updateInformationByClientId(Long id, ClientInformationForMainPageDTO clientInformationForMainPageDTO)
+    {
+        Client client = clientRepository.getById(id);
+        client.setFirstname(clientInformationForMainPageDTO.getFirstname());
+        client.setLastname(clientInformationForMainPageDTO.getLastname());
+        client.setPatronymic(clientInformationForMainPageDTO.getPatronymic());
+        client.setDateOfBirth(clientInformationForMainPageDTO.getDateOfBirth());
+        client.setEmail(clientInformationForMainPageDTO.getEmail());
+        client.setPhoneNumber(clientInformationForMainPageDTO.getPhoneNumber());
+        client.setUpdatedAt(LocalDate.now());
+        clientRepository.save(client);
     }
 }
