@@ -38,9 +38,9 @@ public class ClientDto implements Serializable {
     private Boolean isDelete;
     @NotNull
     private  Boolean isVerify;
-    private DocumentDto document;
+    private DocumentRequestDto document;
 
-    public ClientDto(Long id, String firstname, String lastname, String patronymic, LocalDate dateOfBirth, String email, String phoneNumber, LocalDate createdAt, LocalDate updatedAt, Boolean frozen, Boolean isDelete, Boolean isVerify, DocumentDto document) {
+    public ClientDto(Long id, String firstname, String lastname, String patronymic, LocalDate dateOfBirth, String email, String phoneNumber, LocalDate createdAt, LocalDate updatedAt, Boolean frozen, Boolean isDelete, Boolean isVerify, DocumentRequestDto document) {
         this.id = id;
         this.firstname = firstname;
         this.lastname = lastname;
@@ -65,7 +65,7 @@ public class ClientDto implements Serializable {
         this.phoneNumber = phoneNumber;
     }
 
-    public ClientDto(DocumentDto document) {
+    public ClientDto(DocumentRequestDto document) {
         this.document = document;
     }
 
@@ -117,7 +117,7 @@ public class ClientDto implements Serializable {
         return isVerify;
     }
 
-    public DocumentDto getDocument() {
+    public DocumentRequestDto getDocument() {
         return document;
     }
 

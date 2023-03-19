@@ -6,29 +6,31 @@ import com.example.WalletProject.models.Entity.AuthInfo;
 import com.example.WalletProject.models.Entity.Client;
 import com.example.WalletProject.models.Entity.Document;
 import com.example.WalletProject.repositories.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class ClientService
 {
-    @Autowired
-    private ClientRepository clientRepository;
-    @Autowired
-    private AccountRepository accountRepository;
-    @Autowired
-    private TransactionRepository transactionRepository;
-    @Autowired
-    private AuthInfoRepository authInfoRepository;
-    @Autowired
-    private DocumentRepository documentRepository;
-    @Autowired
-    private AccountService accountService;
-    @Autowired
-    private CountryRepository countryRepository;
+    private final ClientRepository clientRepository;
+    private final AccountRepository accountRepository;
+    private final AuthInfoRepository authInfoRepository;
+    private final DocumentRepository documentRepository;
+    private final AccountService accountService;
+    private final CountryRepository countryRepository;
+
+    public ClientService(ClientRepository clientRepository, AccountRepository accountRepository, AuthInfoRepository authInfoRepository, DocumentRepository documentRepository, AccountService accountService, CountryRepository countryRepository) {
+        this.clientRepository = clientRepository;
+        this.accountRepository = accountRepository;
+        this.authInfoRepository = authInfoRepository;
+        this.documentRepository = documentRepository;
+        this.accountService = accountService;
+        this.countryRepository = countryRepository;
+    }
+
     public ClientInformationForMainPageDTO  getClientById(Long id)
     {
         Client client = clientRepository.findById(id).get();
@@ -66,14 +68,11 @@ public class ClientService
             if(account.getClient().getId() == (long)id) {
                 accountsByClientid.add
                         (new AccountDto
-                        (account.getId()
-                        ,account.getName()
+                        (
+                         account.getName()
                         ,account.getFrozen()
                         ,account.getComment()
                         ,account.getValue()
-                        ,account.getCreatedAt()
-                        ,account.getUpdatedAt()
-                        ,account.getClient().getId()
                         ,account.getCurrency().getId()));
             }
         }
@@ -99,17 +98,15 @@ public class ClientService
     }
 
 
-    public DocumentDto getDocumentByClientId(Long id)
+    public DocumentResponseDto getDocumentByClientId(Long id)
     {
         Document document = documentRepository.getById(id);
-        DocumentDto documentDto =
-                new DocumentDto
+        DocumentResponseDto documentResponseDto =
+                new DocumentResponseDto
                 (document.getDocumentNumber(),
                  document.getIssueDate(),
-                 document.getCreatedAt(),
-                 document.getUpdatedAt(),
                  document.getCountry().getId());
-        return documentDto;
+        return documentResponseDto;
     }
 
     public ClientInformationForManageDTO getClientInformationForManageByClientId(Long id)
@@ -118,24 +115,21 @@ public class ClientService
         ClientInformationForManageDTO clientInformationForManageDTO =
                 new ClientInformationForManageDTO
                 (
-                        client.getCreatedAt(),
-                        client.getUpdatedAt(),
                         client.getFrozen(),
-                        client.getIsDelete(),
                         client.getIsVerify()
                 );
         return clientInformationForManageDTO;
 
     }
-    public void createDocumentByClientId(Long id,DocumentDto documentDto)
+    public void createDocumentByClientId(Long id, DocumentRequestDto documentRequestDto)
     {
         Document document = new Document();
         document.setClient_id(id);
-        document.setDocumentNumber(documentDto.getDocumentNumber());
-        document.setIssueDate(documentDto.getIssueDate());
-        document.setUpdatedAt(documentDto.getUpdatedAt());
-        document.setCreatedAt(documentDto.getUpdatedAt());
-        document.setCountry(countryRepository.getById(documentDto.getCountryId()));
+        document.setDocumentNumber(documentRequestDto.getDocumentNumber());
+        document.setIssueDate(documentRequestDto.getIssueDate());
+        document.setUpdatedAt(null);
+        document.setCreatedAt(LocalDate.now());
+        document.setCountry(countryRepository.getById(documentRequestDto.getCountryId()));
         documentRepository.save(document);
     }
 

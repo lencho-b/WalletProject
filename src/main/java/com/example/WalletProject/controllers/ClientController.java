@@ -10,67 +10,71 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/client")
-public class ClientController
-{
+public class ClientController {
     @Autowired
     private ClientService clientService;
     @Autowired
     private AccountService accountService;
 
-    @GetMapping("/main/{id}/information")
-    public ClientInformationForMainPageDTO  showClientById(@PathVariable("id")Long id)
-    {
-        ClientInformationForMainPageDTO  clientInformationForMainPageDTO = clientService.getClientById(id);
-        return clientInformationForMainPageDTO ;
+    @GetMapping("/{id}/information")
+    public ClientInformationForMainPageDTO showClientById(@PathVariable("id") Long id) {
+        ClientInformationForMainPageDTO clientInformationForMainPageDTO = clientService.getClientById(id);
+        return clientInformationForMainPageDTO;
     }
-    @GetMapping("/main/{id}/transactions")
-    public List<TransactionDto> showAllTransactionsById(@PathVariable("id")Long id)
-    {
+
+    @GetMapping("/{id}/transactions")
+    public List<TransactionDto> showAllTransactionsById(@PathVariable("id") Long id) {
         return clientService.getAllTransactionByClientId(id);
     }
-    @GetMapping("/main/{id}/account")
-    public List<AccountDto> showAllAccountsByClienId(@PathVariable("id")Long id)
-    {
+
+    @GetMapping("/{id}/account")
+    public List<AccountDto> showAllAccountsByClienId(@PathVariable("id") Long id) {
         return clientService.getAllAccountsByClientId(id);
     }
-    @PostMapping("/main/{id}/create")
-    public void  createNewAccountByClientId(@PathVariable("id")Long id,@RequestBody AccountDto accountDto)
-    {
-        accountService.createAccountByClientId(accountDto,id);
+
+    @PostMapping("/{id}/account/create")
+    public void createNewAccountByClientId(@PathVariable("id") Long id, @RequestBody AccountDto accountDto) {
+        accountService.createAccountByClientId(accountDto, id);
     }
-    @GetMapping("/main/{id}/auth")
-    public AuthInfoDto showAuthInfoByClientId(@PathVariable("id")Long id)
-    {
+
+    @GetMapping("/{id}/auth")
+    public AuthInfoDto showAuthInfoByClientId(@PathVariable("id") Long id) {
         return clientService.getAuthInfoByClientId(id);
     }
-    @PatchMapping("/main/{id}/auth/update")
-    public void updateAuthClientById(@PathVariable("id")Long id,@RequestBody AuthInfoDto authInfoDto)
-    {
-        clientService.updateAuthClientById(authInfoDto,id);
+
+    @PatchMapping("/{id}/auth/update")
+    public void updateAuthClientById(@PathVariable("id") Long id, @RequestBody AuthInfoDto authInfoDto) {
+        clientService.updateAuthClientById(authInfoDto, id);
     }
-    @GetMapping("/main/{id}/document")
-    public DocumentDto showDocumentByClientId(@PathVariable("id")Long id)
-    {
+
+    @GetMapping("/{id}/document")
+    public DocumentResponseDto showDocumentByClientId(@PathVariable("id") Long id) {
         return clientService.getDocumentByClientId(id);
     }
-    @GetMapping("/main/{id}/manage-information")
-    public ClientInformationForManageDTO showClientInformationForManageByClientId(@PathVariable("id")Long id)
-    {
+
+    @GetMapping("/{id}/manage-information")
+    public ClientInformationForManageDTO showClientInformationForManageByClientId(@PathVariable("id") Long id) {
         return clientService.getClientInformationForManageByClientId(id);
     }
-    @PostMapping("/main/{id}/document/create")
-    public void updateClientsDocumentById(@PathVariable("id")Long id,@RequestBody DocumentDto documentDto)
-    {
-        clientService.createDocumentByClientId(id,documentDto);
+
+    @PostMapping("/{id}/document/create")
+    public void updateClientsDocumentById(@PathVariable("id") Long id, @RequestBody DocumentRequestDto documentRequestDto) {
+        clientService.createDocumentByClientId(id, documentRequestDto);
     }
-    @DeleteMapping("/main/{id}/document/delete")
-    public void deleteClientsDocumentById(@PathVariable("id")Long id)
-    {
+
+    @DeleteMapping("/{id}/document/delete")
+    public void deleteClientsDocumentById(@PathVariable("id") Long id) {
         clientService.deleteClientsDocumentByClientId(id);
     }
-    @GetMapping("/main/{id}/account/{idAcc}")
-    public AccountDto showClientsAccountById(@PathVariable("idAcc") Long id)
-    {
-        return accountService.getClientsAccountById(id);
+
+    @GetMapping("/{id}/account/{idAcc}")
+    public AccountDto showClientsAccountById(@PathVariable("idAcc") Long idAcc, @PathVariable("id") Long idCl) {
+        return accountService.getClientsAccountById(idAcc, idCl);
+    }
+
+    @PatchMapping("/{id}/account/{idAcc}/update")
+    public void updateClientsAccountById
+            (@PathVariable("idAcc") Long idAcc, @PathVariable("id") Long idCl, @RequestBody AccountRequestDto accountRequestDto) {
+        accountService.updateClientsAccountById(idAcc, idCl, accountRequestDto);
     }
 }

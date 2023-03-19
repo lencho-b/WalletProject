@@ -27,8 +27,7 @@ public class Document {
     @Column(name = "created_at", nullable = false)
     private LocalDate createdAt;
 
-    @NotNull
-    @Column(name = "updated_at", nullable = false)
+    @Column(name = "updated_at")
     private LocalDate updatedAt;
 
     @NotNull
