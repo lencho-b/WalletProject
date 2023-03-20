@@ -1,5 +1,6 @@
 package com.example.WalletProject.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import javax.print.DocFlavor;
@@ -11,11 +12,13 @@ public class TransactionAccount {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonManagedReference
     private Transaction transaction;
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonManagedReference
     private Account account;
-    private boolean sender;
+    private Boolean sender;
 
     public TransactionAccount() {
     }
@@ -48,7 +51,7 @@ public class TransactionAccount {
         return sender;
     }
 
-    public void setSender(boolean sender) {
+    public void setSender(Boolean sender) {
         this.sender = sender;
     }
 
@@ -63,6 +66,16 @@ public class TransactionAccount {
 
     @Override
     public int hashCode() {
+        // переделать сравнение
         return Objects.hash(transaction, account);
+    }
+
+
+    @Override
+    public String toString() {
+        return "TransactionAccount{" +
+                "id=" + id +
+                ", sender=" + sender +
+                '}';
     }
 }

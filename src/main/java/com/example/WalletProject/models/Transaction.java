@@ -1,5 +1,6 @@
 package com.example.WalletProject.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.Date;
@@ -16,8 +17,9 @@ public class Transaction {
     private String message;
     private Date startDateTime;
     private Date finishDateTime;
-    private boolean status;
+    private Boolean status;
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonManagedReference
     private TransactionType transactionType;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "transaction")
     private List<TransactionAccount> transactionAccounts;
@@ -69,7 +71,7 @@ public class Transaction {
         return status;
     }
 
-    public void setStatus(boolean status) {
+    public void setStatus(Boolean status) {
         this.status = status;
     }
 
@@ -103,5 +105,17 @@ public class Transaction {
     @Override
     public int hashCode() {
         return Objects.hash(id, value, startDateTime);
+    }
+
+    @Override
+    public String toString() {
+        return "Transaction{" +
+                "id=" + id +
+                ", value=" + value +
+                ", message='" + message + '\'' +
+                ", startDateTime=" + startDateTime +
+                ", finishDateTime=" + finishDateTime +
+                ", status=" + status +
+                '}';
     }
 }

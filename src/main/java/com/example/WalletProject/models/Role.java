@@ -7,18 +7,16 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
-public class Currency {
-
+public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private String name;
-    private Integer index;
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "currency")
+    private String roleName;
+    @ManyToMany(mappedBy = "roles")
     @JsonBackReference
-    private List<Account> accounts;
+    private List<Client> clients;
 
-    public Currency() {
+    public Role() {
     }
 
     public Integer getId() {
@@ -29,37 +27,29 @@ public class Currency {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getRoleName() {
+        return roleName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
     }
 
-    public Integer getIndex() {
-        return index;
+    public List<Client> getClients() {
+        return clients;
     }
 
-    public void setIndex(Integer index) {
-        this.index = index;
-    }
-
-    public List<Account> getAccounts() {
-        return accounts;
-    }
-
-    public void setAccounts(List<Account> accounts) {
-        this.accounts = accounts;
+    public void setClients(List<Client> clients) {
+        this.clients = clients;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Currency currency = (Currency) o;
+        Role role = (Role) o;
         // переделать сравнение
-        return Objects.equals(id, currency.id);
+        return Objects.equals(id, role.id);
     }
 
     @Override
@@ -69,10 +59,9 @@ public class Currency {
 
     @Override
     public String toString() {
-        return "Currency{" +
+        return "Role{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
-                ", index=" + index +
+                ", roleName='" + roleName + '\'' +
                 '}';
     }
 }

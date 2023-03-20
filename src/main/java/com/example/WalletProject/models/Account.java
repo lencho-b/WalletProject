@@ -1,5 +1,6 @@
 package com.example.WalletProject.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.Date;
@@ -12,23 +13,19 @@ public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private boolean frozen;
-
     private String comment;
-
     private Long value;
-
     private Date created_at;
-
     private Date updated_at;
-
+    @OneToOne(cascade = CascadeType.ALL)
+    private AuthInfo authInfo;
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonManagedReference
     private Client client;
-
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonManagedReference
     private Currency currency;
-
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "account")
     private List<TransactionAccount> transactionAccounts;
 
@@ -122,5 +119,18 @@ public class Account {
     @Override
     public int hashCode() {
         return Objects.hash(id, created_at, client, currency);
+    }
+
+    @Override
+    public String toString() {
+        return "Account{" +
+                "id=" + id +
+                ", frozen=" + frozen +
+                ", comment='" + comment + '\'' +
+                ", value=" + value +
+                ", created_at=" + created_at +
+                ", updated_at=" + updated_at +
+                ", client=" + client +
+                '}';
     }
 }

@@ -1,5 +1,6 @@
 package com.example.WalletProject.models;
 
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
@@ -7,18 +8,18 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
-public class TransactionType {
+public class DocumentFormat {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private String type;
-    private String comment;
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "transactionType")
+    private String format;
+    @OneToMany(mappedBy = "documentFormat", cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY, orphanRemoval = true)
     @JsonBackReference
-    private List<Transaction> transactions;
+    private List<Country> countries;
 
-    public TransactionType() {
+    public DocumentFormat() {
     }
 
     public Integer getId() {
@@ -29,35 +30,27 @@ public class TransactionType {
         this.id = id;
     }
 
-    public String getType() {
-        return type;
+    public String getFormat() {
+        return format;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setFormat(String format) {
+        this.format = format;
     }
 
-    public String getComment() {
-        return comment;
+    public List<Country> getCountries() {
+        return countries;
     }
 
-    public void setComment(String comment) {
-        this.comment = comment;
-    }
-
-    public List<Transaction> getTransactions() {
-        return transactions;
-    }
-
-    public void setTransactions(List<Transaction> transactions) {
-        this.transactions = transactions;
+    public void setCountries(List<Country> countries) {
+        this.countries = countries;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        TransactionType that = (TransactionType) o;
+        DocumentFormat that = (DocumentFormat) o;
         // переделать сравнение
         return Objects.equals(id, that.id);
     }
@@ -69,10 +62,9 @@ public class TransactionType {
 
     @Override
     public String toString() {
-        return "TransactionType{" +
+        return "DocumentFormat{" +
                 "id=" + id +
-                ", type='" + type + '\'' +
-                ", comment='" + comment + '\'' +
+                ", format='" + format + '\'' +
                 '}';
     }
 }
