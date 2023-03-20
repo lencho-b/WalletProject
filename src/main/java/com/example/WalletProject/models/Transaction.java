@@ -22,7 +22,6 @@ public class Transaction {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "transaction")
     private List<TransactionAccount> transactionAccounts;
 
-
     public Transaction() {
     }
 

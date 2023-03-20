@@ -6,19 +6,26 @@ import javax.print.DocFlavor;
 import java.util.Objects;
 
 @Entity
-@IdClass(TransactionAccountPK.class)
 public class TransactionAccount {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     @ManyToOne(fetch = FetchType.EAGER)
     private Transaction transaction;
-    @Id
     @ManyToOne(fetch = FetchType.EAGER)
     private Account account;
     private boolean sender;
 
-
     public TransactionAccount() {
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Transaction getTransaction() {
