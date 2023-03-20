@@ -1,35 +1,29 @@
 package com.example.WalletProject.models.DTO;
 
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
-
 import java.time.LocalDate;
 
 public class RegistrationDto
 {
-    @Size(max = 50)
-    @NotNull
+
     private  String firstname;
-    @Size(max = 50)
-    @NotNull
+
     private  String lastname;
-    @Size(max = 50)
-    @NotNull
+
     private  String patronymic;
-    @NotNull
+
     private LocalDate dateOfBirth;
-    @NotNull
+
     private  String email;
-    @Size(max = 50)
-    @NotNull
+
     private String phoneNumber;
-    @Size(max = 50)
-    @NotNull
+
     private String login;
-    @NotNull
+
     private String password;
 
-    public RegistrationDto(String firstname, String lastname, String patronymic, LocalDate dateOfBirth, String email, String phoneNumber, String login, String password) {
+    private  Integer role;
+
+    public RegistrationDto(String firstname, String lastname, String patronymic, LocalDate dateOfBirth, String email, String phoneNumber, String login, String password, Integer role) {
         this.firstname = firstname;
         this.lastname = lastname;
         this.patronymic = patronymic;
@@ -38,6 +32,7 @@ public class RegistrationDto
         this.phoneNumber = phoneNumber;
         this.login = login;
         this.password = password;
+        this.role = role;
     }
 
     public RegistrationDto() {
@@ -73,5 +68,9 @@ public class RegistrationDto
 
     public String getPassword() {
         return password;
+    }
+
+    public Integer getRole() {
+        return role;
     }
 }

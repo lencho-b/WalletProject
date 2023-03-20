@@ -1,25 +1,15 @@
 package com.example.WalletProject.models.DTO;
 
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+public class AccountDto{
 
-import java.io.Serializable;
-
-/**
- * A DTO for the {@link com.example.WalletProject.models.Entity.Account} entity
- */
-public class AccountDto implements Serializable {
-    @Size(max = 50)
-    @NotNull
     private String name;
-    @NotNull
+
     private Boolean frozen;
-    @Size(max = 100)
-    @NotNull
+
     private  String comment;
-    @NotNull
+
     private Long value;
-    @NotNull
+
     private String currencyName;
 
     public String getName() {
@@ -51,5 +41,16 @@ public class AccountDto implements Serializable {
     }
 
     public AccountDto() {
+    }
+
+    @Override
+    public String toString() {
+        return "AccountDto{" +
+                "name='" + name + '\'' +
+                ", frozen=" + frozen +
+                ", comment='" + comment + '\'' +
+                ", value=" + value +
+                ", currencyName='" + currencyName + '\'' +
+                '}';
     }
 }

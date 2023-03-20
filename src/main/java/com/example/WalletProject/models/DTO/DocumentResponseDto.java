@@ -1,19 +1,11 @@
 package com.example.WalletProject.models.DTO;
 
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
-
-import java.io.Serializable;
 import java.time.LocalDate;
 
-public class DocumentResponseDto implements Serializable
+public class DocumentResponseDto
 {
-    @Size(max = 50)
-    @NotNull
     private String documentNumber;
-    @NotNull
     private LocalDate issueDate;
-    @NotNull
     private Integer countryId;
 
     public DocumentResponseDto(String documentNumber, LocalDate issueDate, Integer countryId) {

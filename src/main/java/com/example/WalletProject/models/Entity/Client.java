@@ -1,10 +1,9 @@
 package com.example.WalletProject.models.Entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -15,50 +14,36 @@ public class Client {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Size(max = 50)
-    @NotNull
     @Column(name = "firstname", nullable = false, length = 50)
     private String firstname;
 
-    @Size(max = 50)
-    @NotNull
     @Column(name = "lastname", nullable = false, length = 50)
     private String lastname;
 
-    @Size(max = 50)
-    @NotNull
     @Column(name = "patronymic", nullable = false, length = 50)
     private String patronymic;
 
-    @NotNull
     @Column(name = "date_of_birth", nullable = false)
     private LocalDate dateOfBirth;
 
-    @NotNull
     @Column(name = "email", nullable = false, length = Integer.MAX_VALUE)
     private String email;
 
-    @Size(max = 50)
-    @NotNull
     @Column(name = "phone_number", nullable = false, length = 50)
     private String phoneNumber;
 
-    @NotNull
     @Column(name = "created_at", nullable = false)
     private LocalDate createdAt;
 
     @Column(name = "updated_at")
     private LocalDate updatedAt;
 
-    @NotNull
     @Column(name = "frozen", nullable = false)
     private boolean frozen = false;
 
-    @NotNull
     @Column(name = "is_delete", nullable = false)
     private boolean isDelete = false;
 
-    @NotNull
     @Column(name = "is_verify", nullable = false)
     private boolean isVerify = false;
 
@@ -68,6 +53,19 @@ public class Client {
     @JoinTable(name = "client_role",joinColumns = @JoinColumn (name = "client_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private List<Role> roles;
+    public Client( String firstname, String lastname, String patronymic, LocalDate dateOfBirth, String email, String phoneNumber, LocalDate createdAt, LocalDate updatedAt, boolean frozen, boolean isDelete, boolean isVerify) {
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.patronymic = patronymic;
+        this.dateOfBirth = dateOfBirth;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.frozen = frozen;
+        this.isDelete = isDelete;
+        this.isVerify = isVerify;
+    }
     public Client(String firstname, String lastname, String patronymic, LocalDate dateOfBirth, String email, String phoneNumber) {
         this.firstname = firstname;
         this.lastname = lastname;
@@ -76,6 +74,24 @@ public class Client {
         this.email = email;
         this.phoneNumber = phoneNumber;
     }
+    public Client() {
+    }
+    public List<Role> getRoles(Role role) {
+
+        return roles;
+    }
+
+    public void setRole(Role role) {
+        if(roles == null)
+        {
+            roles=new ArrayList<>();
+        }
+        roles.add(role);
+    }
+    public Client(Long id) {
+        this.id = id;
+    }
+
 
     public Client(List<Account> accounts) {
         this.accounts = accounts;
@@ -104,26 +120,6 @@ public class Client {
     public void setAccounts(List<Account> accounts) {
         this.accounts = accounts;
     }
-
-    public Client( String firstname, String lastname, String patronymic, LocalDate dateOfBirth, String email, String phoneNumber, LocalDate createdAt, LocalDate updatedAt, boolean frozen, boolean isDelete, boolean isVerify) {
-        this.firstname = firstname;
-        this.lastname = lastname;
-        this.patronymic = patronymic;
-        this.dateOfBirth = dateOfBirth;
-        this.email = email;
-        this.phoneNumber = phoneNumber;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-        this.frozen = frozen;
-        this.isDelete = isDelete;
-        this.isVerify = isVerify;
-    }
-    public Client() {
-    }
-    public Client(Long id) {
-        this.id = id;
-    }
-
     public Long getId() {
         return id;
     }
@@ -220,4 +216,23 @@ public class Client {
         this.isVerify = isVerify;
     }
 
+    @Override
+    public String toString() {
+        return "Client{" +
+                "id=" + id +
+                ", firstname='" + firstname + '\'' +
+                ", lastname='" + lastname + '\'' +
+                ", patronymic='" + patronymic + '\'' +
+                ", dateOfBirth=" + dateOfBirth +
+                ", email='" + email + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                ", frozen=" + frozen +
+                ", isDelete=" + isDelete +
+                ", isVerify=" + isVerify +
+                ", accounts=" + accounts +
+                ", roles=" + roles +
+                '}';
+    }
 }

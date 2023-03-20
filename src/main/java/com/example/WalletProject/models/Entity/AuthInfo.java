@@ -4,8 +4,6 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "auth_info")
@@ -14,12 +12,9 @@ public class AuthInfo {
     @Column(name = "client_id", nullable = false)
     private Long id;
 
-    @Size(max = 50)
-    @NotNull
     @Column(name = "login", nullable = false, length = 50)
     private String login;
 
-    @NotNull
     @Column(name = "password", nullable = false, length = Integer.MAX_VALUE)
     private String password;
 

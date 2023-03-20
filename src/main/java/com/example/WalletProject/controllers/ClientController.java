@@ -27,12 +27,6 @@ public class ClientController {
     {
         clientService.updateInformationByClientId(id,clientInformationForMainPageDTO);
     }
-
-    @GetMapping("/{id}/transactions")
-    public List<TransactionDto> showAllTransactionsById(@PathVariable("id") Long id) {
-        return clientService.getAllTransactionByClientId(id);
-    }
-
     @GetMapping("/{id}/account")
     public List<AccountDto> showAllAccountsByClienId(@PathVariable("id") Long id) {
         return accountService.getAllAccountsByClientId(id);

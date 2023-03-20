@@ -1,10 +1,8 @@
 package com.example.WalletProject.models.Entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @Entity
 @Table(name = "account")
@@ -14,14 +12,12 @@ public class Account {
     @Column(name = "id")
     private Long id;
 
-    @Size(max = 50)
     @Column(name = "name", nullable = false, length = 50)
     private String name;
 
     @Column(name = "frozen", nullable = false)
     private Boolean frozen = false;
 
-    @Size(max = 100)
     @Column(name = "comment", nullable = false, length = 100)
     private String comment;
 
@@ -41,25 +37,19 @@ public class Account {
     @ManyToOne(fetch = FetchType.LAZY, optional = false,  cascade = CascadeType.ALL)
     @JoinColumn(name = "currency_id", nullable = false)
     private Currency currency;
-
-    @ManyToMany(fetch = FetchType.LAZY,cascade =CascadeType.ALL)
-    @JoinTable(name = "transaction_account",joinColumns = @JoinColumn (name = "account_id"),
-            inverseJoinColumns = @JoinColumn(name = "transaction_id"))
-    private List<Transaction> transactions;
-
     public Account() {
     }
 
-    public Account(List<Transaction> transactions) {
-        this.transactions = transactions;
-    }
-
-    public List<Transaction> getTransactions() {
-        return transactions;
-    }
-
-    public void setTransactions(List<Transaction> transactions) {
-        this.transactions = transactions;
+    public Account(Long id, String name, Boolean frozen, String comment, Long value, LocalDate createdAt, LocalDate updatedAt, Client client, Currency currency) {
+        this.id = id;
+        this.name = name;
+        this.frozen = frozen;
+        this.comment = comment;
+        this.value = value;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.client = client;
+        this.currency = currency;
     }
 
     public Long getId() {
@@ -134,4 +124,18 @@ public class Account {
         this.currency = currency;
     }
 
+    @Override
+    public String toString() {
+        return "Account{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", frozen=" + frozen +
+                ", comment='" + comment + '\'' +
+                ", value=" + value +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                ", client=" + client +
+                ", currency=" + currency +
+                '}';
+    }
 }

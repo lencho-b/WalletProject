@@ -2,9 +2,7 @@ package com.example.WalletProject.services;
 
 import com.example.WalletProject.models.DTO.AccountDto;
 import com.example.WalletProject.models.DTO.AccountRequestDto;
-import com.example.WalletProject.models.DTO.TransactionDto;
 import com.example.WalletProject.models.Entity.Account;
-import com.example.WalletProject.models.Entity.Transaction;
 import com.example.WalletProject.repositories.AccountRepository;
 import com.example.WalletProject.repositories.ClientRepository;
 import com.example.WalletProject.repositories.CurrencyRepository;
@@ -122,25 +120,6 @@ public class AccountService {
     {
         accountRepository.deleteById(id);
     }
-    public List<TransactionDto> getTransactionsById(Long id)
-    {
-        Account account = accountRepository.getById(id);
-        List<Transaction>transactions = account.getTransactions();
-        List<TransactionDto>transactionDtos = new ArrayList<>();
-        for (Transaction transaction:transactions)
-        {
-         transactionDtos.add(new TransactionDto
-                 (transaction.getId()
-                 ,transaction.getValue()
-                 ,transaction.getMessage()
-                 ,transaction.getStartDateTime()
-                 ,transaction.getFinishDateTime()
-                 ,transaction.getStatus()
-                 ,transaction.getType().getId()));
-        }
-        return transactionDtos;
-    }
-
     public void updateClientsAccountById(Long idAcc, Long idCl, AccountRequestDto accountRequestDto)
     {
             Account account = accountRepository.getById(idAcc);

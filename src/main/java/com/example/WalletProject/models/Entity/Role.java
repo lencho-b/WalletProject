@@ -1,9 +1,8 @@
 package com.example.WalletProject.models.Entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -13,14 +12,33 @@ public class Role {
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @Size(max = 50)
-    @NotNull
     @Column(name = "role_name", nullable = false, length = 50)
     private String roleName;
     @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinTable(name = "client_role",joinColumns = @JoinColumn (name = "role_id"),
             inverseJoinColumns = @JoinColumn(name = "client_id"))
     private List<Client> clients;
+
+    public Role(Integer id, String roleName, List<Client> clients) {
+        this.id = id;
+        this.roleName = roleName;
+        this.clients = clients;
+    }
+
+    public Role() {
+    }
+
+    public List<Client> getClients() {
+        return clients;
+    }
+
+    public void setClient(Client client) {
+        if(clients == null)
+        {
+            clients = new ArrayList<>();
+        }
+        clients.add(client);
+    }
 
     public Integer getId() {
         return id;
@@ -38,4 +56,12 @@ public class Role {
         this.roleName = roleName;
     }
 
+    @Override
+    public String toString() {
+        return "Role{" +
+                "id=" + id +
+                ", roleName='" + roleName + '\'' +
+                ", clients=" + clients +
+                '}';
+    }
 }

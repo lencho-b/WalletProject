@@ -1,11 +1,8 @@
 package com.example.WalletProject.models.Entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
-import java.util.Objects;
 
 @Entity
 @Table(name = "document")
@@ -14,23 +11,30 @@ public class Document {
     @JoinColumn(name = "client_id", referencedColumnName = "id")
     @Column(name = "client_id", nullable = false)
     private Long client_id;
-    @Size(max = 50)
-    @NotNull
+
     @Column(name = "document_number", nullable = false, length = 50)
     private String documentNumber;
 
-    @NotNull
     @Column(name = "issue_date", nullable = false)
     private LocalDate issueDate;
 
-    @NotNull
     @Column(name = "created_at", nullable = false)
     private LocalDate createdAt;
 
-    @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "country_id", nullable = false)
     private Country country;
+
+    public Document(Long client_id, String documentNumber, LocalDate issueDate, LocalDate createdAt, Country country) {
+        this.client_id = client_id;
+        this.documentNumber = documentNumber;
+        this.issueDate = issueDate;
+        this.createdAt = createdAt;
+        this.country = country;
+    }
+
+    public Document() {
+    }
 
     public Long getClient_id() {
         return client_id;
@@ -80,7 +84,13 @@ public class Document {
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(getCountry());
+    public String toString() {
+        return "Document{" +
+                "client_id=" + client_id +
+                ", documentNumber='" + documentNumber + '\'' +
+                ", issueDate=" + issueDate +
+                ", createdAt=" + createdAt +
+                ", country=" + country +
+                '}';
     }
 }

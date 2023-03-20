@@ -1,7 +1,6 @@
 package com.example.WalletProject.models.Entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "currency")
@@ -11,7 +10,6 @@ public class Currency {
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @Size(max = 50)
     @Column(name = "name", nullable = false, length = 50)
     private String name;
 
@@ -42,5 +40,13 @@ public class Currency {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return "Currency{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
     }
 }

@@ -15,6 +15,14 @@ public class DocumentFormat {
     @Column(name = "document_format", length = Integer.MAX_VALUE)
     private String documentFormat;
 
+    public DocumentFormat(Integer id, String documentFormat) {
+        this.id = id;
+        this.documentFormat = documentFormat;
+    }
+
+    public DocumentFormat() {
+    }
+
     public Integer getId() {
         return id;
     }
@@ -31,4 +39,11 @@ public class DocumentFormat {
         this.documentFormat = documentFormat;
     }
 
+    @Override
+    public String toString() {
+        return "DocumentFormat{" +
+                "id=" + id +
+                ", documentFormat='" + documentFormat + '\'' +
+                '}';
+    }
 }

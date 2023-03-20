@@ -1,34 +1,30 @@
 package com.example.WalletProject.services;
 
 import com.example.WalletProject.models.DTO.*;
-import com.example.WalletProject.models.Entity.Account;
 import com.example.WalletProject.models.Entity.AuthInfo;
 import com.example.WalletProject.models.Entity.Client;
 import com.example.WalletProject.models.Entity.Document;
+import com.example.WalletProject.models.Entity.Role;
 import com.example.WalletProject.repositories.*;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class ClientService
 {
     private final ClientRepository clientRepository;
-    private final AccountRepository accountRepository;
     private final AuthInfoRepository authInfoRepository;
     private final DocumentRepository documentRepository;
-    private final AccountService accountService;
     private final CountryRepository countryRepository;
+    private final RoleRepository roleRepository;
 
-    public ClientService(ClientRepository clientRepository, AccountRepository accountRepository, AuthInfoRepository authInfoRepository, DocumentRepository documentRepository, AccountService accountService, CountryRepository countryRepository) {
+    public ClientService(ClientRepository clientRepository, AuthInfoRepository authInfoRepository, DocumentRepository documentRepository, CountryRepository countryRepository, RoleRepository roleRepository) {
         this.clientRepository = clientRepository;
-        this.accountRepository = accountRepository;
         this.authInfoRepository = authInfoRepository;
         this.documentRepository = documentRepository;
-        this.accountService = accountService;
         this.countryRepository = countryRepository;
+        this.roleRepository = roleRepository;
     }
 
     public ClientInformationForMainPageDTO  getClientById(Long id)
@@ -42,21 +38,6 @@ public class ClientService
                 ,client.getEmail()
                 ,client.getPhoneNumber());
         return clientInformationForMainPageDTO ;
-    }
-    public List<TransactionDto> getAllTransactionByClientId(Long id)
-    {
-
-        accountRepository.findAll();
-        List<TransactionDto>transactionsByClientid = new ArrayList<>();
-        List<Account>accounts = accountRepository.findAll();
-        for (Account account:accounts)
-        {
-            if(account.getClient().getId()==id.longValue())
-            {
-                transactionsByClientid.addAll(accountService.getTransactionsById(account.getId()));
-            }
-        }
-        return transactionsByClientid;
     }
     public AuthInfoDto getAuthInfoByClientId(Long id)
     {
@@ -120,6 +101,7 @@ public class ClientService
 
     public void createNewClient(RegistrationDto registrationDto)
     {
+        Role role = new Role();
      Client client = new Client
              (
                      registrationDto.getFirstname(),
@@ -134,6 +116,7 @@ public class ClientService
                      false,
                      false
              );
+        client.setRole(roleRepository.getById(registrationDto.getRole()));
      clientRepository.save(client);
         AuthInfo authInfo = new AuthInfo(
                 client.getId(),
@@ -141,6 +124,8 @@ public class ClientService
                 registrationDto.getPassword()
         );
      authInfoRepository.save(authInfo);
+     client.setRole(roleRepository.getById(registrationDto.getRole()));
+     role.setClient(clientRepository.getById(client.getId()));
     }
 
     public void updateInformationByClientId(Long id, ClientInformationForMainPageDTO clientInformationForMainPageDTO)
