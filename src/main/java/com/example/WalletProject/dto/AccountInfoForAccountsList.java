@@ -18,11 +18,19 @@ public class AccountInfoForAccountsList {
         this.comment = comment;
     }
 
-    public Long getValue() {
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public BigDecimal getValue() {
         return value;
     }
 
-    public void setValue(Long value) {
+    public void setValue(BigDecimal value) {
         this.value = value;
     }
 

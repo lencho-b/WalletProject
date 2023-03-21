@@ -15,6 +15,8 @@ public class Document {
     @Id
     @Column(name = "client_id")
     private Long id;
+
+    private String documentNumber; //Добавила пропущенное поле
     private Date issueDate;
     private Date createdAt;
     private Date updatedAt;

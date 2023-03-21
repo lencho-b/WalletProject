@@ -36,19 +36,19 @@ public class AccountFullInfoDTO {
         this.value = value;
     }
 
-    public CurrencyDTO getCurrency() {
+    public String getCurrency() {
         return currency;
     }
 
-    public void setCurrency(CurrencyDTO currency) {
+    public void setCurrency(String currency) {
         this.currency = currency;
     }
 
-    public List<TransactionAccount> getTransactionAccounts() {
-        return transactionAccounts;
+    public List<TransactionInfo> getTransactions() {
+        return transactions;
     }
 
-    public void setTransactionAccounts(List<TransactionAccount> transactionAccounts) {
-        this.transactionAccounts = transactionAccounts;
+    public void setTransactions(List<TransactionInfo> transactions) {
+        this.transactions = transactions;
     }
 }

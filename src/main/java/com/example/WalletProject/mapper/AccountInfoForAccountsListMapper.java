@@ -27,12 +27,14 @@ public class AccountInfoForAccountsListMapper {
         };
     }
 
+
+
     public AccountInfoForAccountsList toDto(Account entity){
         return  modelMapper.map(entity, AccountInfoForAccountsList.class);
     }
 
-    public Account toEntity(AccountInfoForAccountsList dto){
-        return modelMapper.map(dto, Account.class);
-    }
+//    public Account toEntity(AccountInfoForAccountsList dto){
+//        return modelMapper.map(dto, Account.class);
+//    }
 
 }
