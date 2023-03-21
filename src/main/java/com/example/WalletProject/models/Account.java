@@ -18,8 +18,6 @@ public class Account {
     private Long value;
     private Date created_at;
     private Date updated_at;
-    @OneToOne(cascade = CascadeType.ALL)
-    private AuthInfo authInfo;
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonManagedReference
     private Client client;
