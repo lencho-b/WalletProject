@@ -12,7 +12,7 @@ public class Role {
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @Column(name = "role_name", nullable = false, length = 50)
+    @Column(name = "name", nullable = false, length = 50)
     private String roleName;
     @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinTable(name = "client_role",joinColumns = @JoinColumn (name = "role_id"),

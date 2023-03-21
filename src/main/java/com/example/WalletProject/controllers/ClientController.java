@@ -2,8 +2,9 @@ package com.example.WalletProject.controllers;
 
 import com.example.WalletProject.models.DTO.*;
 import com.example.WalletProject.services.AccountService;
+import com.example.WalletProject.services.AuthService;
 import com.example.WalletProject.services.ClientService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.WalletProject.services.DocumentService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,10 +12,17 @@ import java.util.List;
 @RestController
 @RequestMapping("/client")
 public class ClientController {
-    @Autowired
-    private ClientService clientService;
-    @Autowired
-    private AccountService accountService;
+    private final ClientService clientService;
+    private final AccountService accountService;
+    private final DocumentService documentService;
+    private final AuthService authService;
+
+    public ClientController(ClientService clientService, AccountService accountService, DocumentService documentService, AuthService authService) {
+        this.clientService = clientService;
+        this.accountService = accountService;
+        this.documentService = documentService;
+        this.authService = authService;
+    }
 
     @GetMapping("/{id}/information")
     public ClientInformationForMainPageDTO showClientById(@PathVariable("id") Long id) {
@@ -39,17 +47,17 @@ public class ClientController {
 
     @GetMapping("/{id}/auth")
     public AuthInfoDto showAuthInfoByClientId(@PathVariable("id") Long id) {
-        return clientService.getAuthInfoByClientId(id);
+        return authService.getAuthInfoByClientId(id);
     }
 
     @PatchMapping("/{id}/auth/update")
     public void updateAuthClientById(@PathVariable("id") Long id, @RequestBody AuthInfoDto authInfoDto) {
-        clientService.updateAuthClientById(authInfoDto, id);
+        authService.updateAuthClientById(authInfoDto, id);
     }
 
     @GetMapping("/{id}/document")
-    public DocumentResponseDto showDocumentByClientId(@PathVariable("id") Long id) {
-        return clientService.getDocumentByClientId(id);
+    public DocumentDto showDocumentByClientId(@PathVariable("id") Long id) {
+        return documentService.getDocumentByClientId(id);
     }
 
     @GetMapping("/{id}/manage-information")
@@ -58,13 +66,13 @@ public class ClientController {
     }
 
     @PostMapping("/{id}/document/create")
-    public void updateClientsDocumentById(@PathVariable("id") Long id, @RequestBody DocumentRequestDto documentRequestDto) {
-        clientService.createDocumentByClientId(id, documentRequestDto);
+    public void updateClientsDocumentById(@PathVariable("id") Long id, @RequestBody DocumentDto documentDto) {
+        documentService.createDocumentByClientId(id, documentDto);
     }
 
     @DeleteMapping("/{id}/document/delete")
     public void deleteClientsDocumentById(@PathVariable("id") Long id) {
-        clientService.deleteClientsDocumentByClientId(id);
+        documentService.deleteClientsDocumentByClientId(id);
     }
 
     @GetMapping("/{id}/account/{idAcc}")

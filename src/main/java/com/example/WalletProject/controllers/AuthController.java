@@ -17,8 +17,7 @@ public class AuthController
         this.clientService = clientService;
     }
     @PostMapping("/registration")
-    public void createNewClient(@RequestBody RegistrationDto registrationDto)
-    {
+    public void createNewClient(@RequestBody RegistrationDto registrationDto) {
         clientService.createNewClient(registrationDto);
     }
 }
