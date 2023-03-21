@@ -1,9 +1,7 @@
 package com.example.WalletProject.controllers;
 
-import com.example.WalletProject.models.Account;
-import com.example.WalletProject.services.AccountService;
+import com.example.WalletProject.dto.ClientDTO;
 import com.example.WalletProject.services.ClientService;
-import com.example.WalletProject.services.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -11,17 +9,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class ClientController {
 
-    private ClientService clientService;
-    private TransactionService transactionService;
-    private AccountService accountService;
+    private final ClientService clientService;
 
     @Autowired
-    public ClientController(ClientService clientService, TransactionService transactionService, AccountService accountService) {
+    public ClientController(ClientService clientService) {
         this.clientService = clientService;
-        this.transactionService = transactionService;
-        this.accountService = accountService;
+
     }
 
+    public ClientDTO getClientById(Long clientId){}
 
 
 }

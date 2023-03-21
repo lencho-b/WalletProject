@@ -1,5 +1,6 @@
 package com.example.WalletProject.models;
 
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
@@ -7,18 +8,18 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
-public class Currency {
+public class DocumentFormat {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private String name;
-    private Integer index;
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "currency")
+    private String format;
+    @OneToMany(mappedBy = "documentFormat", cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY, orphanRemoval = true)
     @JsonBackReference
-    private List<Account> accounts;
+    private List<Country> countries;
 
-    public Currency() {
+    public DocumentFormat() {
     }
 
     public Integer getId() {
@@ -29,37 +30,29 @@ public class Currency {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getFormat() {
+        return format;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFormat(String format) {
+        this.format = format;
     }
 
-    public Integer getIndex() {
-        return index;
+    public List<Country> getCountries() {
+        return countries;
     }
 
-    public void setIndex(Integer index) {
-        this.index = index;
-    }
-
-    public List<Account> getAccounts() {
-        return accounts;
-    }
-
-    public void setAccounts(List<Account> accounts) {
-        this.accounts = accounts;
+    public void setCountries(List<Country> countries) {
+        this.countries = countries;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Currency currency = (Currency) o;
+        DocumentFormat that = (DocumentFormat) o;
         // переделать сравнение
-        return Objects.equals(id, currency.id);
+        return Objects.equals(id, that.id);
     }
 
     @Override
@@ -69,10 +62,9 @@ public class Currency {
 
     @Override
     public String toString() {
-        return "Currency{" +
+        return "DocumentFormat{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
-                ", index=" + index +
+                ", format='" + format + '\'' +
                 '}';
     }
 }

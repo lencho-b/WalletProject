@@ -29,6 +29,6 @@ public class ClientDTO {
     private String phoneNumber;
     @NotNull
     private boolean isVerify;
+    private DocumentDTO;
 
-    private DocumentDTO documentDTO;
 }
