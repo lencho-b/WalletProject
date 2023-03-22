@@ -117,8 +117,6 @@ public class ClientService
                 registrationDto.getPassword()
         );
         authInfoRepository.save(authInfo);
-        client.setRole(roleRepository.getById(registrationDto.getRole()));
-        role.setClient(clientRepository.getById(client.getId()));
     }
 
     public void updateInformationByClientId(Long id, ClientInformationForMainPageDTO clientInformationForMainPageDTO)
