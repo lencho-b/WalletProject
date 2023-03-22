@@ -13,12 +13,12 @@ import com.example.WalletProject.repositories.RoleRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
-public class ClientService
-{
+public class ClientService {
     private final ClientRepository clientRepository;
     private final AuthInfoRepository authInfoRepository;
     private final RoleRepository roleRepository;
@@ -28,45 +28,11 @@ public class ClientService
         this.authInfoRepository = authInfoRepository;
         this.roleRepository = roleRepository;
     }
-    public List<ClientDto> getAllClients()
-    {
-        List<ClientDto>allClientsDto = new ArrayList<>();
-        List<Client>allClients = clientRepository.findAll();
-        for (Client client:allClients)
-        {
-            allClientsDto.add(new ClientDto(
-                    client.getFirstname(),
-                    client.getLastname(),
-                    client.getPatronymic(),
-                    client.getDateOfBirth(),
-                    client.getEmail(),
-                    client.getPhoneNumber(),
-                    client.getCreatedAt(),
-                    client.getUpdatedAt(),
-                    client.getFrozen(),
-                    client.getIsDelete(),
-                    client.getIsVerify()));
-        }
-        return allClientsDto;
-    }
 
-    public ClientInformationForMainPageDTO  getClientById(Long id)
-    {
-        Client client = clientRepository.findById(id).get();
-        ClientInformationForMainPageDTO  clientInformationForMainPageDTO = new ClientInformationForMainPageDTO
-                (client.getFirstname()
-                ,client.getLastname()
-                ,client.getPatronymic()
-                ,client.getDateOfBirth()
-                ,client.getEmail()
-                ,client.getPhoneNumber());
-        return clientInformationForMainPageDTO ;
-    }
-    public ClientDto getClientByIdForAdmin(Long id)
-    {
-        Client client = clientRepository.findById(id).get();
-        ClientDto clientDto = new ClientDto
-                        (
+    public List<ClientDto> getAllClients() {
+        List<Client> allClients = clientRepository.findAll();
+        return allClients.stream()
+                .map(client -> new ClientDto(
                         client.getFirstname(),
                         client.getLastname(),
                         client.getPatronymic(),
@@ -77,22 +43,47 @@ public class ClientService
                         client.getUpdatedAt(),
                         client.getFrozen(),
                         client.getIsDelete(),
-                        client.getIsVerify());
-        return clientDto;
+                        client.getIsVerify()))
+                .collect(Collectors.toList());
     }
 
-    public ClientInformationForManageDTO getClientInformationForManageByClientId(Long id)
-    {
-        Client client = clientRepository.getById(id);
-        ClientInformationForManageDTO clientInformationForManageDTO =
-                new ClientInformationForManageDTO
-                (
+    // укоротил метод, с лямбдой будет длиннее
+    public ClientInformationForMainPageDTO getClientById(Long id) {
+        Client client = clientRepository.findById(id).get();
+        return new ClientInformationForMainPageDTO(
+                client.getFirstname(),
+                client.getLastname(),
+                client.getPatronymic(),
+                client.getDateOfBirth(),
+                client.getEmail(),
+                client.getPhoneNumber());
+    }
+
+    public ClientDto getClientByIdForAdmin(Long id) {
+        return clientRepository.findAllById(Collections.singletonList(id))
+                .stream()
+                .findFirst()
+                .map(client -> new ClientDto(
+                        client.getFirstname(),
+                        client.getLastname(),
+                        client.getPatronymic(),
+                        client.getDateOfBirth(),
+                        client.getEmail(),
+                        client.getPhoneNumber(),
+                        client.getCreatedAt(),
+                        client.getUpdatedAt(),
                         client.getFrozen(),
+                        client.getIsDelete(),
                         client.getIsVerify()
-                );
-        return clientInformationForManageDTO;
-
+                ))
+                .orElse(null);
     }
+
+    public ClientInformationForManageDTO getClientInformationForManageByClientId(Long id) {
+        Client client = clientRepository.getById(id);
+        return new ClientInformationForManageDTO(client.getFrozen(), client.getIsVerify());
+    }
+
     public void createNewClient(RegistrationDto registrationDto)
     {
         Role role = new Role();
@@ -119,8 +110,7 @@ public class ClientService
         authInfoRepository.save(authInfo);
     }
 
-    public void updateInformationByClientId(Long id, ClientInformationForMainPageDTO clientInformationForMainPageDTO)
-    {
+    public void updateInformationByClientId(Long id, ClientInformationForMainPageDTO clientInformationForMainPageDTO) {
         Client client = clientRepository.getById(id);
         client.setFirstname(clientInformationForMainPageDTO.getFirstname());
         client.setLastname(clientInformationForMainPageDTO.getLastname());
@@ -132,15 +122,13 @@ public class ClientService
         clientRepository.save(client);
     }
 
-    public void updateInformationForManageByClientId(Long id,ClientInformationForManageDTO clientInformationForManageDTO)
-    {
+    public void updateInformationForManageByClientId(Long id, ClientInformationForManageDTO clientInformationForManageDTO) {
         Client client = clientRepository.getById(id);
         client.setFrozen(clientInformationForManageDTO.getFrozen());
         client.setIsVerify(clientInformationForManageDTO.getIsVerify());
     }
 
-    public void deleteClientById(Long id)
-    {
+    public void deleteClientById(Long id) {
         clientRepository.deleteById(id);
     }
 }

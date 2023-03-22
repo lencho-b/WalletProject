@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class AccountService {
@@ -23,87 +25,76 @@ public class AccountService {
         this.clientRepository = clientRepository;
         this.currencyRepository = currencyRepository;
     }
-//    для админа
+
+    //    для админа
     public List<AccountDto> getAllAccounts() {
         List<Account> accounts = accountRepository.findAll();
-        List<AccountDto>accountDtos = new ArrayList<>();
-        for (Account account:accounts)
-        {
-            accountDtos.add(new AccountDto
-                    (
-                     account.getName()
-                    ,account.getFrozen()
-                    ,account.getComment()
-                    ,account.getValue()
-                    ,account.getCurrency().getName()));
-        }
-        return accountDtos;
+        return accounts.stream()
+                .map(account -> new AccountDto(
+                        account.getName(),
+                        account.getFrozen(),
+                        account.getComment(),
+                        account.getValue(),
+                        account.getCurrency().getName()))
+                .collect(Collectors.toList());
     }
 
-    public List<Account> getClientsAccounts(Long id)
-    {
-        List<Account>accounts = accountRepository.findAll();
-        List<Account>clientsAccounts= new ArrayList<>();
-        for (Account acc:accounts)
-        {
-            if (acc.getClient().getId()==(long)id)
-            {
+    public List<Account> getClientsAccounts(Long id) {
+        List<Account> accounts = accountRepository.findAll();
+        List<Account> clientsAccounts = new ArrayList<>();
+        for (Account acc : accounts) {
+            if (acc.getClient().getId() == (long) id) {
                 clientsAccounts.add(acc);
             }
         }
         return clientsAccounts;
     }
-//    для админа
+
+    //    для админа
+    // лямбда не требуется
     public AccountDto getAccountById(Long id) {
         Account account = accountRepository.findById(id).get();
-        AccountDto accountDto = new AccountDto
-                        (
-                         account.getName()
-                        ,account.getFrozen()
-                        ,account.getComment()
-                        ,account.getValue()
-                        ,account.getCurrency().getName());
-        return accountDto;
+        return new AccountDto(
+                account.getName(),
+                account.getFrozen(),
+                account.getComment(),
+                account.getValue(),
+                account.getCurrency().getName());
     }
-    public AccountDto getClientsAccountById(Long idAcc,Long idCl)
-    {
-        List<Account>clientsAccounts = getClientsAccounts(idCl);
-        for (Account account:clientsAccounts)
-        {
-            if(account.getId()==(long)idAcc)
-            {
-                AccountDto accountDto = new AccountDto
-                        (
-                                 account.getName()
-                                ,account.getFrozen()
-                                ,account.getComment()
-                                ,account.getValue()
-                                ,account.getCurrency().getName());
-                return accountDto;
-            }
-        }
-        return null;
+
+    public AccountDto getClientsAccountById(Long idAcc, Long idCl) {
+        List<Account> clientsAccounts = getClientsAccounts(idCl);
+        Optional<Account> accountOptional = clientsAccounts
+                .stream()
+                .filter(a -> a.getId().equals(idAcc))
+                .findFirst();
+        return accountOptional
+                .map(account -> new AccountDto(
+                                account.getName(),
+                                account.getFrozen(),
+                                account.getComment(),
+                                account.getValue(),
+                                account.getCurrency().getName()
+                        )
+                )
+                .orElse(null);
     }
+
     public List<AccountDto> getAllAccountsByClientId(Long id) {
-        List<AccountDto> accountsByClientid = new ArrayList<>();
-        List<Account> accounts = accountRepository.findAll();
-
-        for (Account account : accounts) {
-            if (account.getClient().getId() == (long) id) {
-                accountsByClientid.add
-                        (new AccountDto
-                                (
-                                        account.getName()
-                                        , account.getFrozen()
-                                        , account.getComment()
-                                        , account.getValue()
-                                        , account.getCurrency().getName()));
-            }
-        }
-        return accountsByClientid;
+        return accountRepository.findAll()
+                .stream()
+                .filter(account -> account.getClient().getId() == (long) id)
+                .map(account -> new AccountDto(
+                        account.getName(),
+                        account.getFrozen(),
+                        account.getComment(),
+                        account.getValue(),
+                        account.getCurrency().getName()
+                ))
+                .collect(Collectors.toList());
     }
 
-    public void createAccountByClientId(AccountDto accountDto,Long id) {
+    public void createAccountByClientId(AccountDto accountDto, Long id) {
         Account account = new Account();
         account.setComment(accountDto.getComment());
         account.setName(accountDto.getName());
@@ -115,19 +106,19 @@ public class AccountService {
         account.setCurrency(currencyRepository.getCurrencyByNameLike(accountDto.getCurrencyName()).get());
         accountRepository.save(account);
     }
-//    для админа
-    public void deleteAccountById(Long id)
-    {
+
+    //    для админа
+    public void deleteAccountById(Long id) {
         accountRepository.deleteById(id);
     }
-    public void updateClientsAccountById(Long idAcc, Long idCl, AccountRequestDto accountRequestDto)
-    {
-            Account account = accountRepository.getById(idAcc);
-            if(account.getClient().getId() == (long)idCl) {
-                account.setComment(accountRequestDto.getComment());
-                account.setName(accountRequestDto.getName());
-                account.setUpdatedAt(LocalDate.now());
-                accountRepository.save(account);
-            }
+
+    public void updateClientsAccountById(Long idAcc, Long idCl, AccountRequestDto accountRequestDto) {
+        Account account = accountRepository.getById(idAcc);
+        if (account.getClient().getId() == (long) idCl) {
+            account.setComment(accountRequestDto.getComment());
+            account.setName(accountRequestDto.getName());
+            account.setUpdatedAt(LocalDate.now());
+            accountRepository.save(account);
+        }
     }
 }
