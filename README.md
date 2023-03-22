@@ -8,134 +8,40 @@ http://localhost:8083/client/main/{id}/create создает для клиент
 
 Скрипт для создания БД
 
-create table client_role
-  (
-  id_client bigint  not null,
-  id_role   integer not null
-  );
+create table if not exists document_format ( id integer generated always as identity primary key, document_format varchar unique ) ;
 
-create table currency
-   (
-    id serial
-    primary key,
-    index integer,
-    name  varchar(50) not null
-    );
+create table if not exists country ( id integer generated always as identity primary key, name varchar(50) not null unique, phone_code varchar(50) not null, document_format integer not null references document_format ) ;
 
-create table document_format
-    (    
-    id integer not null
-    primary key,
-    document_format text
-    );
+create table if not exists client ( id bigint generated always as identity primary key, firstname varchar(50) not null, lastname varchar(50) not null, patronymic varchar(50) not null, date_of_birth date not null, email varchar not null constraint client_pk unique, phone_number varchar(50) not null, created_at date not null, updated_at date, frozen boolean not null, is_delete boolean not null, is_verify boolean not null );
 
-create table country
-(
-    id integer     not null
-    primary key,
-    name varchar(50) not null,
-    phone_code varchar(50) not null,
-    document_format integer     not null
-    constraint fkrqe18yi65luqwbypod506y3bi
-    references document_format
+create table if not exists document ( client_id integer not null primary key references client on delete cascade, document_number varchar(50) not null constraint document_pk unique, issue_date date not null, created_at date not null, country_id integer not null references country ) ;
+
+create table if not exists role ( id integer generated always as identity primary key, name varchar(50) not null );
+
+create table if not exists client_role ( client_id bigint references client on delete cascade, role_id integer references role );
+
+create table if not exists auth_info ( client_id bigint not null primary key references client on delete cascade, password varchar not null );
+
+create table if not exists currency ( id integer generated always as identity primary key, name varchar(50) not null unique );
+
+create table if not exists account ( id bigint generated always as identity primary key, name varchar(50) not null, frozen boolean not null, comment varchar(100) default ''::character varying not null, value bigint not null, created_at date not null, updated_at date, client_id bigint not null references client, currency_id integer not null references currency );
+
+drop table if exists transaction_type cascade ;
+create table transaction_type(
+    id  int primary key generated always as identity,
+    type varchar(50) not null unique,
+    comment varchar(100) not null default ''
 );
 
-create table document
-(
-    id bigint not null
-    primary key,
-    created_at date not null,
-    document_number varchar(50) not null,
-    issue_date date not null,
-    updated_at date  not null,
-    country_id  integer not null
-    constraint fkchu8sfgaej2j8g29e6aywhtqg
-    references country
+drop table if exists transaction cascade ;
+create table transaction(
+    id  bigint primary key generated always as identity,
+    value bigint not null,
+    message varchar(100) not null default '',
+    start_date_time timestamp not null,
+    finish_date_time timestamp,
+    status boolean not null default false,
+    type int not null references transaction_type(id)
 );
 
-create table client
-(
-    id bigserial
-    primary key,
-    created_at date  not null,
-    date_of_birth date not null,
-    email text not null,
-    firstname varchar(50) not null,
-    frozen boolean  not null,
-    is_delete boolean not null,
-    is_verify  boolean  not null,
-    lastname varchar(50) not null,
-    patronymic varchar(50) not null,
-    phone_number varchar(50) not null,
-    updated_at date  not null,
-    document_id   bigint
-        constraint fkbxhupy156s101isegs5aculms
-            references document
-);
-
-create table account
-(
-    id          bigserial
-        primary key,
-    comment     varchar(100) not null,
-    created_at  date         not null,
-    frozen      boolean      not null,
-    name        varchar(50)  not null,
-    updated_at  date         not null,
-    value       bigint       not null,
-    client_id   bigint       not null
-        constraint fkkm8yb63h4ownvnlrbwnadntyn
-            references client,
-    currency_id integer      not null
-        constraint fk316pn109iutn6yqoxrqp09cpc
-            references currency
-);
-
-create table auth_info
-(
-    client_id bigint      not null
-        primary key
-        constraint fk92t9v6gkbjmyym46m9fpst0si
-            references client
-            on delete cascade,
-    login     varchar(50) not null,
-    password  text        not null
-);
-
-create table role
-(
-    id        integer     not null
-        primary key,
-    role_name varchar(50) not null
-);
-
-create table transaction_type
-(
-    id      integer      not null
-        primary key,
-    comment varchar(100) not null,
-    type    varchar(50)  not null
-);
-
-create table transaction
-(
-    id               bigint                      not null
-        primary key,
-    finish_date_time timestamp(6) with time zone,
-    message          varchar(100)                not null,
-    start_date_time  timestamp(6) with time zone not null,
-    status           boolean                     not null,
-    value            bigint                      not null,
-    type             integer                     not null
-        constraint fk5sn54tdtl540nn1qwfvt7nhd5
-            references transaction_type
-);
-
-create table transaction_account
-(
-    sender         boolean default false not null,
-    account_id     bigint                not null
-        references account,
-    transaction_id bigint                not null
-        references transaction
-);
+create table transaction_account (id bigint primary key generated always as identity, sender boolean default false not null, account_id bigint not null references account, transaction_id bigint not null references transaction);
