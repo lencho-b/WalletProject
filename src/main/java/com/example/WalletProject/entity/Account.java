@@ -1,8 +1,9 @@
-package com.example.WalletProject.models.Entity;
+package com.example.WalletProject.entity;
 
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Entity
 @Table(name = "account")
@@ -138,4 +139,5 @@ public class Account {
                 ", currency=" + currency +
                 '}';
     }
+
 }

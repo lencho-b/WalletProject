@@ -1,7 +1,7 @@
 package com.example.WalletProject.services;
 
-import com.example.WalletProject.models.DTO.DocumentDto;
-import com.example.WalletProject.models.Entity.Document;
+import com.example.WalletProject.DTO.DocumentDTO;
+import com.example.WalletProject.entity.Document;
 import com.example.WalletProject.repositories.CountryRepository;
 import com.example.WalletProject.repositories.DocumentRepository;
 import org.springframework.stereotype.Service;
@@ -19,17 +19,17 @@ public class DocumentService
         this.countryRepository = countryRepository;
     }
 
-    public DocumentDto getDocumentByClientId(Long id)
+    public DocumentDTO getDocumentByClientId(Long id)
     {
         Document document = documentRepository.getById(id);
-        DocumentDto documentDto =
-                new DocumentDto
+        DocumentDTO documentDto =
+                new DocumentDTO
                         (document.getDocumentNumber(),
                                 document.getIssueDate(),
                                 document.getCountry().getId());
         return documentDto;
     }
-    public void createDocumentByClientId(Long id, DocumentDto documentDto)
+    public void createDocumentByClientId(Long id, DocumentDTO documentDto)
     {
         Document document = new Document();
         document.setClient_id(id);

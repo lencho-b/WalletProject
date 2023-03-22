@@ -1,4 +1,4 @@
-package com.example.WalletProject.models.Entity;
+package com.example.WalletProject.entity;
 
 import jakarta.persistence.*;
 
@@ -47,13 +47,14 @@ public class Client {
     @Column(name = "is_verify", nullable = false)
     private boolean isVerify = false;
 
-    @OneToMany(mappedBy = "client",fetch = FetchType.LAZY)
-    private List<Account>accounts;
-    @ManyToMany(fetch = FetchType.LAZY,cascade =CascadeType.ALL)
-    @JoinTable(name = "client_role",joinColumns = @JoinColumn (name = "client_id"),
+    @OneToMany(mappedBy = "client", fetch = FetchType.LAZY)
+    private List<Account> accounts;
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "client_role", joinColumns = @JoinColumn(name = "client_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private List<Role> roles;
-    public Client( String firstname, String lastname, String patronymic, LocalDate dateOfBirth, String email, String phoneNumber, LocalDate createdAt, LocalDate updatedAt, boolean frozen, boolean isDelete, boolean isVerify) {
+
+    public Client(String firstname, String lastname, String patronymic, LocalDate dateOfBirth, String email, String phoneNumber, LocalDate createdAt, LocalDate updatedAt, boolean frozen, boolean isDelete, boolean isVerify) {
         this.firstname = firstname;
         this.lastname = lastname;
         this.patronymic = patronymic;
@@ -66,6 +67,7 @@ public class Client {
         this.isDelete = isDelete;
         this.isVerify = isVerify;
     }
+
     public Client(String firstname, String lastname, String patronymic, LocalDate dateOfBirth, String email, String phoneNumber) {
         this.firstname = firstname;
         this.lastname = lastname;
@@ -74,20 +76,22 @@ public class Client {
         this.email = email;
         this.phoneNumber = phoneNumber;
     }
+
     public Client() {
     }
+
     public List<Role> getRoles(Role role) {
 
         return roles;
     }
 
     public void setRole(Role role) {
-        if(roles == null)
-        {
-            roles=new ArrayList<>();
+        if (roles == null) {
+            roles = new ArrayList<>();
         }
         roles.add(role);
     }
+
     public Client(Long id) {
         this.id = id;
     }
@@ -120,6 +124,7 @@ public class Client {
     public void setAccounts(List<Account> accounts) {
         this.accounts = accounts;
     }
+
     public Long getId() {
         return id;
     }
@@ -231,8 +236,7 @@ public class Client {
                 ", frozen=" + frozen +
                 ", isDelete=" + isDelete +
                 ", isVerify=" + isVerify +
-                ", accounts=" + accounts +
-                ", roles=" + roles +
                 '}';
     }
+
 }

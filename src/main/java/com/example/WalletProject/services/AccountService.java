@@ -1,8 +1,8 @@
 package com.example.WalletProject.services;
 
-import com.example.WalletProject.models.DTO.AccountDto;
-import com.example.WalletProject.models.DTO.AccountRequestDto;
-import com.example.WalletProject.models.Entity.Account;
+import com.example.WalletProject.DTO.AccountDTO;
+import com.example.WalletProject.DTO.AccountRequestDTO;
+import com.example.WalletProject.entity.Account;
 import com.example.WalletProject.repositories.AccountRepository;
 import com.example.WalletProject.repositories.ClientRepository;
 import com.example.WalletProject.repositories.CurrencyRepository;
@@ -24,12 +24,12 @@ public class AccountService {
         this.currencyRepository = currencyRepository;
     }
 //    для админа
-    public List<AccountDto> getAllAccounts() {
+    public List<AccountDTO> getAllAccounts() {
         List<Account> accounts = accountRepository.findAll();
-        List<AccountDto>accountDtos = new ArrayList<>();
+        List<AccountDTO>accountDtos = new ArrayList<>();
         for (Account account:accounts)
         {
-            accountDtos.add(new AccountDto
+            accountDtos.add(new AccountDTO
                     (
                      account.getName()
                     ,account.getFrozen()
@@ -54,9 +54,9 @@ public class AccountService {
         return clientsAccounts;
     }
 //    для админа
-    public AccountDto getAccountById(Long id) {
+    public AccountDTO getAccountById(Long id) {
         Account account = accountRepository.findById(id).get();
-        AccountDto accountDto = new AccountDto
+        AccountDTO accountDto = new AccountDTO
                         (
                          account.getName()
                         ,account.getFrozen()
@@ -65,14 +65,14 @@ public class AccountService {
                         ,account.getCurrency().getName());
         return accountDto;
     }
-    public AccountDto getClientsAccountById(Long idAcc,Long idCl)
+    public AccountDTO getClientsAccountById(Long idAcc, Long idCl)
     {
         List<Account>clientsAccounts = getClientsAccounts(idCl);
         for (Account account:clientsAccounts)
         {
             if(account.getId()==(long)idAcc)
             {
-                AccountDto accountDto = new AccountDto
+                AccountDTO accountDto = new AccountDTO
                         (
                                  account.getName()
                                 ,account.getFrozen()
@@ -84,14 +84,14 @@ public class AccountService {
         }
         return null;
     }
-    public List<AccountDto> getAllAccountsByClientId(Long id) {
-        List<AccountDto> accountsByClientid = new ArrayList<>();
+    public List<AccountDTO> getAllAccountsByClientId(Long id) {
+        List<AccountDTO> accountsByClientid = new ArrayList<>();
         List<Account> accounts = accountRepository.findAll();
 
         for (Account account : accounts) {
             if (account.getClient().getId() == (long) id) {
                 accountsByClientid.add
-                        (new AccountDto
+                        (new AccountDTO
                                 (
                                         account.getName()
                                         , account.getFrozen()
@@ -103,7 +103,7 @@ public class AccountService {
         return accountsByClientid;
     }
 
-    public void createAccountByClientId(AccountDto accountDto,Long id) {
+    public void createAccountByClientId(AccountDTO accountDto, Long id) {
         Account account = new Account();
         account.setComment(accountDto.getComment());
         account.setName(accountDto.getName());
@@ -120,7 +120,7 @@ public class AccountService {
     {
         accountRepository.deleteById(id);
     }
-    public void updateClientsAccountById(Long idAcc, Long idCl, AccountRequestDto accountRequestDto)
+    public void updateClientsAccountById(Long idAcc, Long idCl, AccountRequestDTO accountRequestDto)
     {
             Account account = accountRepository.getById(idAcc);
             if(account.getClient().getId() == (long)idCl) {

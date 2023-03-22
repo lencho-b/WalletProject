@@ -1,10 +1,10 @@
-package com.example.WalletProject.models.DTO;
+package com.example.WalletProject.DTO;
 
-public class AuthInfoDto{
+public class AuthInfoDTO {
 
     private final String password;
 
-    public AuthInfoDto( String password) {
+    public AuthInfoDTO(String password) {
         this.password = password;
     }
 

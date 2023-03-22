@@ -1,4 +1,4 @@
-package com.example.WalletProject.models.DTO;
+package com.example.WalletProject.DTO;
 
 public class ClientInformationForManageDTO{
     private final Boolean frozen;

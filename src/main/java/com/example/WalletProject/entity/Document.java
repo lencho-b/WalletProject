@@ -1,4 +1,4 @@
-package com.example.WalletProject.models.Entity;
+package com.example.WalletProject.entity;
 
 import jakarta.persistence.*;
 
@@ -51,6 +51,7 @@ public class Document {
     public void setId(Long id) {
         this.client_id = id;
     }
+
     public String getDocumentNumber() {
         return documentNumber;
     }

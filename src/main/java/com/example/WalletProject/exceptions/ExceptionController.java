@@ -1,4 +1,4 @@
-package com.example.WalletProject.Exceptions;
+package com.example.WalletProject.exceptions;
 
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;

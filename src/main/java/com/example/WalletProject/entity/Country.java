@@ -1,4 +1,4 @@
-package com.example.WalletProject.models.Entity;
+package com.example.WalletProject.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;

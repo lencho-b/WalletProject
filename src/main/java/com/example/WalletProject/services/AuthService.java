@@ -1,7 +1,7 @@
 package com.example.WalletProject.services;
 
-import com.example.WalletProject.models.DTO.AuthInfoDto;
-import com.example.WalletProject.models.Entity.AuthInfo;
+import com.example.WalletProject.DTO.AuthInfoDTO;
+import com.example.WalletProject.entity.AuthInfo;
 import com.example.WalletProject.repositories.AuthInfoRepository;
 import org.springframework.stereotype.Service;
 
@@ -13,15 +13,15 @@ public class AuthService
     public AuthService(AuthInfoRepository authInfoRepository) {
         this.authInfoRepository = authInfoRepository;
     }
-    public AuthInfoDto getAuthInfoByClientId(Long id)
+    public AuthInfoDTO getAuthInfoByClientId(Long id)
     {
         AuthInfo authInfo = authInfoRepository.getById(id);
-        AuthInfoDto authInfoDto =
-                new AuthInfoDto
+        AuthInfoDTO authInfoDto =
+                new AuthInfoDTO
                         (authInfo.getPassword());
         return authInfoDto;
     }
-    public void updateAuthClientById(AuthInfoDto authInfoDto,Long id)
+    public void updateAuthClientById(AuthInfoDTO authInfoDto, Long id)
     {
         AuthInfo authInfo = authInfoRepository.getById(id);
 

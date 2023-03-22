@@ -1,6 +1,6 @@
-package com.example.WalletProject.models.DTO;
+package com.example.WalletProject.DTO;
 
-public class AccountDto{
+public class AccountDTO {
 
     private String name;
 
@@ -32,7 +32,7 @@ public class AccountDto{
         return currencyName;
     }
 
-    public AccountDto(String name, Boolean frozen, String comment, Long value,String currencyName) {
+    public AccountDTO(String name, Boolean frozen, String comment, Long value, String currencyName) {
         this.name = name;
         this.frozen = frozen;
         this.comment = comment;
@@ -40,7 +40,7 @@ public class AccountDto{
         this.currencyName = currencyName;
     }
 
-    public AccountDto() {
+    public AccountDTO() {
     }
 
     @Override

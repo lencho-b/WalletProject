@@ -1,8 +1,8 @@
-package com.example.WalletProject.models.DTO;
+package com.example.WalletProject.DTO;
 
 import java.time.LocalDate;
 
-public class RegistrationDto
+public class RegistrationDTO
 {
 
     private  String firstname;
@@ -23,7 +23,7 @@ public class RegistrationDto
 
     private  Integer role;
 
-    public RegistrationDto(String firstname, String lastname, String patronymic, LocalDate dateOfBirth, String email, String phoneNumber, String login, String password, Integer role) {
+    public RegistrationDTO(String firstname, String lastname, String patronymic, LocalDate dateOfBirth, String email, String phoneNumber, String login, String password, Integer role) {
         this.firstname = firstname;
         this.lastname = lastname;
         this.patronymic = patronymic;
@@ -35,7 +35,7 @@ public class RegistrationDto
         this.role = role;
     }
 
-    public RegistrationDto() {
+    public RegistrationDTO() {
     }
 
     public String getFirstname() {
@@ -72,5 +72,20 @@ public class RegistrationDto
 
     public Integer getRole() {
         return role;
+    }
+
+    @Override
+    public String toString() {
+        return "RegistrationDTO{" +
+                "firstname='" + firstname + '\'' +
+                ", lastname='" + lastname + '\'' +
+                ", patronymic='" + patronymic + '\'' +
+                ", dateOfBirth=" + dateOfBirth +
+                ", email='" + email + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", login='" + login + '\'' +
+                ", password='" + password + '\'' +
+                ", role=" + role +
+                '}';
     }
 }

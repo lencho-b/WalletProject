@@ -1,4 +1,4 @@
-package com.example.WalletProject.models.Entity;
+package com.example.WalletProject.entity;
 
 import jakarta.persistence.*;
 
@@ -14,8 +14,8 @@ public class Role {
 
     @Column(name = "name", nullable = false, length = 50)
     private String roleName;
-    @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-    @JoinTable(name = "client_role",joinColumns = @JoinColumn (name = "role_id"),
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "client_role", joinColumns = @JoinColumn(name = "role_id"),
             inverseJoinColumns = @JoinColumn(name = "client_id"))
     private List<Client> clients;
 
@@ -33,8 +33,7 @@ public class Role {
     }
 
     public void setClient(Client client) {
-        if(clients == null)
-        {
+        if (clients == null) {
             clients = new ArrayList<>();
         }
         clients.add(client);

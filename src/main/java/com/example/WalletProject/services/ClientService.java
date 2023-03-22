@@ -1,12 +1,12 @@
 package com.example.WalletProject.services;
 
-import com.example.WalletProject.models.DTO.ClientDto;
-import com.example.WalletProject.models.DTO.ClientInformationForMainPageDTO;
-import com.example.WalletProject.models.DTO.ClientInformationForManageDTO;
-import com.example.WalletProject.models.DTO.RegistrationDto;
-import com.example.WalletProject.models.Entity.AuthInfo;
-import com.example.WalletProject.models.Entity.Client;
-import com.example.WalletProject.models.Entity.Role;
+import com.example.WalletProject.DTO.ClientDTO;
+import com.example.WalletProject.DTO.ClientInformationForMainPageDTO;
+import com.example.WalletProject.DTO.ClientInformationForManageDTO;
+import com.example.WalletProject.DTO.RegistrationDTO;
+import com.example.WalletProject.entity.AuthInfo;
+import com.example.WalletProject.entity.Client;
+import com.example.WalletProject.entity.Role;
 import com.example.WalletProject.repositories.AuthInfoRepository;
 import com.example.WalletProject.repositories.ClientRepository;
 import com.example.WalletProject.repositories.RoleRepository;
@@ -17,8 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class ClientService
-{
+public class ClientService {
     private final ClientRepository clientRepository;
     private final AuthInfoRepository authInfoRepository;
     private final RoleRepository roleRepository;
@@ -28,13 +27,12 @@ public class ClientService
         this.authInfoRepository = authInfoRepository;
         this.roleRepository = roleRepository;
     }
-    public List<ClientDto> getAllClients()
-    {
-        List<ClientDto>allClientsDto = new ArrayList<>();
-        List<Client>allClients = clientRepository.findAll();
-        for (Client client:allClients)
-        {
-            allClientsDto.add(new ClientDto(
+
+    public List<ClientDTO> getAllClients() {
+        List<ClientDTO> allClientsDto = new ArrayList<>();
+        List<Client> allClients = clientRepository.findAll();
+        for (Client client : allClients) {
+            allClientsDto.add(new ClientDTO(
                     client.getFirstname(),
                     client.getLastname(),
                     client.getPatronymic(),
@@ -50,23 +48,22 @@ public class ClientService
         return allClientsDto;
     }
 
-    public ClientInformationForMainPageDTO  getClientById(Long id)
-    {
+    public ClientInformationForMainPageDTO getClientById(Long id) {
         Client client = clientRepository.findById(id).get();
-        ClientInformationForMainPageDTO  clientInformationForMainPageDTO = new ClientInformationForMainPageDTO
+        ClientInformationForMainPageDTO clientInformationForMainPageDTO = new ClientInformationForMainPageDTO
                 (client.getFirstname()
-                ,client.getLastname()
-                ,client.getPatronymic()
-                ,client.getDateOfBirth()
-                ,client.getEmail()
-                ,client.getPhoneNumber());
-        return clientInformationForMainPageDTO ;
+                        , client.getLastname()
+                        , client.getPatronymic()
+                        , client.getDateOfBirth()
+                        , client.getEmail()
+                        , client.getPhoneNumber());
+        return clientInformationForMainPageDTO;
     }
-    public ClientDto getClientByIdForAdmin(Long id)
-    {
+
+    public ClientDTO getClientByIdForAdmin(Long id) {
         Client client = clientRepository.findById(id).get();
-        ClientDto clientDto = new ClientDto
-                        (
+        ClientDTO clientDto = new ClientDTO
+                (
                         client.getFirstname(),
                         client.getLastname(),
                         client.getPatronymic(),
@@ -81,20 +78,19 @@ public class ClientService
         return clientDto;
     }
 
-    public ClientInformationForManageDTO getClientInformationForManageByClientId(Long id)
-    {
+    public ClientInformationForManageDTO getClientInformationForManageByClientId(Long id) {
         Client client = clientRepository.getById(id);
         ClientInformationForManageDTO clientInformationForManageDTO =
                 new ClientInformationForManageDTO
-                (
-                        client.getFrozen(),
-                        client.getIsVerify()
-                );
+                        (
+                                client.getFrozen(),
+                                client.getIsVerify()
+                        );
         return clientInformationForManageDTO;
 
     }
-    public void createNewClient(RegistrationDto registrationDto)
-    {
+
+    public void createNewClient(RegistrationDTO registrationDto) {
         Role role = new Role();
         Client client = new Client
                 (
@@ -119,8 +115,7 @@ public class ClientService
         authInfoRepository.save(authInfo);
     }
 
-    public void updateInformationByClientId(Long id, ClientInformationForMainPageDTO clientInformationForMainPageDTO)
-    {
+    public void updateInformationByClientId(Long id, ClientInformationForMainPageDTO clientInformationForMainPageDTO) {
         Client client = clientRepository.getById(id);
         client.setFirstname(clientInformationForMainPageDTO.getFirstname());
         client.setLastname(clientInformationForMainPageDTO.getLastname());
@@ -132,15 +127,13 @@ public class ClientService
         clientRepository.save(client);
     }
 
-    public void updateInformationForManageByClientId(Long id,ClientInformationForManageDTO clientInformationForManageDTO)
-    {
+    public void updateInformationForManageByClientId(Long id, ClientInformationForManageDTO clientInformationForManageDTO) {
         Client client = clientRepository.getById(id);
         client.setFrozen(clientInformationForManageDTO.getFrozen());
         client.setIsVerify(clientInformationForManageDTO.getIsVerify());
     }
 
-    public void deleteClientById(Long id)
-    {
+    public void deleteClientById(Long id) {
         clientRepository.deleteById(id);
     }
 }

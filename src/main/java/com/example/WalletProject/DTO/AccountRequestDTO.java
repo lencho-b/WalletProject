@@ -1,14 +1,14 @@
-package com.example.WalletProject.models.DTO;
+package com.example.WalletProject.DTO;
 
-public class AccountRequestDto
+public class AccountRequestDTO
 {
     private String name;
     private  String comment;
-    public AccountRequestDto(String name, String comment) {
+    public AccountRequestDTO(String name, String comment) {
         this.name = name;
         this.comment = comment;
     }
-    public AccountRequestDto() {
+    public AccountRequestDTO() {
     }
 
     public String getName() {
