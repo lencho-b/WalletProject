@@ -16,11 +16,12 @@ public class ClientController {
     @Autowired
     public ClientController(ClientService clientService, ClientDtoMapper clientDtoMapper) {
         this.clientService = clientService;
-
         this.clientDtoMapper = clientDtoMapper;
     }
 
-    public ClientDTO getClientById(Long clientId){}
+    public ClientDTO getClientById(Long clientId){
+        return clientDtoMapper.toDto(clientService.clientById(clientId));
+    }
 
 
 }

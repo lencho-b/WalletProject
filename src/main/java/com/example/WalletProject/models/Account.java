@@ -14,13 +14,12 @@ public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String name;
     private boolean frozen;
     private String comment;
     private Long value;
     private Date created_at;
     private Date updated_at;
-//    @OneToOne(cascade = CascadeType.ALL)
-//    private AuthInfo authInfo;
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonManagedReference
     private Client client;
@@ -31,6 +30,14 @@ public class Account {
     private List<TransactionAccount> transactionAccounts;
 
     public Account() {
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Long getId() {
