@@ -31,7 +31,7 @@ build/
 
 ### VS Code ###
 .mvn
-mvnw.cmd
-mvnw
+.mvnw.cmd
+.mvnw
 
 
