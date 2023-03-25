@@ -14,6 +14,7 @@ public class TransactionController {
         this.transactionService = transactionService;
     }
 
+    //взять админские дто для получения транзакций, только их переименовать.
     @GetMapping("/{id}")
     public TransactionForClientDTO getTransactionDtoForClientById(@PathVariable("id") Long transactionId) {
         return transactionService.getTransactionDtoForClientById(transactionId);
@@ -21,10 +22,12 @@ public class TransactionController {
 
     @PatchMapping("/{id}")
     public TransactionForClientDTO updateTransactionById(@PathVariable("id") Long transactionId,
-            @Valid @RequestBody TransactionForClientDTO transactionForClientDTO) {
+                                                         @Valid @RequestBody TransactionForClientDTO transactionForClientDTO) {
         return transactionService.updateTransactionFromClientById(transactionId, transactionForClientDTO);
     }
 
+    //в методе создания транзакции нужен айди счета.
+    // создать для этого метода дто формы для перевода.
     @PostMapping("/new")
     public TransactionForClientDTO saveNewTransaction(@Valid @RequestBody TransactionForClientDTO transactionForClientDTO) {
         return transactionService.saveNewTransactionFromClientInRepo(transactionForClientDTO);

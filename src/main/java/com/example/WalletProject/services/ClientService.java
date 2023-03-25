@@ -28,7 +28,7 @@ public class ClientService {
         this.authInfoRepository = authInfoRepository;
         this.roleRepository = roleRepository;
     }
-
+// нужен page, а не list
     public List<ClientDto> getAllClients() {
         List<Client> allClients = clientRepository.findAll();
         return allClients.stream()
@@ -80,6 +80,7 @@ public class ClientService {
     }
 
     public ClientInformationForManageDTO getClientInformationForManageByClientId(Long id) {
+        //optional
         Client client = clientRepository.getById(id);
         return new ClientInformationForManageDTO(client.getFrozen(), client.getIsVerify());
     }
@@ -101,6 +102,7 @@ public class ClientService {
                         false,
                         false
                 );
+        // set role сразу юзера и всегда юзера
         client.setRole(roleRepository.getById(registrationDto.getRole()));
         clientRepository.save(client);
         AuthInfo authInfo = new AuthInfo(
@@ -111,6 +113,7 @@ public class ClientService {
     }
 
     public void updateInformationByClientId(Long id, ClientInformationForMainPageDTO clientInformationForMainPageDTO) {
+        // лучше доставать optional
         Client client = clientRepository.getById(id);
         client.setFirstname(clientInformationForMainPageDTO.getFirstname());
         client.setLastname(clientInformationForMainPageDTO.getLastname());

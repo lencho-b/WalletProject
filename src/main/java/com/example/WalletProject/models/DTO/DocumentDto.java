@@ -1,10 +1,11 @@
 package com.example.WalletProject.models.DTO;
 
 import java.time.LocalDate;
-
+//валидация нужна
 public class DocumentDto {
     private final String documentNumber;
     private final LocalDate issueDate;
+    //меняем айди на название страны.
     private final Integer countryId;
 
     public DocumentDto(String documentNumber, LocalDate issueDate, Integer countryId) {

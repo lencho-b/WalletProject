@@ -1,13 +1,16 @@
 package com.example.WalletProject.models.DTO;
-
-public class AccountRequestDto
-{
+// валидация нужна
+public class AccountRequestDto {
     private String name;
-    private  String comment;
+    private String comment;
+
+    // валюту надо добавить
+
     public AccountRequestDto(String name, String comment) {
         this.name = name;
         this.comment = comment;
     }
+
     public AccountRequestDto() {
     }
 

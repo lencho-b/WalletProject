@@ -1,5 +1,5 @@
 package com.example.WalletProject.models.DTO;
-
+// дто должен быть валидирован
 public class AccountDto{
 
     private String name;

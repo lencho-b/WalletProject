@@ -4,6 +4,7 @@ import com.example.WalletProject.models.DTO.*;
 import com.example.WalletProject.services.ClientService;
 import com.example.WalletProject.services.CountryService;
 import com.example.WalletProject.services.CurrencyService;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,7 +23,7 @@ public class AdminController {
     }
 
     @GetMapping("/allClients")
-    public List<ClientDto> showAllClients() {
+    public Page<ClientDto> showAllClients() {
         return clientService.getAllClients();
     }
 
@@ -31,21 +32,25 @@ public class AdminController {
         return clientService.getClientByIdForAdmin(id);
     }
 
+    // убрать update из адреса
     @PatchMapping("/client/{id}/update")
     public void setStatusByClientId(@PathVariable("id") Long id, @RequestBody ClientInformationForManageDTO clientInformationForManageDTO) {
         clientService.updateInformationForManageByClientId(id, clientInformationForManageDTO);
     }
 
+    //soft удаление
     @DeleteMapping("/client/{id}")
     public void deleteClient(@PathVariable("id") Long id) {
         clientService.deleteClientById(id);
     }
 
     @PostMapping("/send-message")
-    public void sendMessageToClient() {}
-//     если оставлять этот метод, надо учесть, где у пользователя будет показываться сообщение
-//    + создать дополнительный гет-метод формы для создания админом сообщения, а для данного метода сделать дто
+    public void sendMessageToClient() {
+    }
 
+    //     если оставлять этот метод, надо учесть, где у пользователя будет показываться сообщение
+//    + создать дополнительный гет-метод формы для создания админом сообщения, а для данного метода сделать дто
+//можно использовать этот метод для отправки на эмейл сообщения
     @GetMapping("/{id}/accounts")
     public List<AccountInfoForAdminDto> showAllClientAccounts(@PathVariable("id") Long clientId) {
         return null;
@@ -81,10 +86,12 @@ public class AdminController {
     }
 
     @PatchMapping("/country/update")
-    public void updateCountry(@RequestBody CountryForAdminDto country){}
+    public void updateCountry(@RequestBody CountryForAdminDto country) {
+    }
 
     @PostMapping("/country/create")
-    public void createCountry(@RequestBody CountryForAdminDto country){}
+    public void createCountry(@RequestBody CountryForAdminDto country) {
+    }
 
 
 }

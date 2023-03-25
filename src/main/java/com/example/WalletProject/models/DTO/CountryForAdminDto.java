@@ -1,7 +1,7 @@
 package com.example.WalletProject.models.DTO;
 
 
-
+//валидация нужна
 public class CountryForAdminDto {
 
     private String name;

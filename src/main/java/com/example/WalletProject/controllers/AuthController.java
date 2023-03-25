@@ -20,4 +20,6 @@ public class AuthController
     public void createNewClient(@RequestBody RegistrationDto registrationDto) {
         clientService.createNewClient(registrationDto);
     }
+
+    // добавить метод для обновления пароля, принимающий AuthDto
 }

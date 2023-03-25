@@ -20,7 +20,9 @@ public class DocumentService {
 
     // Здесь лямбда усложнит читаемость кода, я просто сделал этот метод немного компактнее
     public DocumentDto getDocumentByClientId(Long id) {
+        //используем optional
         Document document = documentRepository.getById(id);
+
         return new DocumentDto(
                 document.getDocumentNumber(),
                 document.getIssueDate(),
@@ -29,11 +31,13 @@ public class DocumentService {
     }
 
     public void createDocumentByClientId(Long id, DocumentDto documentDto) {
+        //проверка валидации
         Document document = new Document();
         document.setClient_id(id);
         document.setDocumentNumber(documentDto.getDocumentNumber());
         document.setIssueDate(documentDto.getIssueDate());
         document.setCreatedAt(LocalDate.now());
+        //optional
         document.setCountry(countryRepository.getById(documentDto.getCountryId()));
         documentRepository.save(document);
     }

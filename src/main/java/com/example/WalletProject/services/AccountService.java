@@ -39,6 +39,7 @@ public class AccountService {
                 .collect(Collectors.toList());
     }
 
+    //
     public List<Account> getClientsAccounts(Long id) {
         List<Account> accounts = accountRepository.findAll();
         List<Account> clientsAccounts = new ArrayList<>();
@@ -52,6 +53,7 @@ public class AccountService {
 
     //    для админа
     // лямбда не требуется
+    // зачем метод, если он не используется? Плюс Optional
     public AccountDto getAccountById(Long id) {
         Account account = accountRepository.findById(id).get();
         return new AccountDto(
@@ -62,6 +64,7 @@ public class AccountService {
                 account.getCurrency().getName());
     }
 
+    // решили сделать query. Доставать абсолютно все счета из базы - плохая практика.
     public AccountDto getClientsAccountById(Long idAcc, Long idCl) {
         List<Account> clientsAccounts = getClientsAccounts(idCl);
         Optional<Account> accountOptional = clientsAccounts
@@ -81,6 +84,7 @@ public class AccountService {
     }
 
     public List<AccountDto> getAllAccountsByClientId(Long id) {
+        //в репозитории есть другой метод для этого. Доставать все счета из базы - плохая практика.
         return accountRepository.findAll()
                 .stream()
                 .filter(account -> account.getClient().getId() == (long) id)
@@ -102,6 +106,7 @@ public class AccountService {
         account.setCreatedAt(LocalDate.now());
         account.setFrozen(false);
         account.setUpdatedAt(null);
+        //тоже лучше добавить optional
         account.setClient(clientRepository.getById(id));
         account.setCurrency(currencyRepository.getCurrencyByNameLike(accountDto.getCurrencyName()).get());
         accountRepository.save(account);
@@ -113,6 +118,7 @@ public class AccountService {
     }
 
     public void updateClientsAccountById(Long idAcc, Long idCl, AccountRequestDto accountRequestDto) {
+        //optional
         Account account = accountRepository.getById(idAcc);
         if (account.getClient().getId() == (long) idCl) {
             account.setComment(accountRequestDto.getComment());
