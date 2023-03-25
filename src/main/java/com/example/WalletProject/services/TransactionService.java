@@ -18,8 +18,8 @@ public class TransactionService {
         this.modelMapper = modelMapper;
     }
 
-    public TransactionForClientDTO getTransactionForClientById(Long transactionId) {
-        Optional<Transaction> transaction = transactionRepository.findById(transactionId);
-        return modelMapper.map(transaction.orElse(new Transaction()),  TransactionForClientDTO.class);
-    }
+//    public TransactionForClientDTO getTransactionForClientById(Long transactionId) {
+//        Optional<Transaction> transaction = transactionRepository.findById(transactionId);
+//        return modelMapper.map(transaction.orElse(new Transaction()),  TransactionForClientDTO.class);
+//    }
 }

@@ -1,83 +1,20 @@
+create table if not exists document_format ( id integer generated always as identity primary key, document_format varchar unique ) ;
 
-drop table if exists document_format cascade ;
-create table document_format (
-    id int primary key generated always as identity,
-    document_format varchar unique
-);
+create table if not exists country ( id integer generated always as identity primary key, name varchar(50) not null unique, phone_code varchar(50) not null, document_format integer not null references document_format ) ;
 
-drop table if exists country cascade ;
-create table country (
-    id int primary key generated always as identity,
-    name varchar(50) not null unique,
-    phone_code varchar(50) not null,
-    document_format int references document_format(id) not null
-);
+create table if not exists client ( id bigint generated always as identity primary key, firstname varchar(50) not null, lastname varchar(50) not null, patronymic varchar(50) not null, date_of_birth date not null, email varchar not null constraint client_pk unique, phone_number varchar(50) not null, created_at date not null, updated_at date, frozen boolean not null, is_delete boolean not null, is_verify boolean not null );
 
+create table if not exists document ( client_id integer not null primary key references client on delete cascade, document_number varchar(50) not null constraint document_pk unique, issue_date date not null, created_at date not null, country_id integer not null references country ) ;
 
-drop table if exists client cascade;
-create table client(
-    id bigint primary key generated always as identity,
-    firstname varchar(50) not null,
-    lastname varchar(50) not null,
-    patronymic varchar(50) not null,
-    date_of_birth date not null,
-    email varchar not null,
-    phone_number varchar(50) not null,
-    created_at date not null,
-    updated_at date not null,
-    frozen boolean not null,
-    is_delete boolean not null,
-    is_verify boolean not null
-);
+create table if not exists role ( id integer generated always as identity primary key, name varchar(50) not null );
 
-drop table if exists document cascade ;
-create table document(
-    id bigint primary key references client(id) on delete cascade,
-    document_number varchar(50) not null,
-    issue_date date not null,
-    created_at date not null,
-    updated_at date not null,
-    country_id int not null references country (id)
-);
+create table if not exists client_role ( client_id bigint references client on delete cascade, role_id integer references role );
 
-drop table if exists role cascade ;
-create table role(
-    id int primary key generated always as identity,
-    role_name varchar(50) not null
-);
+create table if not exists auth_info ( client_id bigint not null primary key references client on delete cascade, password varchar not null );
 
-drop table if exists client_role cascade ;
-create table client_role(
-    id_client bigint references client (id),
-    id_role int references role(id)
-);
+create table if not exists currency ( id integer generated always as identity primary key, name varchar(50) not null unique );
 
-drop table if exists auth_info cascade ;
-create table auth_info(
-    id bigint primary key references client (id) on delete cascade,
-    login varchar(50) not null unique,
-    password varchar not null
-);
-
-drop table if exists currency cascade ;
-create table currency(
-    id int primary key generated always as identity,
-    name varchar(50) not null unique,
-    index int
-);
-
-drop table if exists account cascade ;
-create table account(
-    id  bigint primary key generated always as identity,
-    name varchar(50) not null,
-    frozen boolean not null,
-    comment varchar(100) default '' not null,
-    value bigint not null,
-    created_at date not null,
-    updated_at date not null,
-    client_id bigint not null references client(id),
-    currency_id int not null references currency(id)
-);
+create table if not exists account ( id bigint generated always as identity primary key, name varchar(50) not null, frozen boolean not null, comment varchar(100) default ''::character varying not null, value bigint not null, created_at date not null, updated_at date, client_id bigint not null references client, currency_id integer not null references currency );
 
 drop table if exists transaction_type cascade ;
 create table transaction_type(
@@ -97,10 +34,4 @@ create table transaction(
     type int not null references transaction_type(id)
 );
 
-drop table if exists transaction_account cascade ;
-create table transaction_account(
-    id  bigint primary key generated always as identity,
-    id_account bigint not null references account(id),
-    id_transaction bigint not null references transaction(id),
-    sender boolean not null default false
-);
+create table transaction_account (id bigint primary key generated always as identity, sender boolean default false not null, account_id bigint not null references account, transaction_id bigint not null references transaction);
