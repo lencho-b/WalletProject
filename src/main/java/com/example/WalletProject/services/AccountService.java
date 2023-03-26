@@ -69,7 +69,6 @@ public class AccountService {
     }
     // решили сделать query. Доставать абсолютно все счета из базы - плохая практика.
 
-
     public AccountDto getClientsAccountById(Long idAcc, Long idCl) {
         Account account = accountRepository.findAccountByIdAndByClientId(idAcc, idCl)
                 .orElseThrow(() -> new EntityNotFoundException("Account not found"));
