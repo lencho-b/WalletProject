@@ -6,6 +6,7 @@ import com.example.WalletProject.models.Entity.Account;
 import com.example.WalletProject.repositories.AccountRepository;
 import com.example.WalletProject.repositories.ClientRepository;
 import com.example.WalletProject.repositories.CurrencyRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -39,55 +40,10 @@ public class AccountService {
                 .collect(Collectors.toList());
     }
 
-    //
-    public List<Account> getClientsAccounts(Long id) {
-        List<Account> accounts = accountRepository.findAll();
-        List<Account> clientsAccounts = new ArrayList<>();
-        for (Account acc : accounts) {
-            if (acc.getClient().getId() == (long) id) {
-                clientsAccounts.add(acc);
-            }
-        }
-        return clientsAccounts;
-    }
-
-    //    для админа
-    // лямбда не требуется
-    // зачем метод, если он не используется? Плюс Optional
-    public AccountDto getAccountById(Long id) {
-        Account account = accountRepository.findById(id).get();
-        return new AccountDto(
-                account.getName(),
-                account.getFrozen(),
-                account.getComment(),
-                account.getValue(),
-                account.getCurrency().getName());
-    }
-
-    // решили сделать query. Доставать абсолютно все счета из базы - плохая практика.
-    public AccountDto getClientsAccountById(Long idAcc, Long idCl) {
-        List<Account> clientsAccounts = getClientsAccounts(idCl);
-        Optional<Account> accountOptional = clientsAccounts
-                .stream()
-                .filter(a -> a.getId().equals(idAcc))
-                .findFirst();
-        return accountOptional
-                .map(account -> new AccountDto(
-                                account.getName(),
-                                account.getFrozen(),
-                                account.getComment(),
-                                account.getValue(),
-                                account.getCurrency().getName()
-                        )
-                )
-                .orElse(null);
-    }
 
     public List<AccountDto> getAllAccountsByClientId(Long id) {
-        //в репозитории есть другой метод для этого. Доставать все счета из базы - плохая практика.
-        return accountRepository.findAll()
+        return accountRepository.findAccountsByClientId(id)
                 .stream()
-                .filter(account -> account.getClient().getId() == (long) id)
                 .map(account -> new AccountDto(
                         account.getName(),
                         account.getFrozen(),
@@ -96,6 +52,33 @@ public class AccountService {
                         account.getCurrency().getName()
                 ))
                 .collect(Collectors.toList());
+    }
+    //    для админа
+    // лямбда не требуется
+    // зачем метод, если он не используется? Плюс Optional
+//    done
+
+    public AccountDto getAccountById(Long id) {
+        Account account = findOrThrow(id);
+        return new AccountDto(
+                account.getName(),
+                account.getFrozen(),
+                account.getComment(),
+                account.getValue(),
+                account.getCurrency().getName());
+    }
+    // решили сделать query. Доставать абсолютно все счета из базы - плохая практика.
+
+    public AccountDto getClientsAccountById(Long idAcc, Long idCl) {
+        Account account = accountRepository.findAccountByIdAndByClientId(idAcc, idCl)
+                .orElseThrow(() -> new EntityNotFoundException("Account not found"));
+        return new AccountDto(
+                account.getName(),
+                account.getFrozen(),
+                account.getComment(),
+                account.getValue(),
+                account.getCurrency().getName()
+        );
     }
 
     public void createAccountByClientId(AccountDto accountDto, Long id) {
@@ -106,9 +89,10 @@ public class AccountService {
         account.setCreatedAt(LocalDate.now());
         account.setFrozen(false);
         account.setUpdatedAt(null);
-        //тоже лучше добавить optional
-        account.setClient(clientRepository.getById(id));
-        account.setCurrency(currencyRepository.getCurrencyByNameLike(accountDto.getCurrencyName()).get());
+        account.setClient(clientRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Client not found")));
+        account.setCurrency(currencyRepository.getCurrencyByNameLike(accountDto.getCurrencyName())
+                .orElseThrow(() -> new EntityNotFoundException("Currency not found")));
         accountRepository.save(account);
     }
 
@@ -126,5 +110,9 @@ public class AccountService {
             account.setUpdatedAt(LocalDate.now());
             accountRepository.save(account);
         }
+    }
+
+    private Account findOrThrow(Long id) {
+        return accountRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Account not found"));
     }
 }

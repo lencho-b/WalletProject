@@ -23,8 +23,8 @@ public class AdminController {
     }
 
     @GetMapping("/allClients")
-    public Page<ClientDto> showAllClients() {
-        return clientService.getAllClients();
+    public List<ClientDto> showAllClients(@RequestParam Integer numberPage) {
+        return clientService.getAllClients(numberPage);
     }
 
     @GetMapping("/client/{id}")
@@ -33,7 +33,7 @@ public class AdminController {
     }
 
     // убрать update из адреса
-    @PatchMapping("/client/{id}/update")
+    @PatchMapping("/client/{id}")
     public void setStatusByClientId(@PathVariable("id") Long id, @RequestBody ClientInformationForManageDTO clientInformationForManageDTO) {
         clientService.updateInformationForManageByClientId(id, clientInformationForManageDTO);
     }

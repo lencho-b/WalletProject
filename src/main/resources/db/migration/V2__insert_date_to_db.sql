@@ -8,3 +8,7 @@ values ('rub');
 
 insert into account(name, frozen, comment, value, created_at, updated_at, client_id, currency_id)
 values ('first', false, 'lalalal', 20, '20.03.2000', '20.03.2000', 1, 1);
+
+insert into role(name)
+values ('user'),
+       ('admin');
