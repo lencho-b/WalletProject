@@ -32,7 +32,7 @@ public class AdminController {
         return clientService.getClientByIdForAdmin(id);
     }
 
-    // убрать update из адреса
+
     @PatchMapping("/client/{id}")
     public void setStatusByClientId(@PathVariable("id") Long id, @RequestBody ClientInformationForManageDTO clientInformationForManageDTO) {
         clientService.updateInformationForManageByClientId(id, clientInformationForManageDTO);
@@ -66,7 +66,7 @@ public class AdminController {
         return null;
     }
 
-    @GetMapping("/{id}/transactions")
+    @GetMapping("/{id}/transactions/a")
     public List<FullTransactionInfoForAdminDto> showTransactionsByAccount(@PathVariable("id") Long accountId) {
         return null;
     }

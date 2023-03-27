@@ -6,7 +6,6 @@ import com.example.WalletProject.models.DTO.ClientInformationForManageDTO;
 import com.example.WalletProject.models.DTO.RegistrationDto;
 import com.example.WalletProject.models.Entity.AuthInfo;
 import com.example.WalletProject.models.Entity.Client;
-import com.example.WalletProject.models.Entity.Role;
 import com.example.WalletProject.repositories.AuthInfoRepository;
 import com.example.WalletProject.repositories.ClientRepository;
 import com.example.WalletProject.repositories.RoleRepository;
@@ -16,7 +15,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -63,10 +61,9 @@ public class ClientService {
                 client.getPhoneNumber());
     }
 
+    //не понятен смыс метода
     public ClientDto getClientByIdForAdmin(Long id) {
-        return clientRepository.findAllById(Collections.singletonList(id))
-                .stream()
-                .findFirst()
+        return clientRepository.findById(id)
                 .map(client -> new ClientDto(
                         client.getFirstname(),
                         client.getLastname(),
@@ -80,7 +77,7 @@ public class ClientService {
                         client.getIsDelete(),
                         client.getIsVerify()
                 ))
-                .orElse(null);
+                .orElseThrow(() -> new EntityNotFoundException("Client not found"));
     }
 
     public ClientInformationForManageDTO getClientInformationForManageByClientId(Long id) {
@@ -89,7 +86,6 @@ public class ClientService {
     }
 
     public void createNewClient(RegistrationDto registrationDto) {
-        Role role = new Role();
         Client client = new Client
                 (
                         registrationDto.getFirstname(),
@@ -135,17 +131,23 @@ public class ClientService {
     }
 
     public void deleteClientById(Long id) {
-        clientRepository.deleteById(id);
+        Client client = finedOrThrow(id);
+        client.setDelete(true);
+        clientRepository.save(client);
     }
 
     private Client finedOrThrow(Long id) {
-        return clientRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Client not found"));
+        Client client = clientRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Client not found"));
+        if(client.getIsDelete().equals(true)) {
+            throw new SecurityException("Client removed");
+        }
+        return client;
     }
 
     private enum Roles {
         USER(1), ADMIN(2);
         private Integer id;
-
         Roles(Integer id) {
             this.id = id;
         }

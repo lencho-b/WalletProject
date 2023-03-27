@@ -5,6 +5,8 @@ import com.example.WalletProject.services.AccountService;
 import com.example.WalletProject.services.AuthService;
 import com.example.WalletProject.services.ClientService;
 import com.example.WalletProject.services.DocumentService;
+import jakarta.validation.Valid;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,14 +33,13 @@ public class ClientController {
     }
 
     @PatchMapping("/{id}/information/")
-    public void updateInformationByClientId(@PathVariable("id") Long id,
-                                            @RequestBody ClientInformationForMainPageDTO clientInformationForMainPageDTO) {
+    public void updateInformationByClientId(@PathVariable("id") Long id, @Validated
+    @RequestBody ClientInformationForMainPageDTO clientInformationForMainPageDTO) {
         clientService.updateInformationByClientId(id, clientInformationForMainPageDTO);
     }
 
-    // accountdto изменить на специальное dto для листа. Сейчас это accountInfoForAdminDto, надо переименовать.
     @GetMapping("/{id}/account")
-    public List<AccountDto> showAllAccountsByClienId(@PathVariable("id") Long id) {
+    public List<AccountDto> showAllAccountsByClientId(@PathVariable("id") Long id) {
         return accountService.getAllAccountsByClientId(id);
     }
 
@@ -63,7 +64,7 @@ public class ClientController {
     }
 
     @PostMapping("/{id}/document/")
-    public void updateClientsDocumentById(@PathVariable("id") Long id, @RequestBody DocumentDto documentDto) {
+    public void updateClientsDocumentById(@PathVariable("id") Long id, @Valid @RequestBody DocumentDto documentDto) {
         documentService.createDocumentByClientId(id, documentDto);
     }
 
@@ -81,7 +82,7 @@ public class ClientController {
 
     @PatchMapping("/{id}/account/{idAcc}")
     public void updateClientsAccountById
-    (@PathVariable("idAcc") Long idAcc, @PathVariable("id") Long idCl, @RequestBody AccountRequestDto accountRequestDto) {
+            (@PathVariable("idAcc") Long idAcc, @PathVariable("id") Long idCl, @RequestBody AccountRequestDto accountRequestDto) {
         accountService.updateClientsAccountById(idAcc, idCl, accountRequestDto);
     }
 
