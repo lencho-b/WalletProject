@@ -5,9 +5,12 @@ import com.example.WalletProject.services.AccountService;
 import com.example.WalletProject.services.AuthService;
 import com.example.WalletProject.services.ClientService;
 import com.example.WalletProject.services.DocumentService;
+import jakarta.validation.Valid;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
 //адрес контроллеров должен быть во множественном числе, плюс версия
 @RestController
 @RequestMapping("/client")
@@ -26,18 +29,17 @@ public class ClientController {
 
     @GetMapping("/{id}/information")
     public ClientInformationForMainPageDTO showClientById(@PathVariable("id") Long id) {
-        ClientInformationForMainPageDTO clientInformationForMainPageDTO = clientService.getClientById(id);
-        return clientInformationForMainPageDTO;
+        return clientService.getClientById(id);
     }
-// patch - запрос сам о себе говорит, так что update слово в адресе, думаем, лишнее
-    @PatchMapping("/{id}/information/update")
-    public void updateInformationByClientId(@PathVariable("id") Long id,
-                                            @RequestBody ClientInformationForMainPageDTO clientInformationForMainPageDTO) {
+
+    @PatchMapping("/{id}/information/")
+    public void updateInformationByClientId(@PathVariable("id") Long id, @Validated
+    @RequestBody ClientInformationForMainPageDTO clientInformationForMainPageDTO) {
         clientService.updateInformationByClientId(id, clientInformationForMainPageDTO);
     }
-// accountdto изменить на специальное dto для листа. Сейчас это accountInfoForAdminDto, надо переименовать.
+
     @GetMapping("/{id}/account")
-    public List<AccountDto> showAllAccountsByClienId(@PathVariable("id") Long id) {
+    public List<AccountDto> showAllAccountsByClientId(@PathVariable("id") Long id) {
         return accountService.getAllAccountsByClientId(id);
     }
 
@@ -45,14 +47,8 @@ public class ClientController {
     public void createNewAccountByClientId(@PathVariable("id") Long id, @RequestBody AccountDto accountDto) {
         accountService.createAccountByClientId(accountDto, id);
     }
-    // команда думает, что метод не нужен, т.к., если используем bcrypt пароль хранится в зашифрованном виде
-    // и обратно расшифрован быть не может. Думаем так же, что возвращать пароль - вообще плохая практика.
-    @GetMapping("/{id}/auth")
-    public AuthInfoDto showAuthInfoByClientId(@PathVariable("id") Long id) {
-        return authService.getAuthInfoByClientId(id);
-    }
-    // думаем, что слово update - излишне в адресе, тк. метод возможно один и patch-запрос сам о себе говорит, что это update
-    @PatchMapping("/{id}/auth/update")
+
+    @PatchMapping("/{id}/auth/")
     public void updateAuthClientById(@PathVariable("id") Long id, @RequestBody AuthInfoDto authInfoDto) {
         authService.updateAuthClientById(authInfoDto, id);
     }
@@ -66,12 +62,13 @@ public class ClientController {
     public ClientInformationForManageDTO showClientInformationForManageByClientId(@PathVariable("id") Long id) {
         return clientService.getClientInformationForManageByClientId(id);
     }
-// та же фигня с адресом - пост говорит за себя, нужен ли create в адресе?
-    @PostMapping("/{id}/document/create")
-    public void updateClientsDocumentById(@PathVariable("id") Long id, @RequestBody DocumentDto documentDto) {
+
+    @PostMapping("/{id}/document/")
+    public void updateClientsDocumentById(@PathVariable("id") Long id, @Valid @RequestBody DocumentDto documentDto) {
         documentService.createDocumentByClientId(id, documentDto);
     }
-//клиенту нельзя удалять свой документ либо он может делать только мягкое удаление
+
+    //клиенту нельзя удалять свой документ либо он может делать только мягкое удаление
     @DeleteMapping("/{id}/document/delete")
     public void deleteClientsDocumentById(@PathVariable("id") Long id) {
         documentService.deleteClientsDocumentByClientId(id);
@@ -81,8 +78,9 @@ public class ClientController {
     public AccountDto showClientsAccountById(@PathVariable("idAcc") Long idAcc, @PathVariable("id") Long idCl) {
         return accountService.getClientsAccountById(idAcc, idCl);
     }
-    // update в адресе не нужен, т.к. patch метод.
-    @PatchMapping("/{id}/account/{idAcc}/update")
+
+
+    @PatchMapping("/{id}/account/{idAcc}")
     public void updateClientsAccountById
             (@PathVariable("idAcc") Long idAcc, @PathVariable("id") Long idCl, @RequestBody AccountRequestDto accountRequestDto) {
         accountService.updateClientsAccountById(idAcc, idCl, accountRequestDto);

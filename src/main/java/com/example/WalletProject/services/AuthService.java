@@ -13,13 +13,6 @@ public class AuthService {
         this.authInfoRepository = authInfoRepository;
     }
 
-    // Тут лямбда избыточна
-    // если не возвращаем пароль, то этот метод не нужен
-    public AuthInfoDto getAuthInfoByClientId(Long id) {
-        AuthInfo authInfo = authInfoRepository.getById(id);
-        AuthInfoDto authInfoDto = new AuthInfoDto(authInfo.getPassword());
-        return authInfoDto;
-    }
 
     public void updateAuthClientById(AuthInfoDto authInfoDto, Long id) {
         AuthInfo authInfo = authInfoRepository.getById(id);

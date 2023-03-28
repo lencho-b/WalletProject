@@ -18,6 +18,11 @@ insert into transaction_type(type, comment) values ('перевод', 'отпр�
 insert into transaction(value, message, start_date_time, finish_date_time, status, type_id)
 VALUES (100, 'перевод тест1 ', now(), null, false, 1);
 
+
 insert into transaction_account(sender, account_id, transaction_id)
 values (true, 1, 1),
        (false, 2, 1);
+
+insert into role(name)
+values ('user'),
+       ('admin');
