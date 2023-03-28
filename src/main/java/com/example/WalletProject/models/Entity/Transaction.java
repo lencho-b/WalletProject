@@ -1,5 +1,6 @@
 package com.example.WalletProject.models.Entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
@@ -17,10 +18,12 @@ public class Transaction {
     private Date startDateTime;
     private Date finishDateTime;
     private Boolean status;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JsonManagedReference
+    @JoinColumn(name = "type_id")
     private TransactionType transactionType;
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "transaction")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "transaction")
+    @JsonBackReference
     private List<TransactionAccount> transactionAccounts;
 
     public Transaction() {
