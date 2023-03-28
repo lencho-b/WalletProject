@@ -9,6 +9,7 @@ import com.example.WalletProject.repositories.AccountRepository;
 import com.example.WalletProject.repositories.TransactionAccountRepository;
 import com.example.WalletProject.repositories.TransactionRepository;
 import com.example.WalletProject.repositories.TransactionTypeRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,14 +45,15 @@ public class TransactionService {
     //тут я поменяю на дто когда будет дто
     @Transactional(readOnly = true)
     public Transaction getOneTransactionById(Long accountId, Long transactionId) {
-        Transaction transaction = transactionRepository.findById(transactionId).orElse(null);
-        if (transaction == null) throw new RuntimeException();
+        Transaction transaction = transactionRepository.findById(transactionId)
+                .orElseThrow(() -> new EntityNotFoundException("Transaction not found"));
 
-        Account account = accountRepository.findById(accountId).orElse(null);
-        if (account == null) throw new RuntimeException();
+        accountRepository.findById(accountId)
+                .orElseThrow(() -> new EntityNotFoundException("Account not found"));
 
-        TransactionAccount transactionAccount = transactionAccountRepository.findByTransactionIdAndAccountId(transactionId, accountId).orElse(null);
-        if (transactionAccount == null) throw new RuntimeException();
+        transactionAccountRepository
+                .findByTransactionIdAndAccountId(transactionId, accountId)
+                .orElseThrow(() -> new EntityNotFoundException("This transaction does not belongs to current account"));
 
         return transaction;
     }
@@ -59,60 +61,61 @@ public class TransactionService {
     // тут тоже поменяю на дто когда оно будет+ тут по хорошему причесать код надо
     @Transactional
     public Transaction saveNewTransactionInRepo(Long clientIdFrom, FullTransactionInfoDto transactionInfoDto) {
-        Account account1 = accountRepository.findById(clientIdFrom).orElse(null);
-        Account account2 = accountRepository.findById(transactionInfoDto.getAccountIdTo()).orElse(null);
-        // надо добавить исключение данного типа
-        if (account1 == null || account2 == null) throw new RuntimeException();
-
-        TransactionType transactionType = transactionTypeRepository.findTransactionTypeByType(transactionInfoDto.getTypeName()).orElse(null);
-        if ((transactionType == null)) throw new RuntimeException();
-
-
+        Account account1 = accountRepository.findById(clientIdFrom)
+                .orElseThrow(() -> new EntityNotFoundException("Account not found"));
+        Account account2 = accountRepository.findById(transactionInfoDto.getAccountIdTo())
+                .orElseThrow(() -> new EntityNotFoundException("Account not found"));
+        TransactionType transactionType = transactionTypeRepository
+                .findTransactionTypeByType(transactionInfoDto.getTypeName())
+                .orElseThrow(() -> new EntityNotFoundException("Type " + transactionInfoDto.getTypeName() + " does not exist"));
         Long transactionValue = transactionInfoDto.getValue().multiply(BigDecimal.valueOf(100)).longValue();
-        /* проверяем есть ли у клиента заявленная сумма и вычитаем деньги с его счета если нет, кидаем исключение
-        если есть то замораживаем средства на счете*/
-        if (account1.getValue() < transactionValue) {
-            throw new RuntimeException();
+
+        //этот код уйдет когда будет валидация
+        if (account1.getValue() < transactionValue || transactionValue < 0) {
+            throw new RuntimeException("Operation closed, transfer sum cannot be negative or you have not enough money");
         } else {
-            Long val1 = account1.getValue();
-            account1.setValue(val1 - transactionValue);
+            account1.setValue(account1.getValue() - transactionValue);
             accountRepository.save(account1);
         }
 
-        //создаем транзакцию
-        Transaction transaction = new Transaction();
-        // как сохраняем ?
-        transaction.setValue(transactionInfoDto.getValue().multiply(BigDecimal.valueOf(100)).longValue());
-        transaction.setMessage(transactionInfoDto.getMessage());
-/*         по сути это поле должно принадлежать к сущности transactionAccount,
-         потому что для одного клиента тип транзакции = перевод, для второго - получение (к обсуждению)*/
-        transaction.setTransactionType(transactionType);
-        transaction.setStartDateTime(new Date());
-        transaction.setStatus(false);
-        Transaction savedTransaction = transactionRepository.save(transaction);
+        //создаем транзакцию (сохраняем в копейках, можно сделать еще билдер (но я не уверен делают ли билдер в ентити)
+        Transaction savedTransaction = createNewTransaction(
+                transactionValue, transactionInfoDto.getMessage(), transactionType, new Date());
 
         //привязываем транзакцию к аккаунтам
-        TransactionAccount transactionAccount1 = new TransactionAccount();
-        TransactionAccount transactionAccount2 = new TransactionAccount();
-
-        transactionAccount1.setAccount(account1);
-        transactionAccount1.setSender(true);
-        transactionAccount1.setTransaction(savedTransaction);
-
-        transactionAccount2.setAccount(account2);
-        transactionAccount2.setSender(false);
-        transactionAccount2.setTransaction(savedTransaction);
-
-        transactionAccountRepository.save(transactionAccount1);
-        transactionAccountRepository.save(transactionAccount2);
+        createTransactionAccount(account1, true, savedTransaction);
+        createTransactionAccount(account2, false, savedTransaction);
 
         //увеличиваем счет у второго аккаунта
-        account2.setValue(account2.getValue() + transaction.getValue());
+        account2.setValue(account2.getValue() + transactionValue);
         accountRepository.save(account2);
 
         //завершаем создание транзакции
         savedTransaction.setFinishDateTime(new Date());
         savedTransaction.setStatus(true);
-        return transactionRepository.save(savedTransaction);
+        return updateTransactionInRepo(savedTransaction);
+    }
+
+    private Transaction updateTransactionInRepo(Transaction transaction) {
+        return transactionRepository.save(transaction);
+    }
+
+    private Transaction createNewTransaction(Long value, String message, TransactionType transactionType, Date date) {
+        Transaction transaction = new Transaction();
+        transaction.setValue(value);
+        transaction.setMessage(message);
+        transaction.setTransactionType(transactionType);
+        transaction.setStartDateTime(date);
+        transaction.setStatus(false);
+        return transactionRepository.save(transaction);
+    }
+
+    private TransactionAccount createTransactionAccount(Account account, Boolean sender, Transaction transaction) {
+        TransactionAccount transactionAccount = new TransactionAccount();
+        transactionAccount.setAccount(account);
+        transactionAccount.setSender(sender);
+        transactionAccount.setTransaction(transaction);
+        transactionAccountRepository.save(transactionAccount);
+        return transactionAccount;
     }
 }

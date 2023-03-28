@@ -1,8 +1,11 @@
 package com.example.WalletProject.models.Entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "account")
@@ -33,10 +36,15 @@ public class Account {
     @ManyToOne(fetch = FetchType.LAZY, optional = false, cascade = CascadeType.ALL)
     @JoinColumn(name = "client_id", nullable = false)
     private Client client;
-
     @ManyToOne(fetch = FetchType.LAZY, optional = false,  cascade = CascadeType.ALL)
     @JoinColumn(name = "currency_id", nullable = false)
     private Currency currency;
+
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "account")
+    @JsonBackReference
+    private List<TransactionAccount> transactionAccounts = new ArrayList<>();
+
     public Account() {
     }
 
@@ -50,6 +58,14 @@ public class Account {
         this.updatedAt = updatedAt;
         this.client = client;
         this.currency = currency;
+    }
+
+    public List<TransactionAccount> getTransactionAccounts() {
+        return transactionAccounts;
+    }
+
+    public void setTransactionAccounts(List<TransactionAccount> transactionAccounts) {
+        this.transactionAccounts = transactionAccounts;
     }
 
     public Long getId() {

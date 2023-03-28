@@ -71,7 +71,7 @@ create table transaction(
     start_date_time timestamp not null,
     finish_date_time timestamp,
     status boolean not null default false,
-    type int not null references transaction_type(id)
+    type_id int not null references transaction_type(id)
 );
 
 create table transaction_account (
