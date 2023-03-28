@@ -1,7 +1,13 @@
 package com.example.WalletProject.models.DTO;
-// валидация нужна
+
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.NotNull;
+
 public class AccountRequestDto {
+    @NotNull
     private String name;
+    @NotNull
+    @Max(value = 100)
     private String comment;
 
     // валюту надо добавить
