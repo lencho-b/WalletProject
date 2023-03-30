@@ -32,15 +32,6 @@ public class TransactionController {
         return transactionService.getOneTransactionById(accountId, transactionId);
     }
 
-    @GetMapping("/new")
-    public TransactionRequestDto createNewTransaction() {
-        TransactionRequestDto transactionRequestDto = new TransactionRequestDto();
-        transactionRequestDto.setValue(new BigDecimal("0.00"));
-        transactionRequestDto.setMessage("введите сообщение");
-        transactionRequestDto.setTypeName("перевод");
-        return transactionRequestDto;
-    }
-
     // в методе создания транзакции нужен айди счета.
 //     создать для этого метода дто формы для перевода.
     @PostMapping("/new")
