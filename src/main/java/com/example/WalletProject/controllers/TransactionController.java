@@ -37,7 +37,7 @@ public class TransactionController {
         TransactionRequestDto transactionRequestDto = new TransactionRequestDto();
         transactionRequestDto.setValue(new BigDecimal("0.00"));
         transactionRequestDto.setMessage("введите сообщение");
-        transactionRequestDto.setTypeName("перевод");
+        transactionRequestDto.getType().setType("перевод");
         return transactionRequestDto;
     }
 

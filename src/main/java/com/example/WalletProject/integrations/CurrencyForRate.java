@@ -1,4 +1,4 @@
-package com.example.WalletProject.integrations.integrations;
+package com.example.WalletProject.integrations;
 
 public class CurrencyForRate
 {

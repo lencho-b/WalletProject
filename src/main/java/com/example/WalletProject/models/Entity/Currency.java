@@ -49,4 +49,5 @@ public class Currency {
                 ", name='" + name + '\'' +
                 '}';
     }
+
 }

@@ -1,26 +1,15 @@
 package com.example.WalletProject.controllers;
 
-import com.example.WalletProject.models.DTO.AccountDto;
-import com.example.WalletProject.models.DTO.AccountInfoForAdminDto;
-import com.example.WalletProject.models.DTO.ClientDto;
-import com.example.WalletProject.models.DTO.ClientInformationForManageDTO;
-import com.example.WalletProject.models.DTO.CountryForAdminDto;
-import com.example.WalletProject.models.DTO.FullTransactionInfoForAdminDto;
+import com.example.WalletProject.integrations.Rate;
+import com.example.WalletProject.models.DTO.*;
 import com.example.WalletProject.models.Entity.Country;
 import com.example.WalletProject.services.ClientService;
 import com.example.WalletProject.services.CountryService;
 import com.example.WalletProject.services.CurrencyService;
 import org.modelmapper.ModelMapper;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -42,6 +31,14 @@ public class AdminController {
     @GetMapping("/allClients")
     public List<ClientDto> showAllClients(@RequestParam Integer numberPage) {
         return clientService.getAllClients(numberPage);
+    }
+    @GetMapping("/rate")
+    public List<Rate> getAllAvailableRates() throws IOException {
+        return currencyService.getAllAvailableRates();
+    }
+    @GetMapping("/rate/{id}")
+    public Rate getRate(@PathVariable("id")Integer id) throws IOException {
+        return currencyService.getRate(id);
     }
 
     @GetMapping("/client/{id}")

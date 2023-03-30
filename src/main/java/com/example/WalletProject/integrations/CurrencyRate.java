@@ -1,4 +1,4 @@
-package com.example.WalletProject.integrations.integrations;
+package com.example.WalletProject.integrations;
 
 import com.google.gson.Gson;
 import org.modelmapper.TypeToken;
@@ -16,17 +16,6 @@ public class CurrencyRate
     private static URL url = null;
     private static URLConnection urlConnection = null;
 
-    public static CurrencyForRate showCurrency(Long id) throws IOException {
-        url = new URL("https://www.nbrb.by/api/exrates/currencies/"+ id);
-        urlConnection = url.openConnection();
-        return  new Gson()
-                .fromJson
-                        (new BufferedReader
-                        (new InputStreamReader
-                                (urlConnection.getInputStream())
-                        ).readLine(),
-                        CurrencyForRate.class);
-    }
 
     public static Rate showRate(Integer id) throws IOException {
         url = new URL("https://www.nbrb.by/api/exrates/rates/"+id);
@@ -43,17 +32,12 @@ public class CurrencyRate
     public static List<Rate> showAllAvailableRates() throws IOException {
         url = new URL("https://www.nbrb.by/api/exrates/rates?periodicity=0");
         urlConnection = url.openConnection();
-
-        return   new ArrayList<>
-                (new Gson()
-                        .fromJson
-                                (new BufferedReader
-                                (new InputStreamReader
-                                        (urlConnection.getInputStream())
-                                ).readLine(),
-                        new TypeToken<List
-                                <CurrencyForRate>
-                                >(){}.getType()));
+        List<Rate>rates = new ArrayList<>(new Gson().fromJson(new BufferedReader(new InputStreamReader(urlConnection.getInputStream())).readLine(), new TypeToken<List<Rate>>(){}.getType()));
+        for (Rate rate:rates)
+        {
+            System.out.println(rate.getCur_Name());
+        }
+        return  rates;
 
     }
 }
