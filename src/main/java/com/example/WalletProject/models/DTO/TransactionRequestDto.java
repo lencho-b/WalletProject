@@ -1,16 +1,23 @@
 package com.example.WalletProject.models.DTO;
 
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 
-public class FullTransactionInfoDto {
+import java.math.BigDecimal;
+
+public class TransactionRequestDto {
+    @NotBlank
     private Long accountIdTo;
+    @NotEmpty
+    @Min(value = 0)
     private BigDecimal value;//big decimal - чтоб не показывать копейки.
     private String message;
-    private String typeName;
+    @NotEmpty
+    private TransactionTypeDto type;
 
-    public FullTransactionInfoDto() {
+    public TransactionRequestDto() {
     }
 
     public Long getAccountIdTo() {
@@ -37,11 +44,11 @@ public class FullTransactionInfoDto {
         this.message = message;
     }
 
-    public String getTypeName() {
-        return typeName;
+    public TransactionTypeDto getType() {
+        return type;
     }
 
-    public void setTypeName(String typeName) {
-        this.typeName = typeName;
+    public void setType(TransactionTypeDto type) {
+        this.type = type;
     }
 }

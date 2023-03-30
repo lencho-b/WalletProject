@@ -1,6 +1,6 @@
 package com.example.WalletProject.services;
 
-import com.example.WalletProject.models.DTO.FullTransactionInfoDto;
+import com.example.WalletProject.models.DTO.TransactionRequestDto;
 import com.example.WalletProject.models.Entity.Account;
 import com.example.WalletProject.models.Entity.Transaction;
 import com.example.WalletProject.models.Entity.TransactionAccount;
@@ -60,15 +60,15 @@ public class TransactionService {
 
     // тут тоже поменяю на дто когда оно будет+ тут по хорошему причесать код надо
     @Transactional
-    public Transaction saveNewTransactionInRepo(Long clientIdFrom, FullTransactionInfoDto transactionInfoDto) {
+    public Transaction saveNewTransactionInRepo(Long clientIdFrom, TransactionRequestDto transactionRequestDto) {
         Account account1 = accountRepository.findById(clientIdFrom)
                 .orElseThrow(() -> new EntityNotFoundException("Account not found"));
-        Account account2 = accountRepository.findById(transactionInfoDto.getAccountIdTo())
+        Account account2 = accountRepository.findById(transactionRequestDto.getAccountIdTo())
                 .orElseThrow(() -> new EntityNotFoundException("Account not found"));
         TransactionType transactionType = transactionTypeRepository
-                .findTransactionTypeByType(transactionInfoDto.getTypeName())
-                .orElseThrow(() -> new EntityNotFoundException("Type " + transactionInfoDto.getTypeName() + " does not exist"));
-        Long transactionValue = transactionInfoDto.getValue().multiply(BigDecimal.valueOf(100)).longValue();
+                .findTransactionTypeByType(transactionRequestDto.getType().getType())
+                .orElseThrow(() -> new EntityNotFoundException("Type " + transactionRequestDto.getType().getType() + " does not exist"));
+        Long transactionValue = transactionRequestDto.getValue().multiply(BigDecimal.valueOf(100)).longValue();
 
         //этот код уйдет когда будет валидация
         if (account1.getValue() < transactionValue || transactionValue < 0) {
@@ -80,7 +80,7 @@ public class TransactionService {
 
         //создаем транзакцию (сохраняем в копейках, можно сделать еще билдер (но я не уверен делают ли билдер в ентити)
         Transaction savedTransaction = createNewTransaction(
-                transactionValue, transactionInfoDto.getMessage(), transactionType, new Date());
+                transactionValue, transactionRequestDto.getMessage(), transactionType, new Date());
 
         //привязываем транзакцию к аккаунтам
         createTransactionAccount(account1, true, savedTransaction);

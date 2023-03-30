@@ -1,11 +1,15 @@
 package com.example.WalletProject.models.DTO;
 
 
+import jakarta.validation.constraints.NotBlank;
+
 //валидация нужна
 public class CountryForAdminDto {
-
+    @NotBlank
     private String name;
+    @NotBlank
     private String phoneCode;
+    @NotBlank
     private String documentFormat;
 
 

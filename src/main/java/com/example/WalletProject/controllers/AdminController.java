@@ -1,13 +1,28 @@
 package com.example.WalletProject.controllers;
 
-import com.example.WalletProject.models.DTO.*;
+import com.example.WalletProject.models.DTO.AccountDto;
+import com.example.WalletProject.models.DTO.AccountInfoForAdminDto;
+import com.example.WalletProject.models.DTO.ClientDto;
+import com.example.WalletProject.models.DTO.ClientInformationForManageDTO;
+import com.example.WalletProject.models.DTO.CountryForAdminDto;
+import com.example.WalletProject.models.DTO.FullTransactionInfoForAdminDto;
+import com.example.WalletProject.models.Entity.Country;
 import com.example.WalletProject.services.ClientService;
 import com.example.WalletProject.services.CountryService;
 import com.example.WalletProject.services.CurrencyService;
-import org.springframework.data.domain.Page;
-import org.springframework.web.bind.annotation.*;
+import org.modelmapper.ModelMapper;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/admin")
@@ -15,11 +30,13 @@ public class AdminController {
     private final ClientService clientService;
     private final CountryService countryService;
     private final CurrencyService currencyService;
+    private final ModelMapper modelMapper;
 
-    public AdminController(ClientService clientService, CountryService countryService, CurrencyService currencyService) {
+    public AdminController(ClientService clientService, CountryService countryService, CurrencyService currencyService, ModelMapper modelMapper) {
         this.clientService = clientService;
         this.countryService = countryService;
         this.currencyService = currencyService;
+        this.modelMapper = modelMapper;
     }
 
     @GetMapping("/allClients")
@@ -73,24 +90,31 @@ public class AdminController {
 
     @GetMapping("/countries")
     public List<CountryForAdminDto> showCountries() {
-        return null;
+        return countryService.findAll()
+                .stream()
+                .map(country -> modelMapper.map(country, CountryForAdminDto.class))
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/country")
     public CountryForAdminDto showCountry(@RequestParam String country) {
-        return null;
+        return modelMapper.map(countryService.findByName(country), CountryForAdminDto.class);
+
     }
 
     @PostMapping("/country/delete")
-    public void deleteCountry(@RequestBody CountryForAdminDto country) {
+    public void deleteCountry(@RequestBody String countryName) {
+        countryService.deleteCountry(countryName);
     }
 
     @PatchMapping("/country/update")
     public void updateCountry(@RequestBody CountryForAdminDto country) {
+        countryService.saveOrUpdate(modelMapper.map(country, Country.class));
     }
 
     @PostMapping("/country/create")
     public void createCountry(@RequestBody CountryForAdminDto country) {
+        countryService.saveOrUpdate(modelMapper.map(country, Country.class));
     }
 
 

@@ -1,6 +1,6 @@
 package com.example.WalletProject.controllers;
 
-import com.example.WalletProject.models.DTO.FullTransactionInfoDto;
+import com.example.WalletProject.models.DTO.TransactionRequestDto;
 import com.example.WalletProject.models.Entity.Transaction;
 import com.example.WalletProject.services.TransactionService;
 import org.springframework.web.bind.annotation.*;
@@ -33,20 +33,20 @@ public class TransactionController {
     }
 
     @GetMapping("/new")
-    public FullTransactionInfoDto createNewTransaction() {
-        FullTransactionInfoDto fullTransactionInfoDto = new FullTransactionInfoDto();
-        fullTransactionInfoDto.setValue(new BigDecimal("0.00"));
-        fullTransactionInfoDto.setMessage("введите сообщение");
-        fullTransactionInfoDto.setTypeName("перевод");
-        return fullTransactionInfoDto;
+    public TransactionRequestDto createNewTransaction() {
+        TransactionRequestDto transactionRequestDto = new TransactionRequestDto();
+        transactionRequestDto.setValue(new BigDecimal("0.00"));
+        transactionRequestDto.setMessage("введите сообщение");
+        transactionRequestDto.setTypeName("перевод");
+        return transactionRequestDto;
     }
 
     // в методе создания транзакции нужен айди счета.
 //     создать для этого метода дто формы для перевода.
     @PostMapping("/new")
     public Transaction saveNewTransaction(@PathVariable("idAcc") Long accountIdFrom,
-                                          @RequestBody FullTransactionInfoDto fullTransactionInfoDto) {
+                                          @RequestBody TransactionRequestDto transactionRequestDto) {
         //поменять на дто
-        return transactionService.saveNewTransactionInRepo(accountIdFrom, fullTransactionInfoDto);
+        return transactionService.saveNewTransactionInRepo(accountIdFrom, transactionRequestDto);
     }
 }

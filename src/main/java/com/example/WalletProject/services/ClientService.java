@@ -10,6 +10,7 @@ import com.example.WalletProject.repositories.AuthInfoRepository;
 import com.example.WalletProject.repositories.ClientRepository;
 import com.example.WalletProject.repositories.RoleRepository;
 import jakarta.persistence.EntityNotFoundException;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -23,83 +24,44 @@ public class ClientService {
     private final ClientRepository clientRepository;
     private final AuthInfoRepository authInfoRepository;
     private final RoleRepository roleRepository;
+    private final ModelMapper modelMapper;
 
-    public ClientService(ClientRepository clientRepository, AuthInfoRepository authInfoRepository, RoleRepository roleRepository) {
+    public ClientService(ClientRepository clientRepository, AuthInfoRepository authInfoRepository, RoleRepository roleRepository, ModelMapper modelMapper) {
         this.clientRepository = clientRepository;
         this.authInfoRepository = authInfoRepository;
         this.roleRepository = roleRepository;
+        this.modelMapper = modelMapper;
     }
 
 
     public List<ClientDto> getAllClients(Integer numberPage) {
         Page<Client> allClients = clientRepository.findAll(PageRequest.of(numberPage, 20));
         return allClients.stream()
-                .map(client -> new ClientDto(
-                        client.getFirstname(),
-                        client.getLastname(),
-                        client.getPatronymic(),
-                        client.getDateOfBirth(),
-                        client.getEmail(),
-                        client.getPhoneNumber(),
-                        client.getCreatedAt(),
-                        client.getUpdatedAt(),
-                        client.getFrozen(),
-                        client.getIsDelete(),
-                        client.getIsVerify()))
+                .map(client -> modelMapper.map(client, ClientDto.class))
                 .collect(Collectors.toList());
     }
 
 
     public ClientInformationForMainPageDTO getClientById(Long id) {
         Client client = finedOrThrow(id);
-        return new ClientInformationForMainPageDTO(
-                client.getFirstname(),
-                client.getLastname(),
-                client.getPatronymic(),
-                client.getDateOfBirth(),
-                client.getEmail(),
-                client.getPhoneNumber());
+        return modelMapper.map(client, ClientInformationForMainPageDTO.class);
     }
 
     //не понятен смыс метода
     public ClientDto getClientByIdForAdmin(Long id) {
         return clientRepository.findById(id)
-                .map(client -> new ClientDto(
-                        client.getFirstname(),
-                        client.getLastname(),
-                        client.getPatronymic(),
-                        client.getDateOfBirth(),
-                        client.getEmail(),
-                        client.getPhoneNumber(),
-                        client.getCreatedAt(),
-                        client.getUpdatedAt(),
-                        client.getFrozen(),
-                        client.getIsDelete(),
-                        client.getIsVerify()
-                ))
+                .map(client -> modelMapper.map(client, ClientDto.class)
+                )
                 .orElseThrow(() -> new EntityNotFoundException("Client not found"));
     }
 
     public ClientInformationForManageDTO getClientInformationForManageByClientId(Long id) {
         Client client = finedOrThrow(id);
-        return new ClientInformationForManageDTO(client.getFrozen(), client.getIsVerify());
+        return modelMapper.map(client, ClientInformationForManageDTO.class);
     }
 
     public void createNewClient(RegistrationDto registrationDto) {
-        Client client = new Client
-                (
-                        registrationDto.getFirstname(),
-                        registrationDto.getLastname(),
-                        registrationDto.getPatronymic(),
-                        registrationDto.getDateOfBirth(),
-                        registrationDto.getEmail(),
-                        registrationDto.getPhoneNumber(),
-                        LocalDate.now(),
-                        null,
-                        false,
-                        false,
-                        false
-                );
+        Client client = modelMapper.map(registrationDto, Client.class);
         // set role сразу юзера и всегда юзера
         client.setRole(roleRepository.findById(Roles.USER.id)
                 .orElseThrow(() -> new EntityNotFoundException("Role not found")));
@@ -113,14 +75,16 @@ public class ClientService {
 
     //перезанирание информации о клиенте в entity из-за пустых полей dto
     public void updateInformationByClientId(Long id, ClientInformationForMainPageDTO clientInformationForMainPageDTO) {
-        Client client = finedOrThrow(id);
-        client.setFirstname(clientInformationForMainPageDTO.getFirstname());
-        client.setLastname(clientInformationForMainPageDTO.getLastname());
-        client.setPatronymic(clientInformationForMainPageDTO.getPatronymic());
-        client.setDateOfBirth(clientInformationForMainPageDTO.getDateOfBirth());
-        client.setEmail(clientInformationForMainPageDTO.getEmail());
-        client.setPhoneNumber(clientInformationForMainPageDTO.getPhoneNumber());
-        client.setUpdatedAt(LocalDate.now());
+        Client clientToBeUpdated = finedOrThrow(id);
+        Client client = modelMapper.map(clientInformationForMainPageDTO, Client.class);
+        client.setId(clientToBeUpdated.getId());
+//        client.setFirstname(clientInformationForMainPageDTO.getFirstname());
+//        client.setLastname(clientInformationForMainPageDTO.getLastname());
+//        client.setPatronymic(clientInformationForMainPageDTO.getPatronymic());
+//        client.setDateOfBirth(clientInformationForMainPageDTO.getDateOfBirth());
+//        client.setEmail(clientInformationForMainPageDTO.getEmail());
+//        client.setPhoneNumber(clientInformationForMainPageDTO.getPhoneNumber());
+//        client.setUpdatedAt(LocalDate.now());
         clientRepository.save(client);
     }
 
@@ -128,6 +92,7 @@ public class ClientService {
         Client client = finedOrThrow(id);
         client.setFrozen(clientInformationForManageDTO.getFrozen());
         client.setIsVerify(clientInformationForManageDTO.getIsVerify());
+        clientRepository.save(client);
     }
 
     public void deleteClientById(Long id) {
