@@ -1,0 +1,10 @@
+services:
+  db:
+    container_name: deposit_service_db
+    image: postgres:11
+    environment:
+      POSTGRES_DB: "deposit_db"
+      POSTGRES_USER: "developer"
+      POSTGRES_PASSWORD: "parol"
+    ports:
+      - "5432:5432"
