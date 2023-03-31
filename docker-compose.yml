@@ -1,10 +1,10 @@
 services:
   db:
-    container_name: deposit_service_db
+    container_name: walletaston
     image: postgres:11
     environment:
-      POSTGRES_DB: "deposit_db"
-      POSTGRES_USER: "developer"
-      POSTGRES_PASSWORD: "parol"
+      POSTGRES_DB: "walletaston"
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "postgres"
     ports:
       - "5432:5432"
