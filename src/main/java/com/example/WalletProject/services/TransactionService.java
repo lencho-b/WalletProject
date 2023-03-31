@@ -1,6 +1,8 @@
 package com.example.WalletProject.services;
 
+import com.example.WalletProject.models.DTO.TransactionDto;
 import com.example.WalletProject.models.DTO.TransactionRequestDto;
+import com.example.WalletProject.models.DTO.TransactionShortDto;
 import com.example.WalletProject.models.Entity.Account;
 import com.example.WalletProject.models.Entity.Transaction;
 import com.example.WalletProject.models.Entity.TransactionAccount;
@@ -38,13 +40,16 @@ public class TransactionService {
 
     // тут поменяю на дто
     @Transactional(readOnly = true)
-    public List<Transaction> getAllByAccountId(Long accountId) {
-        return transactionRepository.findAllByAccountId(accountId);
+    public List<TransactionShortDto> getAllByAccountId(Long accountId) {
+        return transactionRepository.findAllByAccountId(accountId)
+                .stream()
+                .map(entity -> modelMapper.map(entity, TransactionShortDto.class))
+                .toList();
     }
 
     //тут я поменяю на дто когда будет дто
     @Transactional(readOnly = true)
-    public Transaction getOneTransactionById(Long accountId, Long transactionId) {
+    public TransactionDto getOneTransactionById(Long accountId, Long transactionId) {
         Transaction transaction = transactionRepository.findById(transactionId)
                 .orElseThrow(() -> new EntityNotFoundException("Transaction not found"));
 
@@ -55,7 +60,7 @@ public class TransactionService {
                 .findByTransactionIdAndAccountId(transactionId, accountId)
                 .orElseThrow(() -> new EntityNotFoundException("This transaction does not belongs to current account"));
 
-        return transaction;
+        return modelMapper.map(transaction, TransactionDto.class);
     }
 
     // тут тоже поменяю на дто когда оно будет+ тут по хорошему причесать код надо
@@ -65,9 +70,8 @@ public class TransactionService {
                 .orElseThrow(() -> new EntityNotFoundException("Account not found"));
         Account account2 = accountRepository.findById(transactionRequestDto.getAccountIdTo())
                 .orElseThrow(() -> new EntityNotFoundException("Account not found"));
-        TransactionType transactionType = transactionTypeRepository
-                .findTransactionTypeByType(transactionRequestDto.getType().getType())
-                .orElseThrow(() -> new EntityNotFoundException("Type " + transactionRequestDto.getType().getType() + " does not exist"));
+        TransactionType transactionType = transactionTypeRepository.findTransactionTypeByType(transactionRequestDto.getTypeName())
+                .orElseThrow(() -> new EntityNotFoundException("Type " + transactionRequestDto.getTypeName() + " does not exist"));
         Long transactionValue = transactionRequestDto.getValue().multiply(BigDecimal.valueOf(100)).longValue();
 
         //этот код уйдет когда будет валидация
