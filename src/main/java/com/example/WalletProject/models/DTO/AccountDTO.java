@@ -4,7 +4,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 
 // дто должен быть валидирован
-public class AccountDto {
+public class AccountDTO {
 
     @NotNull
     @Pattern(regexp = "[a-zа-я]", flags = Pattern.Flag.CASE_INSENSITIVE)
@@ -37,7 +37,7 @@ public class AccountDto {
         return currencyName;
     }
 
-    public AccountDto(String name, Boolean frozen, String comment, Long value, String currencyName) {
+    public AccountDTO(String name, Boolean frozen, String comment, Long value, String currencyName) {
         this.name = name;
         this.frozen = frozen;
         this.comment = comment;
@@ -45,7 +45,7 @@ public class AccountDto {
         this.currencyName = currencyName;
     }
 
-    public AccountDto() {
+    public AccountDTO() {
     }
 
     @Override

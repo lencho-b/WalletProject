@@ -66,12 +66,12 @@ public class AdminController {
 //    + создать дополнительный гет-метод формы для создания админом сообщения, а для данного метода сделать дто
 //можно использовать этот метод для отправки на эмейл сообщения
     @GetMapping("/{id}/accounts")
-    public List<AccountInfoForAdminDto> showAllClientAccounts(@PathVariable("id") Long clientId) {
+    public List<AccountInfoForAdminDTO> showAllClientAccounts(@PathVariable("id") Long clientId) {
         return null;
     }
 
     @GetMapping("/accounts/{id}")
-    public AccountDto showClientAccount(@PathVariable("id") Long accountId) {
+    public AccountDTO showClientAccount(@PathVariable("id") Long accountId) {
         return null;
     }
 

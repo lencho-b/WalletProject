@@ -1,6 +1,6 @@
 package com.example.WalletProject.models.DTO;
 
-public class AccountInfoForAdminDto {
+public class AccountInfoForAdminDTO {
     private Long id;
     private String name;
     private Boolean frozen;

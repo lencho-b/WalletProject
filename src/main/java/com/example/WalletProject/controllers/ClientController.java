@@ -39,12 +39,12 @@ public class ClientController {
     }
 
     @GetMapping("/{id}/account")
-    public List<AccountDto> showAllAccountsByClientId(@PathVariable("id") Long id) {
+    public List<AccountDTO> showAllAccountsByClientId(@PathVariable("id") Long id) {
         return accountService.getAllAccountsByClientId(id);
     }
 
     @PostMapping("/{id}/account/create")
-    public void createNewAccountByClientId(@PathVariable("id") Long id, @RequestBody AccountDto accountDto) {
+    public void createNewAccountByClientId(@PathVariable("id") Long id, @RequestBody AccountDTO accountDto) {
         accountService.createAccountByClientId(accountDto, id);
     }
 
@@ -75,7 +75,7 @@ public class ClientController {
     }
 
     @GetMapping("/{id}/account/{idAcc}")
-    public AccountDto showClientsAccountById(@PathVariable("idAcc") Long idAcc, @PathVariable("id") Long idCl) {
+    public AccountDTO showClientsAccountById(@PathVariable("idAcc") Long idAcc, @PathVariable("id") Long idCl) {
         return accountService.getClientsAccountById(idAcc, idCl);
     }
 

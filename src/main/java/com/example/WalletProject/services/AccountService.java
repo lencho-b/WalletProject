@@ -1,6 +1,6 @@
 package com.example.WalletProject.services;
 
-import com.example.WalletProject.models.DTO.AccountDto;
+import com.example.WalletProject.models.DTO.AccountDTO;
 import com.example.WalletProject.models.DTO.AccountRequestDto;
 import com.example.WalletProject.models.Entity.Account;
 import com.example.WalletProject.repositories.AccountRepository;
@@ -31,34 +31,34 @@ public class AccountService {
     }
 
     //    для админа
-    public List<AccountDto> getAllAccounts(Integer numberOfPage) {
+    public List<AccountDTO> getAllAccounts(Integer numberOfPage) {
         Page<Account> accounts = accountRepository.findAll(PageRequest.of(numberOfPage, 20));
         return accounts.stream()
-                .map(account -> modelMapper.map(account, AccountDto.class))
+                .map(account -> modelMapper.map(account, AccountDTO.class))
                 .collect(Collectors.toList());
     }
 
 
-    public List<AccountDto> getAllAccountsByClientId(Long id) {
+    public List<AccountDTO> getAllAccountsByClientId(Long id) {
         return accountRepository.findAccountsByClientId(id)
                 .stream()
-                .map(account -> modelMapper.map(account, AccountDto.class)
+                .map(account -> modelMapper.map(account, AccountDTO.class)
                 )
                 .collect(Collectors.toList());
     }
 
-    public AccountDto getAccountById(Long id) {
+    public AccountDTO getAccountById(Long id) {
         Account account = findOrThrow(id);
-        return modelMapper.map(account, AccountDto.class);
+        return modelMapper.map(account, AccountDTO.class);
     }
 
-    public AccountDto getClientsAccountById(Long idAcc, Long idCl) {
+    public AccountDTO getClientsAccountById(Long idAcc, Long idCl) {
         Account account = accountRepository.findAccountByIdAndByClientId(idAcc, idCl)
                 .orElseThrow(() -> new EntityNotFoundException("Account not found"));
-        return modelMapper.map(account, AccountDto.class);
+        return modelMapper.map(account, AccountDTO.class);
     }
 
-    public void createAccountByClientId(AccountDto accountDto, Long id) {
+    public void createAccountByClientId(AccountDTO accountDto, Long id) {
         Account account = modelMapper.map(accountDto, Account.class);
 //        account.setComment(accountDto.getComment());
 //        account.setName(accountDto.getName());
