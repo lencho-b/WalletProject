@@ -1,7 +1,7 @@
 package com.example.WalletProject.services;
 
 import com.example.WalletProject.models.DTO.AccountDTO;
-import com.example.WalletProject.models.DTO.AccountRequestDto;
+import com.example.WalletProject.models.DTO.AccountRequestDTO;
 import com.example.WalletProject.models.Entity.Account;
 import com.example.WalletProject.repositories.AccountRepository;
 import com.example.WalletProject.repositories.ClientRepository;
@@ -78,7 +78,7 @@ public class AccountService {
         accountRepository.deleteById(id);
     }
 
-    public void updateClientsAccountById(Long idAcc, Long idCl, AccountRequestDto accountRequestDto) {
+    public void updateClientsAccountById(Long idAcc, Long idCl, AccountRequestDTO accountRequestDto) {
         Account account = accountRepository.findAccountByIdAndByClientId(idAcc, idCl)
                 .orElseThrow(() -> new EntityNotFoundException("Account not found"));
         account.setComment(accountRequestDto.getComment());

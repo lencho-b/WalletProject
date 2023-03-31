@@ -4,7 +4,7 @@ package com.example.WalletProject.models.DTO;
 import jakarta.validation.constraints.NotBlank;
 
 //валидация нужна
-public class CountryForAdminDto {
+public class CountryForAdminDTO {
     @NotBlank
     private String name;
     @NotBlank

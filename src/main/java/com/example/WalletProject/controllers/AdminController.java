@@ -29,7 +29,7 @@ public class AdminController {
     }
 
     @GetMapping("/allClients")
-    public List<ClientDto> showAllClients(@RequestParam Integer numberPage) {
+    public List<ClientDTO> showAllClients(@RequestParam Integer numberPage) {
         return clientService.getAllClients(numberPage);
     }
     @GetMapping("/rate")
@@ -42,7 +42,7 @@ public class AdminController {
     }
 
     @GetMapping("/client/{id}")
-    public ClientDto showClientById(@PathVariable("id") Long id) {
+    public ClientDTO showClientById(@PathVariable("id") Long id) {
         return clientService.getClientByIdForAdmin(id);
     }
 
@@ -76,26 +76,26 @@ public class AdminController {
     }
 
     @GetMapping("/{id}/transactions")
-    public List<FullTransactionInfoForAdminDto> showTransactionsByClient(@PathVariable("id") Long clientId) {
+    public List<FullTransactionInfoForAdminDTO> showTransactionsByClient(@PathVariable("id") Long clientId) {
         return null;
     }
 
     @GetMapping("/{id}/transactions/a")
-    public List<FullTransactionInfoForAdminDto> showTransactionsByAccount(@PathVariable("id") Long accountId) {
+    public List<FullTransactionInfoForAdminDTO> showTransactionsByAccount(@PathVariable("id") Long accountId) {
         return null;
     }
 
     @GetMapping("/countries")
-    public List<CountryForAdminDto> showCountries() {
+    public List<CountryForAdminDTO> showCountries() {
         return countryService.findAll()
                 .stream()
-                .map(country -> modelMapper.map(country, CountryForAdminDto.class))
+                .map(country -> modelMapper.map(country, CountryForAdminDTO.class))
                 .collect(Collectors.toList());
     }
 
     @GetMapping("/country")
-    public CountryForAdminDto showCountry(@RequestParam String country) {
-        return modelMapper.map(countryService.findByName(country), CountryForAdminDto.class);
+    public CountryForAdminDTO showCountry(@RequestParam String country) {
+        return modelMapper.map(countryService.findByName(country), CountryForAdminDTO.class);
 
     }
 
@@ -105,12 +105,12 @@ public class AdminController {
     }
 
     @PatchMapping("/country/update")
-    public void updateCountry(@RequestBody CountryForAdminDto country) {
+    public void updateCountry(@RequestBody CountryForAdminDTO country) {
         countryService.saveOrUpdate(modelMapper.map(country, Country.class));
     }
 
     @PostMapping("/country/create")
-    public void createCountry(@RequestBody CountryForAdminDto country) {
+    public void createCountry(@RequestBody CountryForAdminDTO country) {
         countryService.saveOrUpdate(modelMapper.map(country, Country.class));
     }
 

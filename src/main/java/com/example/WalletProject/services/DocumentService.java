@@ -1,14 +1,12 @@
 package com.example.WalletProject.services;
 
-import com.example.WalletProject.models.DTO.DocumentDto;
+import com.example.WalletProject.models.DTO.DocumentDTO;
 import com.example.WalletProject.models.Entity.Document;
 import com.example.WalletProject.repositories.CountryRepository;
 import com.example.WalletProject.repositories.DocumentRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDate;
 
 @Service
 public class DocumentService {
@@ -22,14 +20,14 @@ public class DocumentService {
         this.modelMapper = modelMapper;
     }
 
-    public DocumentDto getDocumentByClientId(Long id) {
+    public DocumentDTO getDocumentByClientId(Long id) {
 
         Document document = findOrThrow(id);
 
-        return modelMapper.map(document, DocumentDto.class);
+        return modelMapper.map(document, DocumentDTO.class);
     }
 
-    public void createDocumentByClientId(Long id, DocumentDto documentDto) {
+    public void createDocumentByClientId(Long id, DocumentDTO documentDto) {
         //проверка валидации
         Document document = modelMapper.map(documentDto, Document.class);
         document.setClient_id(id);

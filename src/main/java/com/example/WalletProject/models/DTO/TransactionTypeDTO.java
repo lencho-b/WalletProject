@@ -1,6 +1,6 @@
 package com.example.WalletProject.models.DTO;
 
-public class TransactionTypeDto {
+public class TransactionTypeDTO {
     private String type;
 
     public String getType() {

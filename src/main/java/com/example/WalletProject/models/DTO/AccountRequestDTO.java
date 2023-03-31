@@ -4,7 +4,7 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
-public class AccountRequestDto {
+public class AccountRequestDTO {
     @NotNull
     private String name;
     @NotNull
@@ -12,14 +12,14 @@ public class AccountRequestDto {
     private String comment;
 
     @NotEmpty
-    private CurrencyDto currency;
+    private CurrencyDTO currency;
 
-    public AccountRequestDto(String name, String comment) {
+    public AccountRequestDTO(String name, String comment) {
         this.name = name;
         this.comment = comment;
     }
 
-    public AccountRequestDto() {
+    public AccountRequestDTO() {
     }
 
     public String getName() {
@@ -38,11 +38,11 @@ public class AccountRequestDto {
         this.comment = comment;
     }
 
-    public CurrencyDto getCurrency() {
+    public CurrencyDTO getCurrency() {
         return currency;
     }
 
-    public void setCurrency(CurrencyDto currency) {
+    public void setCurrency(CurrencyDTO currency) {
         this.currency = currency;
     }
 

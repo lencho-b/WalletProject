@@ -49,12 +49,12 @@ public class ClientController {
     }
 
     @PatchMapping("/{id}/auth/")
-    public void updateAuthClientById(@PathVariable("id") Long id, @RequestBody AuthInfoDto authInfoDto) {
+    public void updateAuthClientById(@PathVariable("id") Long id, @RequestBody AuthInfoDTO authInfoDto) {
         authService.updateAuthClientById(authInfoDto, id);
     }
 
     @GetMapping("/{id}/document")
-    public DocumentDto showDocumentByClientId(@PathVariable("id") Long id) {
+    public DocumentDTO showDocumentByClientId(@PathVariable("id") Long id) {
         return documentService.getDocumentByClientId(id);
     }
 
@@ -64,7 +64,7 @@ public class ClientController {
     }
 
     @PostMapping("/{id}/document/")
-    public void updateClientsDocumentById(@PathVariable("id") Long id, @Valid @RequestBody DocumentDto documentDto) {
+    public void updateClientsDocumentById(@PathVariable("id") Long id, @Valid @RequestBody DocumentDTO documentDto) {
         documentService.createDocumentByClientId(id, documentDto);
     }
 
@@ -82,7 +82,7 @@ public class ClientController {
 
     @PatchMapping("/{id}/account/{idAcc}")
     public void updateClientsAccountById
-            (@PathVariable("idAcc") Long idAcc, @PathVariable("id") Long idCl, @RequestBody AccountRequestDto accountRequestDto) {
+            (@PathVariable("idAcc") Long idAcc, @PathVariable("id") Long idCl, @RequestBody AccountRequestDTO accountRequestDto) {
         accountService.updateClientsAccountById(idAcc, idCl, accountRequestDto);
     }
 

@@ -1,6 +1,6 @@
 package com.example.WalletProject.services;
 
-import com.example.WalletProject.models.DTO.TransactionRequestDto;
+import com.example.WalletProject.models.DTO.TransactionRequestDTO;
 import com.example.WalletProject.models.Entity.Account;
 import com.example.WalletProject.models.Entity.Transaction;
 import com.example.WalletProject.models.Entity.TransactionAccount;
@@ -60,7 +60,7 @@ public class TransactionService {
 
     // тут тоже поменяю на дто когда оно будет+ тут по хорошему причесать код надо
     @Transactional
-    public Transaction saveNewTransactionInRepo(Long clientIdFrom, TransactionRequestDto transactionRequestDto) {
+    public Transaction saveNewTransactionInRepo(Long clientIdFrom, TransactionRequestDTO transactionRequestDto) {
         Account account1 = accountRepository.findById(clientIdFrom)
                 .orElseThrow(() -> new EntityNotFoundException("Account not found"));
         Account account2 = accountRepository.findById(transactionRequestDto.getAccountIdTo())

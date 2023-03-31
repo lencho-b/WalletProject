@@ -1,6 +1,6 @@
 package com.example.WalletProject.controllers;
 
-import com.example.WalletProject.models.DTO.TransactionRequestDto;
+import com.example.WalletProject.models.DTO.TransactionRequestDTO;
 import com.example.WalletProject.models.Entity.Transaction;
 import com.example.WalletProject.services.TransactionService;
 import org.springframework.web.bind.annotation.*;
@@ -33,8 +33,8 @@ public class TransactionController {
     }
 
     @GetMapping("/new")
-    public TransactionRequestDto createNewTransaction() {
-        TransactionRequestDto transactionRequestDto = new TransactionRequestDto();
+    public TransactionRequestDTO createNewTransaction() {
+        TransactionRequestDTO transactionRequestDto = new TransactionRequestDTO();
         transactionRequestDto.setValue(new BigDecimal("0.00"));
         transactionRequestDto.setMessage("введите сообщение");
         transactionRequestDto.getType().setType("перевод");
@@ -45,7 +45,7 @@ public class TransactionController {
 //     создать для этого метода дто формы для перевода.
     @PostMapping("/new")
     public Transaction saveNewTransaction(@PathVariable("idAcc") Long accountIdFrom,
-                                          @RequestBody TransactionRequestDto transactionRequestDto) {
+                                          @RequestBody TransactionRequestDTO transactionRequestDto) {
         //поменять на дто
         return transactionService.saveNewTransactionInRepo(accountIdFrom, transactionRequestDto);
     }

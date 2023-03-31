@@ -2,13 +2,12 @@ package com.example.WalletProject.models.DTO;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 
 import java.time.LocalDate;
 
 //валидация нужна
-public class DocumentDto {
+public class DocumentDTO {
 
     @Pattern(regexp = "[a-z]{2}[0-9]{7}", flags = Pattern.Flag.CASE_INSENSITIVE)
     private final String documentNumber;
@@ -16,9 +15,9 @@ public class DocumentDto {
     private final LocalDate issueDate;
     //меняем айди на название страны.
     @NotEmpty
-    private CountryNameDto country;
+    private CountryNameDTO country;
 
-    public DocumentDto(String documentNumber, LocalDate issueDate, CountryNameDto country) {
+    public DocumentDTO(String documentNumber, LocalDate issueDate, CountryNameDTO country) {
         this.documentNumber = documentNumber;
         this.issueDate = issueDate;
         this.country = country;
@@ -32,11 +31,11 @@ public class DocumentDto {
         return issueDate;
     }
 
-    public CountryNameDto getCountry() {
+    public CountryNameDTO getCountry() {
         return country;
     }
 
-    public void setCountry(CountryNameDto country) {
+    public void setCountry(CountryNameDTO country) {
         this.country = country;
     }
 }

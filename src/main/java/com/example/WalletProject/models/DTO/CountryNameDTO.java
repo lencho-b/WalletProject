@@ -2,7 +2,7 @@ package com.example.WalletProject.models.DTO;
 
 import jakarta.validation.constraints.NotBlank;
 
-public class CountryNameDto {
+public class CountryNameDTO {
     @NotBlank
     private String name;
 

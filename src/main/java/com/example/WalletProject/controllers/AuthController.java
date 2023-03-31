@@ -1,6 +1,6 @@
 package com.example.WalletProject.controllers;
 
-import com.example.WalletProject.models.DTO.RegistrationDto;
+import com.example.WalletProject.models.DTO.RegistrationDTO;
 import com.example.WalletProject.services.ClientService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,7 +17,7 @@ public class AuthController
         this.clientService = clientService;
     }
     @PostMapping("/registration")
-    public void createNewClient(@RequestBody RegistrationDto registrationDto) {
+    public void createNewClient(@RequestBody RegistrationDTO registrationDto) {
         clientService.createNewClient(registrationDto);
     }
 

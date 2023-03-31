@@ -3,7 +3,7 @@ package com.example.WalletProject.models.DTO;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-public class TransactionForAdminDto {
+public class TransactionForAdminDTO {
     private BigDecimal value;//big decimal - чтоб не показывать копейки.
     private String message;
     private LocalDateTime startDateTime;

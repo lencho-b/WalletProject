@@ -1,8 +1,8 @@
 package com.example.WalletProject.models.DTO;
 
-public class FullTransactionInfoForAdminDto {
+public class FullTransactionInfoForAdminDTO {
     private Long accountId;
-    private TransactionForAdminDto transactionDto;
+    private TransactionForAdminDTO transactionDto;
     private boolean sender;
 
 
@@ -14,11 +14,11 @@ public class FullTransactionInfoForAdminDto {
         this.accountId = accountId;
     }
 
-    public TransactionForAdminDto getTransactionDto() {
+    public TransactionForAdminDTO getTransactionDto() {
         return transactionDto;
     }
 
-    public void setTransactionDto(TransactionForAdminDto transactionDto) {
+    public void setTransactionDto(TransactionForAdminDTO transactionDto) {
         this.transactionDto = transactionDto;
     }
 

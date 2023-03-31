@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotEmpty;
 
 import java.math.BigDecimal;
 
-public class TransactionRequestDto {
+public class TransactionRequestDTO {
     @NotBlank
     private Long accountIdTo;
     @NotEmpty
@@ -15,9 +15,9 @@ public class TransactionRequestDto {
     private BigDecimal value;//big decimal - чтоб не показывать копейки.
     private String message;
     @NotEmpty
-    private TransactionTypeDto type;
+    private TransactionTypeDTO type;
 
-    public TransactionRequestDto() {
+    public TransactionRequestDTO() {
     }
 
     public Long getAccountIdTo() {
@@ -44,11 +44,11 @@ public class TransactionRequestDto {
         this.message = message;
     }
 
-    public TransactionTypeDto getType() {
+    public TransactionTypeDTO getType() {
         return type;
     }
 
-    public void setType(TransactionTypeDto type) {
+    public void setType(TransactionTypeDTO type) {
         this.type = type;
     }
 }
