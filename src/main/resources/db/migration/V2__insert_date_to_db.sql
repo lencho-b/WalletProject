@@ -1,6 +1,8 @@
 insert into client(firstname, lastname, patronymic, date_of_birth, email, phone_number, created_at, updated_at, frozen,
                    is_delete, is_verify)
 values ('igor', 'sobol', 'evg', '22.03.1908', 'gocha@lalalal.ru', '8002353535', '20.03.2000', '20.03.2000', false,
+        false, false),
+       ('lena', 'domroch', 'evg', '22.03.1999', 'domroch@gmail.com', '8002353535', '20.03.2000', '20.03.2000', false,
         false, false);
 
 insert into currency(name)
@@ -24,5 +26,13 @@ values (true, 1, 1),
        (false, 2, 1);
 
 insert into role(name)
-values ('user'),
-       ('admin');
+values ('ROLE_USER'),
+       ('ROLE_ADMIN');
+
+insert into auth_info(client_id, password)
+values (2, '$2a$10$1Rht.o4HUTVxc10QrzT4Xe1qbvcP/ToE3Z8GtlQ71vMRFkDRTBDae'),
+       (1, '$2a$10$g.k4W9h.oHRK7K8nI0Z7mON/N5OcYp4qog0GNDF1BJa21/UNssxK.');
+
+insert into client_role(client_id, role_id)
+values (1, 1),
+       (2, 2);

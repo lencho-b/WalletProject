@@ -7,7 +7,7 @@ import jakarta.validation.constraints.Pattern;
 public class AccountDto {
 
     @NotNull
-    @Pattern(regexp = "[a-zа-я]", flags = Pattern.Flag.CASE_INSENSITIVE)
+    @Pattern(regexp = "[a-zа-я]{0,12}", flags = Pattern.Flag.CASE_INSENSITIVE)
     private String name;
     @NotNull
     private Boolean frozen;

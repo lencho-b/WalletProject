@@ -1,6 +1,17 @@
 package com.example.WalletProject.models.Entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -47,13 +58,14 @@ public class Client {
     @Column(name = "is_verify", nullable = false)
     private boolean isVerify = false;
 
-    @OneToMany(mappedBy = "client",fetch = FetchType.LAZY)
-    private List<Account>accounts;
-    @ManyToMany(fetch = FetchType.LAZY,cascade =CascadeType.ALL)
-    @JoinTable(name = "client_role",joinColumns = @JoinColumn (name = "client_id"),
+    @OneToMany(mappedBy = "client", fetch = FetchType.LAZY)
+    private List<Account> accounts;
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "client_role", joinColumns = @JoinColumn(name = "client_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private List<Role> roles;
-    public Client( String firstname, String lastname, String patronymic, LocalDate dateOfBirth, String email, String phoneNumber, LocalDate createdAt, LocalDate updatedAt, boolean frozen, boolean isDelete, boolean isVerify) {
+
+    public Client(String firstname, String lastname, String patronymic, LocalDate dateOfBirth, String email, String phoneNumber, LocalDate createdAt, LocalDate updatedAt, boolean frozen, boolean isDelete, boolean isVerify) {
         this.firstname = firstname;
         this.lastname = lastname;
         this.patronymic = patronymic;
@@ -66,6 +78,7 @@ public class Client {
         this.isDelete = isDelete;
         this.isVerify = isVerify;
     }
+
     public Client(String firstname, String lastname, String patronymic, LocalDate dateOfBirth, String email, String phoneNumber) {
         this.firstname = firstname;
         this.lastname = lastname;
@@ -74,20 +87,25 @@ public class Client {
         this.email = email;
         this.phoneNumber = phoneNumber;
     }
+
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
+    }
+
     public Client() {
     }
-    public List<Role> getRoles(Role role) {
 
+    public List<Role> getRoles() {
         return roles;
     }
 
     public void setRole(Role role) {
-        if(roles == null)
-        {
-            roles=new ArrayList<>();
+        if (roles == null) {
+            roles = new ArrayList<>();
         }
         roles.add(role);
     }
+
     public Client(Long id) {
         this.id = id;
     }
@@ -120,6 +138,7 @@ public class Client {
     public void setAccounts(List<Account> accounts) {
         this.accounts = accounts;
     }
+
     public Long getId() {
         return id;
     }

@@ -1,13 +1,25 @@
 package com.example.WalletProject.controllers;
 
-import com.example.WalletProject.models.DTO.*;
+import com.example.WalletProject.models.DTO.AccountDto;
+import com.example.WalletProject.models.DTO.AccountRequestDto;
+import com.example.WalletProject.models.DTO.AuthInfoDto;
+import com.example.WalletProject.models.DTO.ClientInformationForMainPageDTO;
+import com.example.WalletProject.models.DTO.ClientInformationForManageDTO;
+import com.example.WalletProject.models.DTO.DocumentDto;
 import com.example.WalletProject.services.AccountService;
 import com.example.WalletProject.services.AuthService;
 import com.example.WalletProject.services.ClientService;
 import com.example.WalletProject.services.DocumentService;
 import jakarta.validation.Valid;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 

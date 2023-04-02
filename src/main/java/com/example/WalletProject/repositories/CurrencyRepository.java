@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface CurrencyRepository extends JpaRepository<Currency, Integer>
-{// возможно spring data имеет такой метод по умолчанию??
+public interface CurrencyRepository extends JpaRepository<Currency, Integer> {// возможно spring data имеет такой метод по умолчанию??
+
     Optional<Currency> getCurrencyByNameLike(String name);
 }

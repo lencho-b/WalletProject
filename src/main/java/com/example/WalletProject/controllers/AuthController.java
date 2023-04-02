@@ -9,13 +9,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/auth")
-public class AuthController
-{
+public class AuthController {
     private final ClientService clientService;
 
     public AuthController(ClientService clientService) {
         this.clientService = clientService;
     }
+
     @PostMapping("/registration")
     public void createNewClient(@RequestBody RegistrationDto registrationDto) {
         clientService.createNewClient(registrationDto);

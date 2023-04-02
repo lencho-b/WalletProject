@@ -19,7 +19,7 @@ public class ClientDto implements Serializable {
     private boolean isDelete;
     private boolean isVerify;
 
-    public ClientDto( String firstname, String lastname, String patronymic, LocalDate dateOfBirth, String email, String phoneNumber, LocalDate createdAt, LocalDate updatedAt, boolean frozen, boolean isDelete, boolean isVerify) {
+    public ClientDto(String firstname, String lastname, String patronymic, LocalDate dateOfBirth, String email, String phoneNumber, LocalDate createdAt, LocalDate updatedAt, boolean frozen, boolean isDelete, boolean isVerify) {
         this.firstname = firstname;
         this.lastname = lastname;
         this.patronymic = patronymic;

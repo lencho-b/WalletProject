@@ -1,27 +1,27 @@
 package com.example.WalletProject.models.DTO;
 
 import java.time.LocalDate;
+
 // валидация нужна
-public class RegistrationDto
-{
+public class RegistrationDto {
 
-    private  String firstname;
+    private String firstname;
 
-    private  String lastname;
+    private String lastname;
 
-    private  String patronymic;
+    private String patronymic;
 
     private LocalDate dateOfBirth;
 
-    private  String email;
+    private String email;
 
     private String phoneNumber;
-// убираем логин, если его нет в базе.
+    // убираем логин, если его нет в базе.
     private String login;
 
     private String password;
-// роль пользователь себе выбирать не может, это надо в сервисе проставлять.
-    private  Integer role;
+    // роль пользователь себе выбирать не может, это надо в сервисе проставлять.
+    private Integer role;
 
     public RegistrationDto(String firstname, String lastname, String patronymic, LocalDate dateOfBirth, String email, String phoneNumber, String login, String password, Integer role) {
         this.firstname = firstname;

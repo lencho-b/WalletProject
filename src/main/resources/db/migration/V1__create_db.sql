@@ -34,8 +34,8 @@ create table if not exists role (
      name varchar(50) not null );
 
 create table if not exists client_role (
-    client_id bigint references client on delete cascade,
-     role_id integer references role );
+    client_id bigint references client(id) on delete cascade,
+     role_id integer references role(id) );
 
 create table if not exists auth_info (
     client_id bigint not null primary key references client on delete cascade,

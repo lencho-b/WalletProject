@@ -11,7 +11,8 @@ import java.util.Optional;
 
 @Repository
 public interface AccountRepository extends JpaRepository<Account, Long> {
-        List<Account> findAccountsByClientId(Long id);
-        @Query("SELECT a FROM Account a WHERE a.id=:idAcc AND a.client.id=:idCl")
-        Optional<Account> findAccountByIdAndByClientId(@Param("idAcc") Long idAcc, @Param("idCl") Long idCl);
+    List<Account> findAccountsByClientId(Long id);
+
+    @Query("SELECT a FROM Account a WHERE a.id=:idAcc AND a.client.id=:idCl")
+    Optional<Account> findAccountByIdAndByClientId(@Param("idAcc") Long idAcc, @Param("idCl") Long idCl);
 }

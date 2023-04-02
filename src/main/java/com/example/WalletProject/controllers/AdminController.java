@@ -39,7 +39,8 @@ public class AdminController {
         this.modelMapper = modelMapper;
     }
 
-    @GetMapping("/allClients")
+
+    @GetMapping("/all")
     public List<ClientDto> showAllClients(@RequestParam Integer numberPage) {
         return clientService.getAllClients(numberPage);
     }
@@ -83,7 +84,7 @@ public class AdminController {
         return null;
     }
 
-    @GetMapping("/{id}/transactions/a")
+    @GetMapping("/{id}/transactions/c")
     public List<FullTransactionInfoForAdminDto> showTransactionsByAccount(@PathVariable("id") Long accountId) {
         return null;
     }

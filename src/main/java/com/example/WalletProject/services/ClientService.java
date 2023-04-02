@@ -13,14 +13,18 @@ import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class ClientService {
+public class ClientService implements UserDetailsService {
     private final ClientRepository clientRepository;
     private final AuthInfoRepository authInfoRepository;
     private final RoleRepository roleRepository;
@@ -104,15 +108,24 @@ public class ClientService {
     private Client finedOrThrow(Long id) {
         Client client = clientRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Client not found"));
-        if(client.getIsDelete().equals(true)) {
+        if (client.getIsDelete().equals(true)) {
             throw new SecurityException("Client removed");
         }
         return client;
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        Client client = clientRepository.findByEmail(email).orElseThrow(() -> new EntityNotFoundException("Client not found"));
+        AuthInfo authInfo = authInfoRepository.findById(client.getId()).orElseThrow(() -> new EntityNotFoundException("AufInfo not found"));
+        return new User(client.getEmail(), authInfo.getPassword(), client.getRoles());
+    }
+
     private enum Roles {
         USER(1), ADMIN(2);
         private Integer id;
+
         Roles(Integer id) {
             this.id = id;
         }
