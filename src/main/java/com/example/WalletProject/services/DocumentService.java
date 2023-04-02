@@ -25,19 +25,19 @@ public class DocumentService {
     public DocumentDto getDocumentByClientId(Long id) {
 
         Document document = findOrThrow(id);
-
-        return modelMapper.map(document, DocumentDto.class);
+        DocumentDto documentDto = modelMapper.map(document, DocumentDto.class);
+        documentDto.setCountry(document.getCountry().getName());
+        return documentDto;
     }
 
     public void createDocumentByClientId(Long id, DocumentDto documentDto) {
         //проверка валидации
         Document document = modelMapper.map(documentDto, Document.class);
         document.setClient_id(id);
-//        document.setDocumentNumber(documentDto.getDocumentNumber());
-//        document.setIssueDate(documentDto.getIssueDate());
-//        document.setCreatedAt(LocalDate.now());
-        document.setCountry(countryRepository.findByName(documentDto.getCountry().getName())
+
+        document.setCountry(countryRepository.findByName(documentDto.getCountry())
                 .orElseThrow(() -> new EntityNotFoundException("Country not found")));
+        document.setCreatedAt(LocalDate.now());
         documentRepository.save(document);
     }
 

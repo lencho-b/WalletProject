@@ -60,16 +60,13 @@ public class AccountService {
 
     public void createAccountByClientId(AccountDto accountDto, Long id) {
         Account account = modelMapper.map(accountDto, Account.class);
-//        account.setComment(accountDto.getComment());
-//        account.setName(accountDto.getName());
-//        account.setValue(0L);
-//        account.setCreatedAt(LocalDate.now());
-//        account.setFrozen(false);
-//        account.setUpdatedAt(LocalDate.now());
         account.setClient(clientRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Client not found")));
         account.setCurrency(currencyRepository.getCurrencyByNameLike(account.getCurrency().getName())
                 .orElseThrow(() -> new EntityNotFoundException("Currency not found")));
+        account.setFrozen(false);
+        account.setCreatedAt(LocalDate.now());
+        account.setValue(0L);
         accountRepository.save(account);
     }
 
@@ -81,8 +78,7 @@ public class AccountService {
     public void updateClientsAccountById(Long idAcc, Long idCl, AccountRequestDto accountRequestDto) {
         Account account = accountRepository.findAccountByIdAndByClientId(idAcc, idCl)
                 .orElseThrow(() -> new EntityNotFoundException("Account not found"));
-        account.setComment(accountRequestDto.getComment());
-        account.setName(accountRequestDto.getName());
+        modelMapper.map(accountRequestDto, account);
         account.setUpdatedAt(LocalDate.now());
         accountRepository.save(account);
     }

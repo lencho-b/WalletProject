@@ -5,7 +5,6 @@ import com.example.WalletProject.services.AccountService;
 import com.example.WalletProject.services.AuthService;
 import com.example.WalletProject.services.ClientService;
 import com.example.WalletProject.services.DocumentService;
-import jakarta.validation.Valid;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -48,9 +47,9 @@ public class ClientController {
         accountService.createAccountByClientId(accountDto, id);
     }
 
-    @PatchMapping("/{id}/auth/")
-    public void updateAuthClientById(@PathVariable("id") Long id, @RequestBody AuthInfoDto authInfoDto) {
-        authService.updateAuthClientById(authInfoDto, id);
+    @PatchMapping("/{id}/auth")
+    public void updateAuthClientById(@PathVariable("id") Long id, @RequestBody String password) {
+        authService.updateAuthClientById(password, id);
     }
 
     @GetMapping("/{id}/document")
@@ -63,13 +62,13 @@ public class ClientController {
         return clientService.getClientInformationForManageByClientId(id);
     }
 
-    @PostMapping("/{id}/document/")
-    public void updateClientsDocumentById(@PathVariable("id") Long id, @Valid @RequestBody DocumentDto documentDto) {
+    @PostMapping("/{id}/document")
+    public void updateClientsDocumentById(@PathVariable("id") Long id,@RequestBody DocumentDto documentDto) {
         documentService.createDocumentByClientId(id, documentDto);
     }
 
     //клиенту нельзя удалять свой документ либо он может делать только мягкое удаление
-    @DeleteMapping("/{id}/document/delete")
+    @DeleteMapping("/{id}/document")
     public void deleteClientsDocumentById(@PathVariable("id") Long id) {
         documentService.deleteClientsDocumentByClientId(id);
     }
