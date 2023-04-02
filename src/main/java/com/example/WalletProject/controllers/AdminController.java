@@ -27,18 +27,18 @@ public class AdminController {
     }
 
     @GetMapping("/allClients")
-    public List<ClientDTO> showAllClients(@RequestParam Integer numberPage) {
+    public List<ClientDto> showAllClients(@RequestParam Integer numberPage) {
         return clientService.getAllClients(numberPage);
     }
 
     @GetMapping("/client/{id}")
-    public ClientDTO showClientById(@PathVariable("id") Long id) {
+    public ClientDto showClientById(@PathVariable("id") Long id) {
         return clientService.getClientByIdForAdmin(id);
     }
 
 
     @PatchMapping("/client/{id}")
-    public void setStatusByClientId(@PathVariable("id") Long id, @RequestBody ClientInformationForManageDTO clientInformationForManageDTO) {
+    public void setStatusByClientId(@PathVariable("id") Long id, @RequestBody ClientInformationForManageDto clientInformationForManageDTO) {
         clientService.updateInformationForManageByClientId(id, clientInformationForManageDTO);
     }
 

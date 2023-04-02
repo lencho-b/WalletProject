@@ -28,13 +28,13 @@ public class ClientController {
     }
 
     @GetMapping("/{id}/information")
-    public ClientInformationForMainPageDTO showClientById(@PathVariable("id") Long id) {
+    public ClientInformationForMainPageDto showClientById(@PathVariable("id") Long id) {
         return clientService.getClientById(id);
     }
 
     @PatchMapping("/{id}/information/")
     public void updateInformationByClientId(@PathVariable("id") Long id, @Validated
-    @RequestBody ClientInformationForMainPageDTO clientInformationForMainPageDTO) {
+    @RequestBody ClientInformationForMainPageDto clientInformationForMainPageDTO) {
         clientService.updateInformationByClientId(id, clientInformationForMainPageDTO);
     }
 
@@ -59,7 +59,7 @@ public class ClientController {
     }
 
     @GetMapping("/{id}/manage-information")
-    public ClientInformationForManageDTO showClientInformationForManageByClientId(@PathVariable("id") Long id) {
+    public ClientInformationForManageDto showClientInformationForManageByClientId(@PathVariable("id") Long id) {
         return clientService.getClientInformationForManageByClientId(id);
     }
 

@@ -1,8 +1,8 @@
 package com.example.WalletProject.services;
 
-import com.example.WalletProject.models.DTO.ClientDTO;
-import com.example.WalletProject.models.DTO.ClientInformationForMainPageDTO;
-import com.example.WalletProject.models.DTO.ClientInformationForManageDTO;
+import com.example.WalletProject.models.DTO.ClientDto;
+import com.example.WalletProject.models.DTO.ClientInformationForMainPageDto;
+import com.example.WalletProject.models.DTO.ClientInformationForManageDto;
 import com.example.WalletProject.models.DTO.RegistrationDto;
 import com.example.WalletProject.models.Entity.AuthInfo;
 import com.example.WalletProject.models.Entity.Client;
@@ -34,30 +34,30 @@ public class ClientService {
     }
 
 
-    public List<ClientDTO> getAllClients(Integer numberPage) {
+    public List<ClientDto> getAllClients(Integer numberPage) {
         Page<Client> allClients = clientRepository.findAll(PageRequest.of(numberPage, 20));
         return allClients.stream()
-                .map(client -> modelMapper.map(client, ClientDTO.class))
+                .map(client -> modelMapper.map(client, ClientDto.class))
                 .collect(Collectors.toList());
     }
 
 
-    public ClientInformationForMainPageDTO getClientById(Long id) {
+    public ClientInformationForMainPageDto getClientById(Long id) {
         Client client = finedOrThrow(id);
-        return modelMapper.map(client, ClientInformationForMainPageDTO.class);
+        return modelMapper.map(client, ClientInformationForMainPageDto.class);
     }
 
     //не понятен смыс метода
-    public ClientDTO getClientByIdForAdmin(Long id) {
+    public ClientDto getClientByIdForAdmin(Long id) {
         return clientRepository.findById(id)
-                .map(client -> modelMapper.map(client, ClientDTO.class)
+                .map(client -> modelMapper.map(client, ClientDto.class)
                 )
                 .orElseThrow(() -> new EntityNotFoundException("Client not found"));
     }
 
-    public ClientInformationForManageDTO getClientInformationForManageByClientId(Long id) {
+    public ClientInformationForManageDto getClientInformationForManageByClientId(Long id) {
         Client client = finedOrThrow(id);
-        return modelMapper.map(client, ClientInformationForManageDTO.class);
+        return modelMapper.map(client, ClientInformationForManageDto.class);
     }
 
     public void createNewClient(RegistrationDto registrationDto) {
@@ -75,7 +75,7 @@ public class ClientService {
     }
 
     //перезанирание информации о клиенте в entity из-за пустых полей dto
-    public void updateInformationByClientId(Long id, ClientInformationForMainPageDTO clientInformationForMainPageDTO) {
+    public void updateInformationByClientId(Long id, ClientInformationForMainPageDto clientInformationForMainPageDTO) {
         Client clientToBeUpdated = finedOrThrow(id);
         Client client = modelMapper.map(clientInformationForMainPageDTO, Client.class);
         client.setId(clientToBeUpdated.getId());
@@ -89,7 +89,7 @@ public class ClientService {
         clientRepository.save(client);
     }
 
-    public void updateInformationForManageByClientId(Long id, ClientInformationForManageDTO clientInformationForManageDTO) {
+    public void updateInformationForManageByClientId(Long id, ClientInformationForManageDto clientInformationForManageDTO) {
         Client client = finedOrThrow(id);
         client.setFrozen(clientInformationForManageDTO.getFrozen());
         client.setIsVerify(clientInformationForManageDTO.getVerify());

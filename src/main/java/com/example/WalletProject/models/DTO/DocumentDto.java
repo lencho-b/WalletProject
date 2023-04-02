@@ -15,9 +15,9 @@ public class DocumentDto {
     private final LocalDate issueDate;
     //меняем айди на название страны.
     @NotEmpty
-    private CountryNameDTO country;
+    private CountryNameDto country;
 
-    public DocumentDto(String documentNumber, LocalDate issueDate, CountryNameDTO country) {
+    public DocumentDto(String documentNumber, LocalDate issueDate, CountryNameDto country) {
         this.documentNumber = documentNumber;
         this.issueDate = issueDate;
         this.country = country;
@@ -31,11 +31,11 @@ public class DocumentDto {
         return issueDate;
     }
 
-    public CountryNameDTO getCountry() {
+    public CountryNameDto getCountry() {
         return country;
     }
 
-    public void setCountry(CountryNameDTO country) {
+    public void setCountry(CountryNameDto country) {
         this.country = country;
     }
 }

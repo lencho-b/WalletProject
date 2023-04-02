@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 // так как информация получается извне и сохраняется в базе, поля должны быть валидированы
-public class ClientInformationForMainPageDTO {
+public class ClientInformationForMainPageDto {
     @NotNull
     private String firstname;
     @NotNull
@@ -22,7 +22,7 @@ public class ClientInformationForMainPageDTO {
     private String phoneNumber;
 
     //нужен ли гига-конструктор - тоже вопрос
-    public ClientInformationForMainPageDTO(String firstname, String lastname, String patronymic, LocalDate dateOfBirth, String email, String phoneNumber) {
+    public ClientInformationForMainPageDto(String firstname, String lastname, String patronymic, LocalDate dateOfBirth, String email, String phoneNumber) {
         this.firstname = firstname;
         this.lastname = lastname;
         this.patronymic = patronymic;
@@ -31,7 +31,7 @@ public class ClientInformationForMainPageDTO {
         this.phoneNumber = phoneNumber;
     }
 
-    public ClientInformationForMainPageDTO() {
+    public ClientInformationForMainPageDto() {
     }
 
     public String getFirstname() {
