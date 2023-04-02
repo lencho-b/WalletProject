@@ -7,6 +7,7 @@ import com.example.WalletProject.models.Entity.Transaction;
 import com.example.WalletProject.services.TransactionService;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -36,7 +37,7 @@ public class TransactionController {
 //     создать для этого метода дто формы для перевода.
     @PostMapping
     public Transaction saveNewTransaction(@PathVariable("idAcc") Long accountIdFrom,
-                                          @RequestBody TransactionRequestDto transactionRequestDto) {
+                                          @RequestBody TransactionRequestDto transactionRequestDto) throws IOException {
         //поменять на дто
         return transactionService.saveNewTransactionInRepo(accountIdFrom, transactionRequestDto);
     }

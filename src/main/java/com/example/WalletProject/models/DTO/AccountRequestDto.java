@@ -1,7 +1,6 @@
 package com.example.WalletProject.models.DTO;
 
 import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
 public class AccountRequestDto {
@@ -11,8 +10,6 @@ public class AccountRequestDto {
     @Max(value = 100)
     private String comment;
 
-    @NotEmpty
-    private CurrencyDto currency;
 
     public AccountRequestDto(String name, String comment) {
         this.name = name;
@@ -36,14 +33,6 @@ public class AccountRequestDto {
 
     public void setComment(String comment) {
         this.comment = comment;
-    }
-
-    public CurrencyDto getCurrency() {
-        return currency;
-    }
-
-    public void setCurrency(CurrencyDto currency) {
-        this.currency = currency;
     }
 
     @Override

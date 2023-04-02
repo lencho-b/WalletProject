@@ -10,7 +10,6 @@ public class AuthInfo {
     @Column(name = "client_id", nullable = false)
     private Long id;
 
-
     @Column(name = "password", nullable = false, length = Integer.MAX_VALUE)
     private String password;
 

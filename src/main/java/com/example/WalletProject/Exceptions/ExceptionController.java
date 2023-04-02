@@ -15,4 +15,9 @@ public String SQLExceptionHandler(SQLException e) {
             "или некоректные значения либо запросили не существующие";
     return log;
 }
+//    @ExceptionHandler(EntityNotFoundException.class)
+//    public String EntityNotFoundExceptionHandler(EntityNotFoundException e) {
+//        String log = "значение не найдено";
+//        return log;
+//    }
 }

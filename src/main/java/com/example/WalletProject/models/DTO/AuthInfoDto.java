@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Size;
 public class AuthInfoDto {
     @NotNull
     @Size(min = 7, max = 15, message = "incorrect password")
-    private final String password;
+    private String password;
 
     public AuthInfoDto(String password) {
         this.password = password;
@@ -14,6 +14,9 @@ public class AuthInfoDto {
 
     public String getPassword() {
         return password;
+    }
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     @Override

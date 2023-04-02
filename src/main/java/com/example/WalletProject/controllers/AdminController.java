@@ -1,5 +1,6 @@
 package com.example.WalletProject.controllers;
 
+import com.example.WalletProject.integration.Rate;
 import com.example.WalletProject.models.DTO.*;
 import com.example.WalletProject.models.Entity.Country;
 import com.example.WalletProject.services.ClientService;
@@ -8,6 +9,7 @@ import com.example.WalletProject.services.CurrencyService;
 import org.modelmapper.ModelMapper;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,7 +32,10 @@ public class AdminController {
     public List<ClientDto> showAllClients(@RequestParam Integer numberPage) {
         return clientService.getAllClients(numberPage);
     }
-
+    @GetMapping("/rate")
+    public List<Rate> showAllRates() throws IOException {
+        return currencyService.getAllAvailableRates();
+    }
     @GetMapping("/client/{id}")
     public ClientDto showClientById(@PathVariable("id") Long id) {
         return clientService.getClientByIdForAdmin(id);

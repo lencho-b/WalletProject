@@ -1,5 +1,7 @@
 package com.example.WalletProject.services;
 
+import com.example.WalletProject.integration.CurrencyRate;
+import com.example.WalletProject.integration.Rate;
 import com.example.WalletProject.models.DTO.TransactionDto;
 import com.example.WalletProject.models.DTO.TransactionRequestDto;
 import com.example.WalletProject.models.DTO.TransactionShortDto;
@@ -7,15 +9,13 @@ import com.example.WalletProject.models.Entity.Account;
 import com.example.WalletProject.models.Entity.Transaction;
 import com.example.WalletProject.models.Entity.TransactionAccount;
 import com.example.WalletProject.models.Entity.TransactionType;
-import com.example.WalletProject.repositories.AccountRepository;
-import com.example.WalletProject.repositories.TransactionAccountRepository;
-import com.example.WalletProject.repositories.TransactionRepository;
-import com.example.WalletProject.repositories.TransactionTypeRepository;
+import com.example.WalletProject.repositories.*;
 import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -27,14 +27,18 @@ public class TransactionService {
     private final TransactionAccountRepository transactionAccountRepository;
     private final TransactionTypeRepository transactionTypeRepository;
     private final AccountRepository accountRepository;
+    private final CurrencyRepository currencyRepository;
+    private final CurrencyService currencyService;
     private final ModelMapper modelMapper;
 
-    public TransactionService(TransactionRepository transactionRepository, TransactionAccountRepository transactionAccountRepository, TransactionTypeRepository transactionTypeRepository, AccountRepository accountRepository, ModelMapper modelMapper) {
+    public TransactionService(TransactionRepository transactionRepository, TransactionAccountRepository transactionAccountRepository, TransactionTypeRepository transactionTypeRepository, AccountRepository accountRepository, ModelMapper modelMapper, CurrencyRepository currencyRepository, CurrencyService currencyService) {
         this.transactionRepository = transactionRepository;
         this.transactionAccountRepository = transactionAccountRepository;
         this.transactionTypeRepository = transactionTypeRepository;
         this.accountRepository = accountRepository;
         this.modelMapper = modelMapper;
+        this.currencyRepository = currencyRepository;
+        this.currencyService = currencyService;
     }
 
 
@@ -65,15 +69,17 @@ public class TransactionService {
 
     // тут тоже поменяю на дто когда оно будет+ тут по хорошему причесать код надо
     @Transactional
-    public Transaction saveNewTransactionInRepo(Long clientIdFrom, TransactionRequestDto transactionRequestDto) {
+    public Transaction saveNewTransactionInRepo(Long clientIdFrom, TransactionRequestDto transactionRequestDto) throws IOException {
         Account account1 = accountRepository.findById(clientIdFrom)
                 .orElseThrow(() -> new EntityNotFoundException("Account not found"));
         Account account2 = accountRepository.findById(transactionRequestDto.getAccountIdTo())
                 .orElseThrow(() -> new EntityNotFoundException("Account not found"));
-        TransactionType transactionType = transactionTypeRepository.findTransactionTypeByType(transactionRequestDto.getTypeName())
-                .orElseThrow(() -> new EntityNotFoundException("Type " + transactionRequestDto.getTypeName() + " does not exist"));
-        Long transactionValue = transactionRequestDto.getValue().multiply(BigDecimal.valueOf(100)).longValue();
+        TransactionType transactionType = transactionTypeRepository.findTransactionTypeByType(transactionRequestDto.getType())
+                .orElseThrow(() -> new EntityNotFoundException("Type " + transactionRequestDto.getType() + " does not exist"));
+        Long transactionValue = transactionRequestDto.getValue().longValue();
 
+            Rate rateForFirstAccount = foundRateForCurrency(account1);
+            Rate rateForSecondAccount = foundRateForCurrency(account2);
         //этот код уйдет когда будет валидация
         if (account1.getValue() < transactionValue || transactionValue < 0) {
             throw new RuntimeException("Operation closed, transfer sum cannot be negative or you have not enough money");
@@ -81,17 +87,21 @@ public class TransactionService {
             account1.setValue(account1.getValue() - transactionValue);
             accountRepository.save(account1);
         }
-
-        //создаем транзакцию (сохраняем в копейках, можно сделать еще билдер (но я не уверен делают ли билдер в ентити)
+                //создаем транзакцию (сохраняем в копейках, можно сделать еще билдер (но я не уверен делают ли билдер в ентити)
         Transaction savedTransaction = createNewTransaction(
-                transactionValue, transactionRequestDto.getMessage(), transactionType, new Date());
+                transactionValue, transactionRequestDto.getMessage()
+                ,transactionType
+                ,new Date());
 
         //привязываем транзакцию к аккаунтам
         createTransactionAccount(account1, true, savedTransaction);
         createTransactionAccount(account2, false, savedTransaction);
 
         //увеличиваем счет у второго аккаунта
-        account2.setValue(account2.getValue() + transactionValue);
+        account2.setValue(account2.getValue() + currencyService.exchangeValue(
+                 transactionValue
+                ,rateForFirstAccount
+                ,rateForSecondAccount).longValue());
         accountRepository.save(account2);
 
         //завершаем создание транзакции
@@ -121,5 +131,15 @@ public class TransactionService {
         transactionAccount.setTransaction(transaction);
         transactionAccountRepository.save(transactionAccount);
         return transactionAccount;
+    }
+    private Rate foundRateForCurrency(Account account) throws IOException {
+        if (currencyRepository.findById(account.getCurrency().getId()).get().getName().compareTo("BYN")==0)
+        {
+            return new Rate(1,"BYN",1,"Беларусский Рубль",new BigDecimal(1));
+        }
+        else {
+            return CurrencyRate.showRate(currencyRepository.findById(account.
+                    getCurrency().getId()).orElseThrow().getIdFromApi());
+        }
     }
 }
