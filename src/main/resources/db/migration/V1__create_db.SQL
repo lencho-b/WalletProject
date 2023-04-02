@@ -43,7 +43,8 @@ create table if not exists auth_info (
 
 create table if not exists currency (
     id integer generated always as identity primary key,
-     name varchar(50) not null unique );
+     name varchar(50) not null unique ,
+     id_from_api integer not null unique);
 
 create table if not exists account (
     id bigint generated always as identity primary key,

@@ -1,19 +1,31 @@
 package com.example.WalletProject.models.DTO;
 
 public class ClientInformationForManageDTO{
-    private final Boolean frozen;
+    private Boolean frozen;
 
-    private final Boolean isVerify;
+    private Boolean isVerify;
     public ClientInformationForManageDTO( Boolean frozen,Boolean isVerify) {
         this.frozen = frozen;
         this.isVerify = isVerify;
     }
+
+    public ClientInformationForManageDTO() {
+    }
+
     public Boolean getFrozen() {
         return frozen;
     }
 
-    public Boolean getIsVerify() {
+    public void setFrozen(Boolean frozen) {
+        this.frozen = frozen;
+    }
+
+    public Boolean getVerify() {
         return isVerify;
+    }
+
+    public void setVerify(Boolean verify) {
+        isVerify = verify;
     }
 
     @Override

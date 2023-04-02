@@ -8,18 +8,18 @@ import java.time.LocalDate;
 // так как информация получается извне и сохраняется в базе, поля должны быть валидированы
 public class ClientInformationForMainPageDTO {
     @NotNull
-    private final String firstname;
+    private String firstname;
     @NotNull
-    private final String lastname;
+    private String lastname;
     @NotNull
-    private final String patronymic;
+    private String patronymic;
     @NotNull
-    private final LocalDate dateOfBirth;
+    private LocalDate dateOfBirth;
     @NotNull
     @Email()
-    private final String email;
+    private String email;
     @NotNull
-    private final String phoneNumber;
+    private String phoneNumber;
 
     //нужен ли гига-конструктор - тоже вопрос
     public ClientInformationForMainPageDTO(String firstname, String lastname, String patronymic, LocalDate dateOfBirth, String email, String phoneNumber) {
@@ -31,30 +31,56 @@ public class ClientInformationForMainPageDTO {
         this.phoneNumber = phoneNumber;
     }
 
+    public ClientInformationForMainPageDTO() {
+    }
+
     public String getFirstname() {
         return firstname;
+    }
+
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
     }
 
     public String getLastname() {
         return lastname;
     }
 
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
+    }
+
     public String getPatronymic() {
         return patronymic;
+    }
+
+    public void setPatronymic(String patronymic) {
+        this.patronymic = patronymic;
     }
 
     public LocalDate getDateOfBirth() {
         return dateOfBirth;
     }
 
+    public void setDateOfBirth(LocalDate dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+
     public String getEmail() {
         return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPhoneNumber() {
         return phoneNumber;
     }
 
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
 
     // нужен ли toString-?
     @Override

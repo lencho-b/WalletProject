@@ -15,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -64,6 +65,7 @@ public class ClientService {
         // set role сразу юзера и всегда юзера
         client.setRole(roleRepository.findById(Roles.USER.id)
                 .orElseThrow(() -> new EntityNotFoundException("Role not found")));
+        client.setCreatedAt(LocalDate.now());
         clientRepository.save(client);
         AuthInfo authInfo = new AuthInfo(
                 client.getId(),
@@ -90,7 +92,7 @@ public class ClientService {
     public void updateInformationForManageByClientId(Long id, ClientInformationForManageDTO clientInformationForManageDTO) {
         Client client = finedOrThrow(id);
         client.setFrozen(clientInformationForManageDTO.getFrozen());
-        client.setIsVerify(clientInformationForManageDTO.getIsVerify());
+        client.setIsVerify(clientInformationForManageDTO.getVerify());
         clientRepository.save(client);
     }
 
