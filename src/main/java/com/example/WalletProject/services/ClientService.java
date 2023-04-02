@@ -1,6 +1,6 @@
 package com.example.WalletProject.services;
 
-import com.example.WalletProject.models.DTO.ClientDto;
+import com.example.WalletProject.models.DTO.ClientDTO;
 import com.example.WalletProject.models.DTO.ClientInformationForMainPageDTO;
 import com.example.WalletProject.models.DTO.ClientInformationForManageDTO;
 import com.example.WalletProject.models.DTO.RegistrationDto;
@@ -15,7 +15,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,10 +33,10 @@ public class ClientService {
     }
 
 
-    public List<ClientDto> getAllClients(Integer numberPage) {
+    public List<ClientDTO> getAllClients(Integer numberPage) {
         Page<Client> allClients = clientRepository.findAll(PageRequest.of(numberPage, 20));
         return allClients.stream()
-                .map(client -> modelMapper.map(client, ClientDto.class))
+                .map(client -> modelMapper.map(client, ClientDTO.class))
                 .collect(Collectors.toList());
     }
 
@@ -48,9 +47,9 @@ public class ClientService {
     }
 
     //не понятен смыс метода
-    public ClientDto getClientByIdForAdmin(Long id) {
+    public ClientDTO getClientByIdForAdmin(Long id) {
         return clientRepository.findById(id)
-                .map(client -> modelMapper.map(client, ClientDto.class)
+                .map(client -> modelMapper.map(client, ClientDTO.class)
                 )
                 .orElseThrow(() -> new EntityNotFoundException("Client not found"));
     }
@@ -112,7 +111,7 @@ public class ClientService {
 
     private enum Roles {
         USER(1), ADMIN(2);
-        private Integer id;
+        private final Integer id;
         Roles(Integer id) {
             this.id = id;
         }
