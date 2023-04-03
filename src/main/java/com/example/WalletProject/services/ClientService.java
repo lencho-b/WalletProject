@@ -13,24 +13,33 @@ import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class ClientService {
+public class ClientService implements UserDetailsService {
     private final ClientRepository clientRepository;
     private final AuthInfoRepository authInfoRepository;
     private final RoleRepository roleRepository;
     private final ModelMapper modelMapper;
 
-    public ClientService(ClientRepository clientRepository, AuthInfoRepository authInfoRepository, RoleRepository roleRepository, ModelMapper modelMapper) {
+    private final PasswordEncoder passwordEncoder;
+
+    public ClientService(ClientRepository clientRepository, AuthInfoRepository authInfoRepository, RoleRepository roleRepository, ModelMapper modelMapper, PasswordEncoder passwordEncoder) {
         this.clientRepository = clientRepository;
         this.authInfoRepository = authInfoRepository;
         this.roleRepository = roleRepository;
         this.modelMapper = modelMapper;
+        this.passwordEncoder = passwordEncoder;
     }
 
 
@@ -63,13 +72,14 @@ public class ClientService {
     public void createNewClient(RegistrationDto registrationDto) {
         Client client = modelMapper.map(registrationDto, Client.class);
         // set role сразу юзера и всегда юзера
+        String password = passwordEncoder.encode(registrationDto.getPassword());
         client.setRole(roleRepository.findById(Roles.USER.id)
                 .orElseThrow(() -> new EntityNotFoundException("Role not found")));
         client.setCreatedAt(LocalDate.now());
         clientRepository.save(client);
         AuthInfo authInfo = new AuthInfo(
                 client.getId(),
-                registrationDto.getPassword()
+                password
         );
         authInfoRepository.save(authInfo);
     }
@@ -109,6 +119,14 @@ public class ClientService {
             throw new SecurityException("Client removed");
         }
         return client;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        Client client = clientRepository.findByEmail(email).orElseThrow(() -> new EntityNotFoundException("Client not found"));
+        AuthInfo authInfo = authInfoRepository.findById(client.getId()).orElseThrow(() -> new EntityNotFoundException("AufInfo not found"));
+        return new User(client.getEmail(), authInfo.getPassword(), client.getRoles());
     }
 
     private enum Roles {

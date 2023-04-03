@@ -1,13 +1,14 @@
 package com.example.WalletProject.models.Entity;
 
 import jakarta.persistence.*;
+import org.springframework.security.core.GrantedAuthority;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "role")
-public class Role {
+public class Role implements GrantedAuthority {
     @Id
     @Column(name = "id", nullable = false)
     private Integer id;
@@ -63,5 +64,10 @@ public class Role {
                 ", roleName='" + roleName + '\'' +
                 ", clients=" + clients +
                 '}';
+    }
+
+    @Override
+    public String getAuthority() {
+        return getRoleName();
     }
 }

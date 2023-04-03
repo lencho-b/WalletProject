@@ -76,7 +76,7 @@ public class Client {
     }
     public Client() {
     }
-    public List<Role> getRoles(Role role) {
+    public List<Role> getRoles() {
 
         return roles;
     }
