@@ -1,7 +1,7 @@
 package com.example.WalletProject.services;
 
-import com.example.WalletProject.models.DTO.AccountDto;
-import com.example.WalletProject.models.DTO.AccountRequestDto;
+import com.example.WalletProject.models.DTO.account.AccountDto;
+import com.example.WalletProject.models.DTO.account.AccountRequestDto;
 import com.example.WalletProject.models.Entity.Account;
 import com.example.WalletProject.repositories.AccountRepository;
 import com.example.WalletProject.repositories.ClientRepository;
@@ -58,7 +58,7 @@ public class AccountService {
         return modelMapper.map(account, AccountDto.class);
     }
 
-    public void createAccountByClientId(AccountDto accountDto, Long id) {
+    public void createAccountByClientId(AccountRequestDto accountDto, Long id) {
         Account account = modelMapper.map(accountDto, Account.class);
         account.setClient(clientRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Client not found")));

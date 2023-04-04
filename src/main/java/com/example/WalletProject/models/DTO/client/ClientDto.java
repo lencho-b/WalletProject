@@ -1,4 +1,4 @@
-package com.example.WalletProject.models.DTO;
+package com.example.WalletProject.models.DTO.client;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -19,23 +19,8 @@ public class ClientDto implements Serializable {
     private boolean isDelete;
     private boolean isVerify;
 
-    public ClientDto(String firstname, String lastname, String patronymic, LocalDate dateOfBirth, String email, String phoneNumber, LocalDate createdAt, LocalDate updatedAt, boolean frozen, boolean isDelete, boolean isVerify) {
-        this.firstname = firstname;
-        this.lastname = lastname;
-        this.patronymic = patronymic;
-        this.dateOfBirth = dateOfBirth;
-        this.email = email;
-        this.phoneNumber = phoneNumber;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
-        this.frozen = frozen;
-        this.isDelete = isDelete;
-        this.isVerify = isVerify;
-    }
-
     public ClientDto() {
     }
-
 
     public String getFirstname() {
         return firstname;

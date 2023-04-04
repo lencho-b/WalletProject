@@ -1,25 +1,22 @@
-package com.example.WalletProject.models.DTO;
+package com.example.WalletProject.models.DTO.transaction;
 
-
+import com.example.WalletProject.Messages;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 
 import java.math.BigDecimal;
 
 public class TransactionRequestDto {
-    @NotBlank
+    @NotBlank(message = Messages.EMPTY_ACCOUNT_ID_TO)
     private Long accountIdTo;
-    @NotEmpty
-    @Min(value = 0)
-    private BigDecimal value;//big decimal - чтоб не показывать копейки.
+    @NotBlank(message = Messages.EMPTY_VALUE_OF_TRANSACTION)
+    @Min(value = 0, message = Messages.INVALID_VALUE_OF_TRANSACTION)
+    private BigDecimal value;
+    @Max(value = 100, message = Messages.SIZE_MESSAGE)
     private String message;
-    @NotEmpty
+    @NotBlank(message = Messages.EMPTY_TRANSACTION_TYPE)
     private String typeName;
-
-
-    public TransactionRequestDto() {
-    }
 
     public Long getAccountIdTo() {
         return accountIdTo;

@@ -1,8 +1,8 @@
 package com.example.WalletProject.controllers;
 
-import com.example.WalletProject.models.DTO.TransactionDto;
-import com.example.WalletProject.models.DTO.TransactionRequestDto;
-import com.example.WalletProject.models.DTO.TransactionShortDto;
+import com.example.WalletProject.models.DTO.transaction.TransactionDto;
+import com.example.WalletProject.models.DTO.transaction.TransactionRequestDto;
+import com.example.WalletProject.models.DTO.transaction.TransactionShortDto;
 import com.example.WalletProject.models.Entity.Transaction;
 import com.example.WalletProject.services.TransactionService;
 import org.springframework.web.bind.annotation.*;
@@ -26,19 +26,19 @@ public class TransactionController {
         return transactionService.getAllByAccountId(accountId);
     }
 
-    //взять админские дто для получения транзакций, только их переименовать.
     @GetMapping("/{id}")
     public TransactionDto getTransactionDtoForClientById(@PathVariable("idAcc") Long accountId,
                                                          @PathVariable("id") Long transactionId) {
         return transactionService.getOneTransactionById(accountId, transactionId);
     }
 
-    // в методе создания транзакции нужен айди счета.
-//     создать для этого метода дто формы для перевода.
     @PostMapping
     public Transaction saveNewTransaction(@PathVariable("idAcc") Long accountIdFrom,
                                           @RequestBody TransactionRequestDto transactionRequestDto) throws IOException {
         //поменять на дто
         return transactionService.saveNewTransactionInRepo(accountIdFrom, transactionRequestDto);
     }
+
+
+    //добавить метод, возвращающий лист типов транзакций
 }

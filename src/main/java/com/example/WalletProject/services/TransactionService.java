@@ -2,9 +2,9 @@ package com.example.WalletProject.services;
 
 import com.example.WalletProject.integration.CurrencyRate;
 import com.example.WalletProject.integration.Rate;
-import com.example.WalletProject.models.DTO.TransactionDto;
-import com.example.WalletProject.models.DTO.TransactionRequestDto;
-import com.example.WalletProject.models.DTO.TransactionShortDto;
+import com.example.WalletProject.models.DTO.transaction.TransactionDto;
+import com.example.WalletProject.models.DTO.transaction.TransactionRequestDto;
+import com.example.WalletProject.models.DTO.transaction.TransactionShortDto;
 import com.example.WalletProject.models.Entity.Account;
 import com.example.WalletProject.models.Entity.Transaction;
 import com.example.WalletProject.models.Entity.TransactionAccount;

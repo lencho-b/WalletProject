@@ -1,9 +1,10 @@
-package com.example.WalletProject.models.DTO;
+package com.example.WalletProject.models.DTO.country;
 
+import com.example.WalletProject.Messages;
 import jakarta.validation.constraints.NotBlank;
 
-public class CurrencyDto {
-    @NotBlank
+public class CountryDto {
+    @NotBlank(message = Messages.EMPTY_COUNTRY_NAME)
     private String name;
 
     public String getName() {

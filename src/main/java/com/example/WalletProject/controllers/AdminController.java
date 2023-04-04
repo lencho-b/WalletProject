@@ -1,15 +1,23 @@
 package com.example.WalletProject.controllers;
 
-import com.example.WalletProject.integration.Rate;
-import com.example.WalletProject.models.DTO.*;
+import com.example.WalletProject.models.DTO.client.ClientDto;
+import com.example.WalletProject.models.DTO.client.ClientInformationForManageDto;
+import com.example.WalletProject.models.DTO.country.FullCountryInfoDto;
 import com.example.WalletProject.models.Entity.Country;
 import com.example.WalletProject.services.ClientService;
 import com.example.WalletProject.services.CountryService;
 import com.example.WalletProject.services.CurrencyService;
 import org.modelmapper.ModelMapper;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,10 +40,7 @@ public class AdminController {
     public List<ClientDto> showAllClients(@RequestParam Integer numberPage) {
         return clientService.getAllClients(numberPage);
     }
-    @GetMapping("/rate")
-    public List<Rate> showAllRates() throws IOException {
-        return currencyService.getAllAvailableRates();
-    }
+
     @GetMapping("/client/{id}")
     public ClientDto showClientById(@PathVariable("id") Long id) {
         return clientService.getClientByIdForAdmin(id);
@@ -47,7 +52,6 @@ public class AdminController {
         clientService.updateInformationForManageByClientId(id, clientInformationForManageDTO);
     }
 
-    //soft удаление
     @DeleteMapping("/client/{id}")
     public void deleteClient(@PathVariable("id") Long id) {
         clientService.deleteClientById(id);
@@ -60,37 +64,19 @@ public class AdminController {
     //     если оставлять этот метод, надо учесть, где у пользователя будет показываться сообщение
 //    + создать дополнительный гет-метод формы для создания админом сообщения, а для данного метода сделать дто
 //можно использовать этот метод для отправки на эмейл сообщения
-    @GetMapping("/{id}/accounts")
-    public List<AccountInfoForAdminDto> showAllClientAccounts(@PathVariable("id") Long clientId) {
-        return null;
-    }
 
-    @GetMapping("/accounts/{id}")
-    public AccountDto showClientAccount(@PathVariable("id") Long accountId) {
-        return null;
-    }
-
-    @GetMapping("/{id}/transactions")
-    public List<FullTransactionInfoForAdminDto> showTransactionsByClient(@PathVariable("id") Long clientId) {
-        return null;
-    }
-
-    @GetMapping("/{id}/transactions/a")
-    public List<FullTransactionInfoForAdminDto> showTransactionsByAccount(@PathVariable("id") Long accountId) {
-        return null;
-    }
 
     @GetMapping("/countries")
-    public List<CountryForAdminDto> showCountries() {
+    public List<FullCountryInfoDto> showCountries() {
         return countryService.findAll()
                 .stream()
-                .map(country -> modelMapper.map(country, CountryForAdminDto.class))
+                .map(country -> modelMapper.map(country, FullCountryInfoDto.class))
                 .collect(Collectors.toList());
     }
 
     @GetMapping("/country")
-    public CountryForAdminDto showCountry(@RequestParam String country) {
-        return modelMapper.map(countryService.findByName(country), CountryForAdminDto.class);
+    public FullCountryInfoDto showCountry(@RequestParam String country) {
+        return modelMapper.map(countryService.findByName(country), FullCountryInfoDto.class);
 
     }
 
@@ -100,12 +86,12 @@ public class AdminController {
     }
 
     @PatchMapping("/country/update")
-    public void updateCountry(@RequestBody CountryForAdminDto country) {
+    public void updateCountry(@RequestBody FullCountryInfoDto country) {
         countryService.saveOrUpdate(modelMapper.map(country, Country.class));
     }
 
     @PostMapping("/country/create")
-    public void createCountry(@RequestBody CountryForAdminDto country) {
+    public void createCountry(@RequestBody FullCountryInfoDto country) {
         countryService.saveOrUpdate(modelMapper.map(country, Country.class));
     }
 
