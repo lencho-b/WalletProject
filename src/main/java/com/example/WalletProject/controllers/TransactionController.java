@@ -3,6 +3,7 @@ package com.example.WalletProject.controllers;
 import com.example.WalletProject.models.DTO.transaction.TransactionDto;
 import com.example.WalletProject.models.DTO.transaction.TransactionRequestDto;
 import com.example.WalletProject.models.DTO.transaction.TransactionShortDto;
+import com.example.WalletProject.models.DTO.transaction.TransactionTypeDto;
 import com.example.WalletProject.models.Entity.Transaction;
 import com.example.WalletProject.services.TransactionService;
 import org.springframework.web.bind.annotation.*;
@@ -33,12 +34,14 @@ public class TransactionController {
     }
 
     @PostMapping
-    public Transaction saveNewTransaction(@PathVariable("idAcc") Long accountIdFrom,
+    public TransactionDto saveNewTransaction(@PathVariable("idAcc") Long accountIdFrom,
                                           @RequestBody TransactionRequestDto transactionRequestDto) throws IOException {
         //поменять на дто
         return transactionService.saveNewTransactionInRepo(accountIdFrom, transactionRequestDto);
     }
 
-
-    //добавить метод, возвращающий лист типов транзакций
+    @GetMapping("/transaction-type")
+    public List<TransactionTypeDto> getAllTransactionTypes() {
+        return transactionService.getAllTransactionTypesFromRepo();
+    }
 }

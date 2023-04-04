@@ -5,6 +5,7 @@ import com.example.WalletProject.integration.Rate;
 import com.example.WalletProject.models.DTO.transaction.TransactionDto;
 import com.example.WalletProject.models.DTO.transaction.TransactionRequestDto;
 import com.example.WalletProject.models.DTO.transaction.TransactionShortDto;
+import com.example.WalletProject.models.DTO.transaction.TransactionTypeDto;
 import com.example.WalletProject.models.Entity.Account;
 import com.example.WalletProject.models.Entity.Transaction;
 import com.example.WalletProject.models.Entity.TransactionAccount;
@@ -42,7 +43,6 @@ public class TransactionService {
     }
 
 
-    // тут поменяю на дто
     @Transactional(readOnly = true)
     public List<TransactionShortDto> getAllByAccountId(Long accountId) {
         return transactionRepository.findAllByAccountId(accountId)
@@ -51,7 +51,6 @@ public class TransactionService {
                 .toList();
     }
 
-    //тут я поменяю на дто когда будет дто
     @Transactional(readOnly = true)
     public TransactionDto getOneTransactionById(Long accountId, Long transactionId) {
         Transaction transaction = transactionRepository.findById(transactionId)
@@ -67,9 +66,8 @@ public class TransactionService {
         return modelMapper.map(transaction, TransactionDto.class);
     }
 
-    // тут тоже поменяю на дто когда оно будет+ тут по хорошему причесать код надо
     @Transactional
-    public Transaction saveNewTransactionInRepo(Long clientIdFrom, TransactionRequestDto transactionRequestDto) throws IOException {
+    public TransactionDto saveNewTransactionInRepo(Long clientIdFrom, TransactionRequestDto transactionRequestDto) throws IOException {
         Account account1 = accountRepository.findById(clientIdFrom)
                 .orElseThrow(() -> new EntityNotFoundException("Account not found"));
         Account account2 = accountRepository.findById(transactionRequestDto.getAccountIdTo())
@@ -78,36 +76,33 @@ public class TransactionService {
                 .orElseThrow(() -> new EntityNotFoundException("Type " + transactionRequestDto.getTypeName() + " does not exist"));
         Long transactionValue = transactionRequestDto.getValue().longValue();
 
-            Rate rateForFirstAccount = foundRateForCurrency(account1);
-            Rate rateForSecondAccount = foundRateForCurrency(account2);
-        //этот код уйдет когда будет валидация
-        if (account1.getValue() < transactionValue || transactionValue < 0) {
-            throw new RuntimeException("Operation closed, transfer sum cannot be negative or you have not enough money");
+        Rate rateForFirstAccount = foundRateForCurrency(account1);
+        Rate rateForSecondAccount = foundRateForCurrency(account2);
+
+        if (account1.getValue() < transactionValue) {
+            throw new RuntimeException("Operation closed, you have not enough money");
         } else {
             account1.setValue(account1.getValue() - transactionValue);
             accountRepository.save(account1);
         }
-                //создаем транзакцию (сохраняем в копейках, можно сделать еще билдер (но я не уверен делают ли билдер в ентити)
+
         Transaction savedTransaction = createNewTransaction(
                 transactionValue, transactionRequestDto.getMessage()
-                ,transactionType
-                ,new Date());
+                , transactionType
+                , new Date());
 
-        //привязываем транзакцию к аккаунтам
         createTransactionAccount(account1, true, savedTransaction);
         createTransactionAccount(account2, false, savedTransaction);
 
-        //увеличиваем счет у второго аккаунта
         account2.setValue(account2.getValue() + currencyService.exchangeValue(
-                 transactionValue
-                ,rateForFirstAccount
-                ,rateForSecondAccount).longValue());
+                transactionValue
+                , rateForFirstAccount
+                , rateForSecondAccount).longValue());
         accountRepository.save(account2);
 
-        //завершаем создание транзакции
         savedTransaction.setFinishDateTime(new Date());
         savedTransaction.setStatus(true);
-        return updateTransactionInRepo(savedTransaction);
+        return modelMapper.map(updateTransactionInRepo(savedTransaction), TransactionDto.class);
     }
 
     private Transaction updateTransactionInRepo(Transaction transaction) {
@@ -132,14 +127,20 @@ public class TransactionService {
         transactionAccountRepository.save(transactionAccount);
         return transactionAccount;
     }
+
     private Rate foundRateForCurrency(Account account) throws IOException {
-        if (currencyRepository.findById(account.getCurrency().getId()).get().getName().compareTo("BYN")==0)
-        {
-            return new Rate(1,"BYN",1,"Беларусский Рубль",new BigDecimal(1));
-        }
-        else {
+        if (currencyRepository.findById(account.getCurrency().getId()).get().getName().compareTo("BYN") == 0) {
+            return new Rate(1, "BYN", 1, "Беларусский Рубль", new BigDecimal(1));
+        } else {
             return CurrencyRate.showRate(currencyRepository.findById(account.
                     getCurrency().getId()).orElseThrow().getIdFromApi());
         }
+    }
+
+    public List<TransactionTypeDto> getAllTransactionTypesFromRepo() {
+        return transactionTypeRepository.findAll()
+                .stream()
+                .map(e -> modelMapper.map(e, TransactionTypeDto.class))
+                .toList();
     }
 }
