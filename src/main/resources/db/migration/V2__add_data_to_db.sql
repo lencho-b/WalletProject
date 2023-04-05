@@ -54,8 +54,8 @@ values (true, 1, 1),
 
 
 insert into role(name)
-values ('user'),
-       ('admin');
+values ('ROLE_USER'),
+       ('ROLE_ADMIN');
 
 insert into document_format(document_format)
 values ('txt'),
@@ -74,3 +74,11 @@ values (1,'0001-001', cast('2023/04/01' as date), cast('2023/04/01' as date), 1)
        (3,'0001-003', cast('2023/04/01' as date), cast('2023/04/01' as date), 1),
        (4,'0001-004', cast('2023/04/01' as date), cast('2023/04/01' as date), 3),
        (5,'0001-005', cast('2022/01/09' as date), cast('2022/01/09' as date), 2);
+
+insert into auth_info(client_id, password)
+values (2, '$2a$10$1Rht.o4HUTVxc10QrzT4Xe1qbvcP/ToE3Z8GtlQ71vMRFkDRTBDae'),
+       (1, '$2a$10$g.k4W9h.oHRK7K8nI0Z7mON/N5OcYp4qog0GNDF1BJa21/UNssxK.');
+
+insert into client_role(client_id, role_id)
+values (1, 1),
+       (2, 2);
