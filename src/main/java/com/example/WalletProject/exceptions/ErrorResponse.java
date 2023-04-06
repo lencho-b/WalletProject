@@ -1,4 +1,4 @@
-package com.example.WalletProject.Exceptions;
+package com.example.WalletProject.exceptions;
 
 public class ErrorResponse {
     private String errorMessage;

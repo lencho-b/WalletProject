@@ -68,15 +68,15 @@ public class ClientController {
         accountService.updateClientsAccountById(idAcc, idCl, accountRequestDto);
     }
 
-    @GetMapping("/{id}/document")
-    public DocumentDto showDocumentByClientId(@PathVariable("id") Long id) {
-        return documentService.getDocumentByClientId(id);
-    }
-
-    @PostMapping("/{id}/document")
-    public void updateClientsDocumentById(@PathVariable("id") Long id,@RequestBody DocumentDto documentDto) {
-        documentService.createDocumentByClientId(id, documentDto);
-    }
+//    @GetMapping("/{id}/document")
+//    public DocumentDto showDocumentByClientId(@PathVariable("id") Long id) {
+//        return documentService.getDocumentByClientId(id);
+//    }
+//
+//    @PostMapping("/{id}/document")
+//    public void updateClientsDocumentById(@PathVariable("id") Long id,@RequestBody DocumentDto documentDto) {
+//        documentService.createDocumentByClientId(id, documentDto);
+//    }
 
     @DeleteMapping("/{id}/document")
     public void deleteClientsDocumentById(@PathVariable("id") Long id) {
