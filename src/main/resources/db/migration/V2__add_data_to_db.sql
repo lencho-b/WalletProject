@@ -18,11 +18,12 @@ values ('Игорь', 'Солод', 'Дмитрьевич', cast('1990/05/28' as
 
 
 insert into currency(name, id_from_api)
-values ('RUB', 1),
-       ('USD', 2),
-       ('AUD', 3),
-       ('EUR', 4);
-
+values ('UAH', 449),
+       ('USD', 431),
+       ('EUR', 451),
+       ('PLN', 452),
+       ('BYN', 1),
+       ('RUB', 456);
 
 insert into account(name, frozen, comment, value, created_at, updated_at, client_id, currency_id)
 values ('main', false, 'нет', 10000, cast('2022/01/28' as date), cast('2022/01/28' as date), 1,1),
