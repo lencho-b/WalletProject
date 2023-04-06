@@ -27,10 +27,10 @@ values ('UAH', 449),
 
 insert into account(name, frozen, comment, value, created_at, updated_at, client_id, currency_id)
 values ('main', false, 'нет', 10000, cast('2022/01/28' as date), cast('2022/01/28' as date), 1,1),
-       ('foreign', false, 'основной', 12000, cast('2022/02/07' as date) ,cast('2022/02/07' as date), 1, 3),
-       ('main', true, 'основной', 100000, cast('2022/01/09' as date), cast('2022/01/09' as date), 5, 1),
-       ('foreign', false, 'нет', 100, cast('2022/11/28' as date), cast('2022/11/28' as date), 5, 2),
-       ('foreign', false, 'основной', 29, cast('2023/01/28' as date),cast('2023/01/28' as date), 5, 4);
+       ('foreign', false, 'основной', 12000, cast('2022/02/07' as date) ,cast('2022/02/07' as date), 1, 2),
+       ('main', true, 'основной', 100000, cast('2022/01/09' as date), cast('2022/01/09' as date), 5, 3),
+       ('foreign', false, 'нет', 100, cast('2022/11/28' as date), cast('2022/11/28' as date), 5, 4),
+       ('foreign', false, 'основной', 29, cast('2023/01/28' as date),cast('2023/01/28' as date), 5, 5);
 
 
 insert into transaction_type(type, comment)
