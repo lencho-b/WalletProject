@@ -1,20 +1,20 @@
-package com.example.WalletProject.models.DTO;
+package com.example.WalletProject.models.DTO.account;
 
+import com.example.WalletProject.Messages;
+import com.example.WalletProject.models.DTO.CurrencyNameDto;
 import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 
 public class AccountRequestDto {
-    @NotNull
+    @NotEmpty(message = Messages.EMPTY_ACCOUNTS_NAME)
+    @Pattern(regexp = "[a-zа-я]", flags = Pattern.Flag.CASE_INSENSITIVE)
     private String name;
-    @NotNull
-    @Max(value = 100)
+    @Max(value = 100, message = Messages.SIZE_COMMENT)
     private String comment;
-
-
-    public AccountRequestDto(String name, String comment) {
-        this.name = name;
-        this.comment = comment;
-    }
+    @NotNull(message = Messages.EMPTY_CURRENCY)
+    private CurrencyNameDto currency;
 
     public AccountRequestDto() {
     }
@@ -33,6 +33,14 @@ public class AccountRequestDto {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public CurrencyNameDto getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(CurrencyNameDto currency) {
+        this.currency = currency;
     }
 
     @Override

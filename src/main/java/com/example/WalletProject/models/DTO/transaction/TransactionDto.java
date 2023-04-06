@@ -1,11 +1,11 @@
-package com.example.WalletProject.models.DTO;
+package com.example.WalletProject.models.DTO.transaction;
 
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
 public class TransactionDto {
-    private BigDecimal value;//big decimal - чтоб не показывать копейки.
+    private BigDecimal value;
     private String message;
     private Date startDateTime;
     private Date finishDateTime;

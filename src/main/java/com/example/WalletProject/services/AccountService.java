@@ -3,8 +3,8 @@ package com.example.WalletProject.services;
 import com.example.WalletProject.exceptions.CurrencyNotFoundException;
 import com.example.WalletProject.exceptions.AccountNotFoundException;
 import com.example.WalletProject.exceptions.ClientNotFoundException;
-import com.example.WalletProject.models.DTO.AccountDto;
-import com.example.WalletProject.models.DTO.AccountRequestDto;
+import com.example.WalletProject.models.DTO.account.AccountDto;
+import com.example.WalletProject.models.DTO.account.AccountRequestDto;
 import com.example.WalletProject.models.Entity.Account;
 import com.example.WalletProject.repositories.AccountRepository;
 import com.example.WalletProject.repositories.ClientRepository;
@@ -63,8 +63,8 @@ public class AccountService {
         return modelMapper.map(account, AccountDto.class);
     }
 
-    public void createAccountByClientId(AccountDto accountDto, Long id) {
-        Account account = modelMapper.map(accountDto, Account.class);
+    public void createAccountByClientId(AccountRequestDto accountRequestDto, Long id) {
+        Account account = modelMapper.map(accountRequestDto, Account.class);
         account.setClient(clientRepository.findById(id)
                 .orElseThrow(() -> new ClientNotFoundException("Client with id "+id+" not found")));
         account.setCurrency(currencyRepository.getCurrencyByNameLike(account.getCurrency().getName())

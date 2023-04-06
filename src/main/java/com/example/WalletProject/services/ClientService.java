@@ -2,10 +2,10 @@ package com.example.WalletProject.services;
 
 import com.example.WalletProject.exceptions.ClientNotFoundException;
 import com.example.WalletProject.exceptions.UserNotFoundException;
-import com.example.WalletProject.models.DTO.ClientDto;
-import com.example.WalletProject.models.DTO.ClientInformationForMainPageDto;
-import com.example.WalletProject.models.DTO.ClientInformationForManageDto;
-import com.example.WalletProject.models.DTO.RegistrationDto;
+import com.example.WalletProject.models.DTO.client.ClientDto;
+import com.example.WalletProject.models.DTO.client.ClientInformationForMainPageDto;
+import com.example.WalletProject.models.DTO.client.ClientInformationForManageDto;
+import com.example.WalletProject.models.DTO.client.RegistrationDto;
 import com.example.WalletProject.models.Entity.AuthInfo;
 import com.example.WalletProject.models.Entity.Client;
 import com.example.WalletProject.repositories.AuthInfoRepository;

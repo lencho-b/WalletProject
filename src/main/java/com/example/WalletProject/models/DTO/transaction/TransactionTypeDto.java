@@ -1,4 +1,4 @@
-package com.example.WalletProject.models.DTO;
+package com.example.WalletProject.models.DTO.transaction;
 
 public class TransactionTypeDto {
     private String type;

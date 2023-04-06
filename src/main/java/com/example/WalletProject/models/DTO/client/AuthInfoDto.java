@@ -1,11 +1,12 @@
-package com.example.WalletProject.models.DTO;
+package com.example.WalletProject.models.DTO.client;
 
-import jakarta.validation.constraints.NotNull;
+import com.example.WalletProject.Messages;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 public class AuthInfoDto {
-    @NotNull
-    @Size(min = 7, max = 15, message = "incorrect password")
+    @NotBlank(message = Messages.EMPTY_PASSWORD)
+    @Size(min = 7, max = 15, message = Messages.INVALID_PASSWORD)
     private String password;
 
     public AuthInfoDto(String password) {
