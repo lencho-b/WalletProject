@@ -6,7 +6,6 @@ import com.example.WalletProject.models.DTO.country.FullCountryInfoDto;
 import com.example.WalletProject.models.Entity.Country;
 import com.example.WalletProject.services.ClientService;
 import com.example.WalletProject.services.CountryService;
-import com.example.WalletProject.services.CurrencyService;
 import org.modelmapper.ModelMapper;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,13 +25,11 @@ import java.util.stream.Collectors;
 public class AdminController {
     private final ClientService clientService;
     private final CountryService countryService;
-    private final CurrencyService currencyService;
     private final ModelMapper modelMapper;
 
-    public AdminController(ClientService clientService, CountryService countryService, CurrencyService currencyService, ModelMapper modelMapper) {
+    public AdminController(ClientService clientService, CountryService countryService, ModelMapper modelMapper) {
         this.clientService = clientService;
         this.countryService = countryService;
-        this.currencyService = currencyService;
         this.modelMapper = modelMapper;
     }
 
@@ -77,7 +74,6 @@ public class AdminController {
     @GetMapping("/country")
     public FullCountryInfoDto showCountry(@RequestParam String country) {
         return modelMapper.map(countryService.findByName(country), FullCountryInfoDto.class);
-
     }
 
     @PostMapping("/country/delete")
@@ -94,6 +90,4 @@ public class AdminController {
     public void createCountry(@RequestBody FullCountryInfoDto country) {
         countryService.saveOrUpdate(modelMapper.map(country, Country.class));
     }
-
-
 }
