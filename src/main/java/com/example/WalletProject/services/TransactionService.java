@@ -5,14 +5,13 @@ import com.example.WalletProject.exceptions.TransactionNotFoundException;
 import com.example.WalletProject.integration.CurrencyRate;
 import com.example.WalletProject.integration.Rate;
 import com.example.WalletProject.models.DTO.TransactionDto;
-import com.example.WalletProject.models.DTO.TransactionRequestDto;
+import com.example.WalletProject.models.DTO.TransactionRequestDTO;
 import com.example.WalletProject.models.DTO.TransactionShortDto;
 import com.example.WalletProject.models.Entity.Account;
 import com.example.WalletProject.models.Entity.Transaction;
 import com.example.WalletProject.models.Entity.TransactionAccount;
 import com.example.WalletProject.models.Entity.TransactionType;
 import com.example.WalletProject.repositories.*;
-import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -71,7 +70,7 @@ public class TransactionService {
 
     // тут тоже поменяю на дто когда оно будет+ тут по хорошему причесать код надо
     @Transactional
-    public Transaction saveNewTransactionInRepo(Long clientIdFrom, TransactionRequestDto transactionRequestDto) throws IOException {
+    public Transaction saveNewTransactionInRepo(Long clientIdFrom, TransactionRequestDTO transactionRequestDto) throws IOException {
         Account account1 = accountRepository.findById(clientIdFrom)
                 .orElseThrow(() -> new AccountNotFoundException("Account not found"));
         Account account2 = accountRepository.findById(transactionRequestDto.getAccountIdTo())

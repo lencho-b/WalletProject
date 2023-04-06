@@ -1,7 +1,7 @@
 package com.example.WalletProject.controllers;
 
 import com.example.WalletProject.models.DTO.TransactionDto;
-import com.example.WalletProject.models.DTO.TransactionRequestDto;
+import com.example.WalletProject.models.DTO.TransactionRequestDTO;
 import com.example.WalletProject.models.DTO.TransactionShortDto;
 import com.example.WalletProject.models.Entity.Transaction;
 import com.example.WalletProject.services.TransactionService;
@@ -37,7 +37,7 @@ public class TransactionController {
 //     создать для этого метода дто формы для перевода.
     @PostMapping
     public Transaction saveNewTransaction(@PathVariable("idAcc") Long accountIdFrom,
-                                          @RequestBody TransactionRequestDto transactionRequestDto) throws IOException {
+                                          @RequestBody TransactionRequestDTO transactionRequestDto) throws IOException {
         //поменять на дто
         return transactionService.saveNewTransactionInRepo(accountIdFrom, transactionRequestDto);
     }
