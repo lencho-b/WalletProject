@@ -1,5 +1,7 @@
 package com.example.WalletProject.services;
 
+import com.example.WalletProject.exceptions.ClientNotFoundException;
+import com.example.WalletProject.exceptions.UserNotFoundException;
 import com.example.WalletProject.models.DTO.ClientDto;
 import com.example.WalletProject.models.DTO.ClientInformationForMainPageDto;
 import com.example.WalletProject.models.DTO.ClientInformationForManageDto;
@@ -9,7 +11,6 @@ import com.example.WalletProject.models.Entity.Client;
 import com.example.WalletProject.repositories.AuthInfoRepository;
 import com.example.WalletProject.repositories.ClientRepository;
 import com.example.WalletProject.repositories.RoleRepository;
-import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -36,6 +37,9 @@ public class ClientService {
 
     public List<ClientDto> getAllClients(Integer numberPage) {
         Page<Client> allClients = clientRepository.findAll(PageRequest.of(numberPage, 20));
+        if(allClients.isEmpty()){
+            throw new ClientNotFoundException("Page "+numberPage+" is empty");
+        }
         return allClients.stream()
                 .map(client -> modelMapper.map(client, ClientDto.class))
                 .collect(Collectors.toList());
@@ -45,6 +49,7 @@ public class ClientService {
     public ClientInformationForMainPageDto getClientById(Long id) {
         Client client = finedOrThrow(id);
         return modelMapper.map(client, ClientInformationForMainPageDto.class);
+
     }
 
     //не понятен смыс метода
@@ -52,7 +57,7 @@ public class ClientService {
         return clientRepository.findById(id)
                 .map(client -> modelMapper.map(client, ClientDto.class)
                 )
-                .orElseThrow(() -> new EntityNotFoundException("Client not found"));
+                .orElseThrow(() -> new ClientNotFoundException("Client with id "+id+" not found"));
     }
 
     public ClientInformationForManageDto getClientInformationForManageByClientId(Long id) {
@@ -64,7 +69,7 @@ public class ClientService {
         Client client = modelMapper.map(registrationDto, Client.class);
         // set role сразу юзера и всегда юзера
         client.setRole(roleRepository.findById(Roles.USER.id)
-                .orElseThrow(() -> new EntityNotFoundException("Role not found")));
+                .orElseThrow(() -> new UserNotFoundException("User "+ Roles.USER.id+" not found")));
         client.setCreatedAt(LocalDate.now());
         clientRepository.save(client);
         AuthInfo authInfo = new AuthInfo(
@@ -104,7 +109,7 @@ public class ClientService {
 
     private Client finedOrThrow(Long id) {
         Client client = clientRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Client not found"));
+                .orElseThrow(() -> new ClientNotFoundException("Client with id "+id+" not found"));
         if(client.getIsDelete().equals(true)) {
             throw new SecurityException("Client removed");
         }

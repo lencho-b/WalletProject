@@ -1,8 +1,8 @@
 package com.example.WalletProject.services;
 
+import com.example.WalletProject.exceptions.CountryNotFoundException;
 import com.example.WalletProject.models.Entity.Country;
 import com.example.WalletProject.repositories.CountryRepository;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,7 +21,7 @@ public class CountryService {
     }
 
     public Country findByName(String name) {
-        return countryRepository.findByName(name).orElseThrow(() -> new EntityNotFoundException("Country not found"));
+        return countryRepository.findByName(name).orElseThrow(() -> new CountryNotFoundException("Country " + name + " not found"));
     }
 
     public void saveOrUpdate(Country country) {

@@ -1,5 +1,7 @@
 package com.example.WalletProject.services;
 
+import com.example.WalletProject.exceptions.AccountNotFoundException;
+import com.example.WalletProject.exceptions.TransactionNotFoundException;
 import com.example.WalletProject.integration.CurrencyRate;
 import com.example.WalletProject.integration.Rate;
 import com.example.WalletProject.models.DTO.TransactionDto;
@@ -55,14 +57,14 @@ public class TransactionService {
     @Transactional(readOnly = true)
     public TransactionDto getOneTransactionById(Long accountId, Long transactionId) {
         Transaction transaction = transactionRepository.findById(transactionId)
-                .orElseThrow(() -> new EntityNotFoundException("Transaction not found"));
+                .orElseThrow(() -> new TransactionNotFoundException("Transaction with id"+transactionId+ " not found"));
 
         accountRepository.findById(accountId)
-                .orElseThrow(() -> new EntityNotFoundException("Account not found"));
+                .orElseThrow(() -> new AccountNotFoundException("Account with id "+accountId+" not found"));
 
         transactionAccountRepository
                 .findByTransactionIdAndAccountId(transactionId, accountId)
-                .orElseThrow(() -> new EntityNotFoundException("This transaction does not belongs to current account"));
+                .orElseThrow(() -> new TransactionNotFoundException("This transaction does not belongs to current account"));
 
         return modelMapper.map(transaction, TransactionDto.class);
     }
@@ -71,11 +73,11 @@ public class TransactionService {
     @Transactional
     public Transaction saveNewTransactionInRepo(Long clientIdFrom, TransactionRequestDto transactionRequestDto) throws IOException {
         Account account1 = accountRepository.findById(clientIdFrom)
-                .orElseThrow(() -> new EntityNotFoundException("Account not found"));
+                .orElseThrow(() -> new AccountNotFoundException("Account not found"));
         Account account2 = accountRepository.findById(transactionRequestDto.getAccountIdTo())
-                .orElseThrow(() -> new EntityNotFoundException("Account not found"));
+                .orElseThrow(() -> new AccountNotFoundException("Account not found"));
         TransactionType transactionType = transactionTypeRepository.findTransactionTypeByType(transactionRequestDto.getType())
-                .orElseThrow(() -> new EntityNotFoundException("Type " + transactionRequestDto.getType() + " does not exist"));
+                .orElseThrow(() -> new TransactionNotFoundException("Type " + transactionRequestDto.getType() + " does not exist"));
         Long transactionValue = transactionRequestDto.getValue().longValue();
 
             Rate rateForFirstAccount = foundRateForCurrency(account1);

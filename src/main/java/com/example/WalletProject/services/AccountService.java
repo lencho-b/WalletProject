@@ -1,12 +1,14 @@
 package com.example.WalletProject.services;
 
+import com.example.WalletProject.exceptions.CurrencyNotFoundException;
+import com.example.WalletProject.exceptions.AccountNotFoundException;
+import com.example.WalletProject.exceptions.ClientNotFoundException;
 import com.example.WalletProject.models.DTO.AccountDto;
 import com.example.WalletProject.models.DTO.AccountRequestDto;
 import com.example.WalletProject.models.Entity.Account;
 import com.example.WalletProject.repositories.AccountRepository;
 import com.example.WalletProject.repositories.ClientRepository;
 import com.example.WalletProject.repositories.CurrencyRepository;
-import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -33,6 +35,9 @@ public class AccountService {
     //    для админа
     public List<AccountDto> getAllAccounts(Integer numberOfPage) {
         Page<Account> accounts = accountRepository.findAll(PageRequest.of(numberOfPage, 20));
+        if(accounts.isEmpty()){
+            throw new AccountNotFoundException("Page "+numberOfPage+" is empty");
+        }
         return accounts.stream()
                 .map(account -> modelMapper.map(account, AccountDto.class))
                 .collect(Collectors.toList());
@@ -54,16 +59,16 @@ public class AccountService {
 
     public AccountDto getClientsAccountById(Long idAcc, Long idCl) {
         Account account = accountRepository.findAccountByIdAndByClientId(idAcc, idCl)
-                .orElseThrow(() -> new EntityNotFoundException("Account not found"));
+                .orElseThrow(() -> new AccountNotFoundException("Account with id"+idAcc+" not found"));
         return modelMapper.map(account, AccountDto.class);
     }
 
     public void createAccountByClientId(AccountDto accountDto, Long id) {
         Account account = modelMapper.map(accountDto, Account.class);
         account.setClient(clientRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Client not found")));
+                .orElseThrow(() -> new ClientNotFoundException("Client with id "+id+" not found")));
         account.setCurrency(currencyRepository.getCurrencyByNameLike(account.getCurrency().getName())
-                .orElseThrow(() -> new EntityNotFoundException("Currency not found")));
+                .orElseThrow(() -> new CurrencyNotFoundException("Currency not found")));
         account.setFrozen(false);
         account.setCreatedAt(LocalDate.now());
         account.setValue(0L);
@@ -76,8 +81,7 @@ public class AccountService {
     }
 
     public void updateClientsAccountById(Long idAcc, Long idCl, AccountRequestDto accountRequestDto) {
-        Account account = accountRepository.findAccountByIdAndByClientId(idAcc, idCl)
-                .orElseThrow(() -> new EntityNotFoundException("Account not found"));
+        Account account = accountRepository.findAccountByIdAndByClientId(idAcc, idCl).orElseThrow(() -> new AccountNotFoundException("Account not found"));
         modelMapper.map(accountRequestDto, account);
         account.setUpdatedAt(LocalDate.now());
         accountRepository.save(account);
@@ -85,6 +89,6 @@ public class AccountService {
 
     private Account findOrThrow(Long id) {
         return accountRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Account not found"));
+                .orElseThrow(() -> new AccountNotFoundException("Account with id " + id + " not found"));
     }
 }
