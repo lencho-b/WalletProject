@@ -8,12 +8,16 @@ public class ClientInformationForManageDto {
         return frozen;
     }
 
-    public void setFrozen() {
-        this.frozen = true;
+    public void setFrozen(Boolean frozen) {
+        this.frozen = frozen;
     }
 
     public Boolean getVerify() {
         return isVerify;
+    }
+
+    public void setVerify(Boolean verify) {
+        isVerify = verify;
     }
 
     @Override

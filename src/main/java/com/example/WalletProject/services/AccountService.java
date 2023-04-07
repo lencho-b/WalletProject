@@ -81,10 +81,13 @@ public class AccountService {
     }
 
     public void updateClientsAccountById(Long idAcc, Long idCl, AccountRequestDto accountRequestDto) {
-        Account account = accountRepository.findAccountByIdAndByClientId(idAcc, idCl).orElseThrow(() -> new AccountNotFoundException("Account not found"));
-        modelMapper.map(accountRequestDto, account);
-        account.setUpdatedAt(LocalDate.now());
-        accountRepository.save(account);
+        Account accountUpdated = accountRepository.findAccountByIdAndByClientId(idAcc, idCl).orElseThrow(() -> new AccountNotFoundException("Account not found"));
+        Account account = modelMapper.map(accountRequestDto, Account.class);
+        accountUpdated.setComment(account.getComment());
+        accountUpdated.setName(account.getName());
+        accountUpdated.setCurrency(currencyRepository.getCurrencyByNameLike(account.getCurrency().getName()).get());
+
+        accountRepository.save(accountUpdated);
     }
 
     private Account findOrThrow(Long id) {

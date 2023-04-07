@@ -13,11 +13,11 @@ import com.example.WalletProject.repositories.ClientRepository;
 import com.example.WalletProject.repositories.RoleRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,14 +35,14 @@ public class ClientService {
     }
 
 
-    public List<ClientDto> getAllClients(Integer numberPage) {
-        Page<Client> allClients = clientRepository.findAll(PageRequest.of(numberPage, 20));
-        if(allClients.isEmpty()){
-            throw new ClientNotFoundException("Page "+numberPage+" is empty");
+    public Page<ClientDto> getAllClients(Pageable pageable) {
+        Page<Client> allClients = clientRepository.findAll(pageable);
+        if (allClients.isEmpty()) {
+            throw new ClientNotFoundException("page of clients is empty");
         }
-        return allClients.stream()
+        return new PageImpl<>(allClients.getContent().stream()
                 .map(client -> modelMapper.map(client, ClientDto.class))
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()));
     }
 
 
@@ -57,7 +57,7 @@ public class ClientService {
         return clientRepository.findById(id)
                 .map(client -> modelMapper.map(client, ClientDto.class)
                 )
-                .orElseThrow(() -> new ClientNotFoundException("Client with id "+id+" not found"));
+                .orElseThrow(() -> new ClientNotFoundException("Client with id " + id + " not found"));
     }
 
     public ClientInformationForManageDto getClientInformationForManageByClientId(Long id) {
@@ -69,7 +69,7 @@ public class ClientService {
         Client client = modelMapper.map(registrationDto, Client.class);
         // set role сразу юзера и всегда юзера
         client.setRole(roleRepository.findById(Roles.USER.id)
-                .orElseThrow(() -> new UserNotFoundException("User "+ Roles.USER.id+" not found")));
+                .orElseThrow(() -> new UserNotFoundException("User " + Roles.USER.id + " not found")));
         client.setCreatedAt(LocalDate.now());
         clientRepository.save(client);
         AuthInfo authInfo = new AuthInfo(
@@ -79,18 +79,16 @@ public class ClientService {
         authInfoRepository.save(authInfo);
     }
 
-    //перезанирание информации о клиенте в entity из-за пустых полей dto
+
     public void updateInformationByClientId(Long id, ClientInformationForMainPageDto clientInformationForMainPageDTO) {
         Client clientToBeUpdated = finedOrThrow(id);
         Client client = modelMapper.map(clientInformationForMainPageDTO, Client.class);
         client.setId(clientToBeUpdated.getId());
-//        client.setFirstname(clientInformationForMainPageDTO.getFirstname());
-//        client.setLastname(clientInformationForMainPageDTO.getLastname());
-//        client.setPatronymic(clientInformationForMainPageDTO.getPatronymic());
-//        client.setDateOfBirth(clientInformationForMainPageDTO.getDateOfBirth());
-//        client.setEmail(clientInformationForMainPageDTO.getEmail());
-//        client.setPhoneNumber(clientInformationForMainPageDTO.getPhoneNumber());
-//        client.setUpdatedAt(LocalDate.now());
+        client.setCreatedAt(clientToBeUpdated.getCreatedAt());
+        client.setUpdatedAt(LocalDate.now());
+        client.setFrozen(clientToBeUpdated.getFrozen());
+        client.setIsVerify(clientToBeUpdated.getIsVerify());
+        client.setDelete(clientToBeUpdated.getIsDelete());
         clientRepository.save(client);
     }
 
@@ -109,8 +107,8 @@ public class ClientService {
 
     private Client finedOrThrow(Long id) {
         Client client = clientRepository.findById(id)
-                .orElseThrow(() -> new ClientNotFoundException("Client with id "+id+" not found"));
-        if(client.getIsDelete().equals(true)) {
+                .orElseThrow(() -> new ClientNotFoundException("Client with id " + id + " not found"));
+        if (client.getIsDelete().equals(true)) {
             throw new SecurityException("Client removed");
         }
         return client;
@@ -119,6 +117,7 @@ public class ClientService {
     private enum Roles {
         USER(1), ADMIN(2);
         private final Integer id;
+
         Roles(Integer id) {
             this.id = id;
         }

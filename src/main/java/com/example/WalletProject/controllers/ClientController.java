@@ -8,6 +8,7 @@ import com.example.WalletProject.models.DTO.client.ClientInformationForManageDto
 import com.example.WalletProject.services.AccountService;
 import com.example.WalletProject.services.ClientService;
 import com.example.WalletProject.services.DocumentService;
+import jakarta.validation.Valid;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,6 +16,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/client")
+@Validated
 public class ClientController {
     private final ClientService clientService;
     private final AccountService accountService;
@@ -31,8 +33,8 @@ public class ClientController {
         return clientService.getClientById(id);
     }
 
-    @PatchMapping("/{id}/information/")
-    public void updateInformationByClientId(@PathVariable("id") Long id, @Validated
+    @PatchMapping("/{id}/information")
+    public void updateInformationByClientId(@PathVariable("id") Long id, @Valid
     @RequestBody ClientInformationForMainPageDto clientInformationForMainPageDTO) {
         clientService.updateInformationByClientId(id, clientInformationForMainPageDTO);
     }
@@ -56,27 +58,27 @@ public class ClientController {
         return accountService.getClientsAccountById(idAcc, idCl);
     }
 
-// вроде договорились, что для создания принимается AccountRequestDto, так что изменила на него.
-    @PostMapping("/{id}/account/create")
-    public void createNewAccountByClientId(@PathVariable("id") Long id, @RequestBody AccountRequestDto accountRequestDto) {
+
+    @PostMapping("/{id}/account")
+    public void createNewAccountByClientId(@PathVariable("id") Long id, @RequestBody @Valid AccountRequestDto accountRequestDto) {
         accountService.createAccountByClientId(accountRequestDto, id);
     }
 
     @PatchMapping("/{id}/account/{idAcc}")
     public void updateClientsAccountById
-            (@PathVariable("idAcc") Long idAcc, @PathVariable("id") Long idCl, @RequestBody AccountRequestDto accountRequestDto) {
+            (@PathVariable("idAcc") Long idAcc, @PathVariable("id") Long idCl, @RequestBody @Valid AccountRequestDto accountRequestDto) {
         accountService.updateClientsAccountById(idAcc, idCl, accountRequestDto);
     }
 
-//    @GetMapping("/{id}/document")
-//    public DocumentDto showDocumentByClientId(@PathVariable("id") Long id) {
-//        return documentService.getDocumentByClientId(id);
-//    }
-//
-//    @PostMapping("/{id}/document")
-//    public void updateClientsDocumentById(@PathVariable("id") Long id,@RequestBody DocumentDto documentDto) {
-//        documentService.createDocumentByClientId(id, documentDto);
-//    }
+    @GetMapping("/{id}/document")
+    public DocumentDto showDocumentByClientId(@PathVariable("id") Long id) {
+        return documentService.getDocumentByClientId(id);
+    }
+
+    @PostMapping("/{id}/document")
+    public void updateClientsDocumentById(@PathVariable("id") Long id,@RequestBody @Valid DocumentDto documentDto) {
+        documentService.createDocumentByClientId(id, documentDto);
+    }
 
     @DeleteMapping("/{id}/document")
     public void deleteClientsDocumentById(@PathVariable("id") Long id) {

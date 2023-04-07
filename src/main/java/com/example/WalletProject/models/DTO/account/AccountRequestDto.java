@@ -6,12 +6,13 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 
 public class AccountRequestDto {
     @NotEmpty(message = Messages.EMPTY_ACCOUNTS_NAME)
-    @Pattern(regexp = "[a-zа-я]", flags = Pattern.Flag.CASE_INSENSITIVE)
+    @Pattern(regexp = "^[а-яА-Я]+$", flags = Pattern.Flag.CASE_INSENSITIVE)
     private String name;
-    @Max(value = 100, message = Messages.SIZE_COMMENT)
+    @Size(max= 100, message = Messages.SIZE_COMMENT)
     private String comment;
     @NotNull(message = Messages.EMPTY_CURRENCY)
     private CurrencyNameDto currency;

@@ -7,7 +7,13 @@ import com.example.WalletProject.models.Entity.Country;
 import com.example.WalletProject.services.ClientService;
 import com.example.WalletProject.services.CountryService;
 import com.example.WalletProject.services.CurrencyService;
+import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -18,11 +24,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/admin")
+@Validated
 public class AdminController {
     private final ClientService clientService;
     private final CountryService countryService;
@@ -37,8 +42,8 @@ public class AdminController {
     }
 
     @GetMapping("/allClients")
-    public List<ClientDto> showAllClients(@RequestParam Integer numberPage) {
-        return clientService.getAllClients(numberPage);
+    public Page<ClientDto> showAllClients(@PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable) {
+        return clientService.getAllClients(pageable);
     }
 
     @GetMapping("/client/{id}")
@@ -57,42 +62,32 @@ public class AdminController {
         clientService.deleteClientById(id);
     }
 
-    @PostMapping("/send-message")
-    public void sendMessageToClient() {
-    }
-
-    //     если оставлять этот метод, надо учесть, где у пользователя будет показываться сообщение
-//    + создать дополнительный гет-метод формы для создания админом сообщения, а для данного метода сделать дто
-//можно использовать этот метод для отправки на эмейл сообщения
-
 
     @GetMapping("/countries")
-    public List<FullCountryInfoDto> showCountries() {
-        return countryService.findAll()
-                .stream()
-                .map(country -> modelMapper.map(country, FullCountryInfoDto.class))
-                .collect(Collectors.toList());
+    public Page<FullCountryInfoDto> showCountries(@PageableDefault(sort = {"id"}, direction = Sort.Direction.DESC) Pageable pageable) {
+        return countryService.findAll(pageable);
+
     }
 
     @GetMapping("/country")
     public FullCountryInfoDto showCountry(@RequestParam String country) {
-        return modelMapper.map(countryService.findByName(country), FullCountryInfoDto.class);
+        return countryService.findByName(country);
 
     }
 
-    @PostMapping("/country/delete")
-    public void deleteCountry(@RequestBody String countryName) {
-        countryService.deleteCountry(countryName);
+    @DeleteMapping("/country")
+    public void deleteCountry(@RequestBody String country) {
+        countryService.deleteCountry(country);
     }
 
-    @PatchMapping("/country/update")
-    public void updateCountry(@RequestBody FullCountryInfoDto country) {
-        countryService.saveOrUpdate(modelMapper.map(country, Country.class));
+    @PatchMapping("/country")
+    public void updateCountry(@RequestBody @Valid FullCountryInfoDto country) {
+        countryService.saveOrUpdate(country);
     }
 
-    @PostMapping("/country/create")
-    public void createCountry(@RequestBody FullCountryInfoDto country) {
-        countryService.saveOrUpdate(modelMapper.map(country, Country.class));
+    @PostMapping("/country")
+    public void createCountry(@RequestBody @Valid FullCountryInfoDto country) {
+        countryService.saveOrUpdate(country);
     }
 
 

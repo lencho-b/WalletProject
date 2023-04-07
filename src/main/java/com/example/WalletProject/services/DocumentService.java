@@ -27,7 +27,6 @@ public class DocumentService {
 
         Document document = findOrThrow(id);
         DocumentDto documentDto = modelMapper.map(document, DocumentDto.class);
-        documentDto.setCountry(document.getCountry().getName());
         return documentDto;
     }
 
@@ -36,7 +35,7 @@ public class DocumentService {
         Document document = modelMapper.map(documentDto, Document.class);
         document.setClient_id(id);
 
-        document.setCountry(countryRepository.findByName(documentDto.getCountry())
+        document.setCountry(countryRepository.findByName(documentDto.getCountry().getName())
                 .orElseThrow(() -> new CountryNotFoundException("Country not found")));
         document.setCreatedAt(LocalDate.now());
         documentRepository.save(document);
