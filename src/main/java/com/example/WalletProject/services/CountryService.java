@@ -46,14 +46,23 @@ public class CountryService {
 
     public void saveOrUpdate(FullCountryInfoDto countryInfoDto) {
         Country country = modelMapper.map(countryInfoDto, Country.class);
-        Optional<Country> toBeUpdated = countryRepository.findByName(country.getName());
-        toBeUpdated.ifPresent(value -> country.setId(value.getId()));
-        Optional<DocumentFormat> documentFormat = documentFormatRepository
-                .findByDocumentFormat(country.getDocumentFormat().getDocumentFormat());
-        if (documentFormat.isEmpty()) {
-            documentFormatRepository.save(country.getDocumentFormat());
+        Optional<Country> optional = countryRepository.findByName(country.getName());
+        Country toBeUpdated = optional.get();
+        if (optional.isPresent()) {
+            toBeUpdated.setName(country.getName());
+            toBeUpdated.setPhoneCode(country.getPhoneCode());
+            Optional<DocumentFormat> documentOptional = documentFormatRepository
+                    .findByDocumentFormat(country.getDocumentFormat().getDocumentFormat());
+            if (documentOptional.isEmpty()) {
+                documentFormatRepository.save(country.getDocumentFormat());
+            }
+            documentOptional = documentFormatRepository
+                    .findByDocumentFormat(country.getDocumentFormat().getDocumentFormat());
+            toBeUpdated.setDocumentFormat(documentOptional.get());
+            countryRepository.save(toBeUpdated);
+        } else {
+            throw new CountryNotFoundException("Country not found");
         }
-        countryRepository.save(country);
     }
 
     public void deleteCountry(String name) {

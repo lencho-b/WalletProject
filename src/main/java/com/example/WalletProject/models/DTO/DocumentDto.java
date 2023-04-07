@@ -2,6 +2,7 @@ package com.example.WalletProject.models.DTO;
 
 import com.example.WalletProject.Messages;
 import com.example.WalletProject.models.DTO.country.CountryDto;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -13,7 +14,7 @@ public class DocumentDto {
 
     @NotBlank(message = Messages.EMPTY_DOCUMENT_NUMBER)
     private  String documentNumber;
-
+    @JsonFormat(pattern = "dd.MM.yyyy")
     @DateTimeFormat(pattern = "dd.MM.yyyy")
     private  LocalDate issueDate;
 
