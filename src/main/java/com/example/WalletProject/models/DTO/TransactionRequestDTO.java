@@ -15,7 +15,7 @@ public class TransactionRequestDTO {
     private BigDecimal value;//big decimal - чтоб не показывать копейки.
     private String message;
     @NotEmpty
-    private String typeName;
+    private String type;
 
 
     public TransactionRequestDTO() {
@@ -45,11 +45,11 @@ public class TransactionRequestDTO {
         this.message = message;
     }
 
-    public String getTypeName() {
-        return typeName;
+    public String getType() {
+        return type;
     }
 
-    public void setTypeName(String typeName) {
-        this.typeName = typeName;
+    public void setType(String type) {
+        this.type = type;
     }
 }

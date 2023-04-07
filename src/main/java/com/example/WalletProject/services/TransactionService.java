@@ -1,5 +1,7 @@
 package com.example.WalletProject.services;
 
+import com.example.WalletProject.exceptions.AccountNotFoundException;
+import com.example.WalletProject.exceptions.TransactionNotFoundException;
 import com.example.WalletProject.integration.CurrencyRate;
 import com.example.WalletProject.integration.Rate;
 import com.example.WalletProject.models.DTO.transaction.TransactionDto;
@@ -11,7 +13,6 @@ import com.example.WalletProject.models.Entity.Transaction;
 import com.example.WalletProject.models.Entity.TransactionAccount;
 import com.example.WalletProject.models.Entity.TransactionType;
 import com.example.WalletProject.repositories.*;
-import jakarta.persistence.EntityNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,9 +43,9 @@ public class TransactionService {
         this.currencyService = currencyService;
     }
 
-
     @Transactional(readOnly = true)
     public List<TransactionShortDto> getAllByAccountId(Long accountId) {
+        if (accountId == null) throw new RuntimeException("Exception: accountId can not be null");
         return transactionRepository.findAllByAccountId(accountId)
                 .stream()
                 .map(entity -> modelMapper.map(entity, TransactionShortDto.class))
@@ -54,59 +55,55 @@ public class TransactionService {
     @Transactional(readOnly = true)
     public TransactionDto getOneTransactionById(Long accountId, Long transactionId) {
         Transaction transaction = transactionRepository.findById(transactionId)
-                .orElseThrow(() -> new EntityNotFoundException("Transaction not found"));
+                .orElseThrow(() -> new TransactionNotFoundException("Transaction with id" + transactionId + " not found"));
 
         accountRepository.findById(accountId)
-                .orElseThrow(() -> new EntityNotFoundException("Account not found"));
+                .orElseThrow(() -> new AccountNotFoundException("Account with id " + accountId + " not found"));
 
         transactionAccountRepository
                 .findByTransactionIdAndAccountId(transactionId, accountId)
-                .orElseThrow(() -> new EntityNotFoundException("This transaction does not belongs to current account"));
+                .orElseThrow(() -> new TransactionNotFoundException("This transaction does not belongs to current account"));
 
         return modelMapper.map(transaction, TransactionDto.class);
     }
 
     @Transactional
-    public TransactionDto saveNewTransactionInRepo(Long clientIdFrom, TransactionRequestDto transactionRequestDto) throws IOException {
+    public TransactionDto saveNewTransactionInRepo(Long clientIdFrom, TransactionRequestDto transactionRequestDto) {
         Account account1 = accountRepository.findById(clientIdFrom)
-                .orElseThrow(() -> new EntityNotFoundException("Account not found"));
+                .orElseThrow(() -> new AccountNotFoundException("Account not found"));
         Account account2 = accountRepository.findById(transactionRequestDto.getAccountIdTo())
-                .orElseThrow(() -> new EntityNotFoundException("Account not found"));
+                .orElseThrow(() -> new AccountNotFoundException("Account not found"));
         TransactionType transactionType = transactionTypeRepository.findTransactionTypeByType(transactionRequestDto.getTypeName())
-                .orElseThrow(() -> new EntityNotFoundException("Type " + transactionRequestDto.getTypeName() + " does not exist"));
+                .orElseThrow(() -> new TransactionNotFoundException("Type " + transactionRequestDto.getTypeName() + " does not exist"));
         Long transactionValue = transactionRequestDto.getValue().longValue();
+
+        if (account1.getValue() < transactionValue || transactionValue < 0)
+            throw new RuntimeException("Operation closed, transfer sum cannot be negative or you have not enough money");
+
+        account1.setValue(account1.getValue() - transactionValue);
+        accountRepository.save(account1);
+
+        var transaction = createNewTransaction(transactionValue, transactionRequestDto.getMessage(), transactionType, new Date());
+
+        createTransactionAccount(account1, true, transaction);
+        createTransactionAccount(account2, false, transaction);
 
         Rate rateForFirstAccount = foundRateForCurrency(account1);
         Rate rateForSecondAccount = foundRateForCurrency(account2);
-
-        if (account1.getValue() < transactionValue) {
-            throw new RuntimeException("Operation closed, you have not enough money");
-        } else {
-            account1.setValue(account1.getValue() - transactionValue);
-            accountRepository.save(account1);
-        }
-
-        Transaction savedTransaction = createNewTransaction(
-                transactionValue, transactionRequestDto.getMessage()
-                , transactionType
-                , new Date());
-
-        createTransactionAccount(account1, true, savedTransaction);
-        createTransactionAccount(account2, false, savedTransaction);
-
-        account2.setValue(account2.getValue() + currencyService.exchangeValue(
-                transactionValue
+        account2.setValue(account2.getValue() + currencyService.exchangeValue(transactionValue
                 , rateForFirstAccount
                 , rateForSecondAccount).longValue());
         accountRepository.save(account2);
 
-        savedTransaction.setFinishDateTime(new Date());
-        savedTransaction.setStatus(true);
-        return modelMapper.map(updateTransactionInRepo(savedTransaction), TransactionDto.class);
+        return modelMapper.map(updateTransactionInRepo(transaction), TransactionDto.class);
     }
 
     private Transaction updateTransactionInRepo(Transaction transaction) {
-        return transactionRepository.save(transaction);
+        Transaction transaction1 = transactionRepository.findById(transaction.getId())
+                .orElseThrow(() -> new TransactionNotFoundException("Transaction not found"));
+        transaction1.setStatus(true);
+        transaction1.setFinishDateTime(new Date());
+        return transactionRepository.save(transaction1);
     }
 
     private Transaction createNewTransaction(Long value, String message, TransactionType transactionType, Date date) {
@@ -128,19 +125,25 @@ public class TransactionService {
         return transactionAccount;
     }
 
-    private Rate foundRateForCurrency(Account account) throws IOException {
-        if (currencyRepository.findById(account.getCurrency().getId()).get().getName().compareTo("BYN") == 0) {
-            return new Rate(1, "BYN", 1, "Беларусский Рубль", new BigDecimal(1));
-        } else {
-            return CurrencyRate.showRate(currencyRepository.findById(account.
-                    getCurrency().getId()).orElseThrow().getIdFromApi());
+    private Rate foundRateForCurrency(Account account) {
+        try {
+            if (account.getCurrency().getName().equalsIgnoreCase("byn")) {
+                return new Rate(1, "BYN", 1, "Беларусский Рубль", new BigDecimal(1));
+            } else {
+                return CurrencyRate.showRate(currencyRepository.findById(account.
+                        getCurrency().getId()).orElseThrow().getIdFromApi());
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("Rate did not found");
         }
     }
 
+    @Transactional(readOnly = true)
     public List<TransactionTypeDto> getAllTransactionTypesFromRepo() {
-        return transactionTypeRepository.findAll()
-                .stream()
+        return transactionTypeRepository.findAll().stream()
                 .map(e -> modelMapper.map(e, TransactionTypeDto.class))
                 .toList();
     }
+
+
 }

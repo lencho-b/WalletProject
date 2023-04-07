@@ -1,6 +1,8 @@
 package com.example.WalletProject.models.DTO.account;
 
-// дто должен быть валидирован
+import com.example.WalletProject.models.DTO.CurrencyNameDto;
+
+
 public class AccountDto {
 
     private Long id;
@@ -8,8 +10,7 @@ public class AccountDto {
     private Boolean frozen;
     private String comment;
     private Long value;
-    private String currencyName;
-
+    private CurrencyNameDto currencyName;
 
     public Long getId() {
         return id;
@@ -23,20 +24,40 @@ public class AccountDto {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public Boolean getFrozen() {
         return frozen;
+    }
+
+    public void setFrozen(Boolean frozen) {
+        this.frozen = frozen;
     }
 
     public String getComment() {
         return comment;
     }
 
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
     public Long getValue() {
         return value;
     }
 
-    public String getCurrencyName() {
+    public void setValue(Long value) {
+        this.value = value;
+    }
+
+    public CurrencyNameDto getCurrencyName() {
         return currencyName;
+    }
+
+    public void setCurrencyName(CurrencyNameDto currencyName) {
+        this.currencyName = currencyName;
     }
 
     public AccountDto() {

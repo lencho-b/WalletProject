@@ -11,13 +11,12 @@ import java.time.LocalDate;
 
 public class DocumentDto {
 
-    @Pattern(regexp = "[a-z]{2}[0-9]{7}", flags = Pattern.Flag.CASE_INSENSITIVE, message = Messages.INVALID_DOCUMENT_NUMBER)
-    @NotNull(message = Messages.EMPTY_DOCUMENT_NUMBER)
+    @NotBlank(message = Messages.EMPTY_DOCUMENT_NUMBER)
     private  String documentNumber;
-    @NotBlank(message = Messages.EMPTY_ISSUE_DATE)
+
     @DateTimeFormat(pattern = "dd.MM.yyyy")
     private  LocalDate issueDate;
-    //меняем айди на название страны.
+
     @NotNull(message = Messages.EMPTY_COUNTRY_NAME)
     private CountryDto country;
 
