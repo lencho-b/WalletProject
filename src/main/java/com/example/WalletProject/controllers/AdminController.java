@@ -31,13 +31,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class AdminController {
     private final ClientService clientService;
     private final CountryService countryService;
-    private final CurrencyService currencyService;
     private final ModelMapper modelMapper;
 
-    public AdminController(ClientService clientService, CountryService countryService, CurrencyService currencyService, ModelMapper modelMapper) {
+    public AdminController(ClientService clientService, CountryService countryService, ModelMapper modelMapper) {
         this.clientService = clientService;
         this.countryService = countryService;
-        this.currencyService = currencyService;
         this.modelMapper = modelMapper;
     }
 
@@ -72,7 +70,6 @@ public class AdminController {
     @GetMapping("/country")
     public FullCountryInfoDto showCountry(@RequestParam String country) {
         return countryService.findByName(country);
-
     }
 
     @DeleteMapping("/country")
@@ -89,6 +86,4 @@ public class AdminController {
     public void createCountry(@RequestBody @Valid FullCountryInfoDto country) {
         countryService.saveOrUpdate(country);
     }
-
-
 }

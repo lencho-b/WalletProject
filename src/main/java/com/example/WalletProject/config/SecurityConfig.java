@@ -22,7 +22,7 @@ public class SecurityConfig {
         httpSecurity
                 .csrf().disable()
                 .authorizeHttpRequests(urlConfig -> urlConfig
-                        .requestMatchers("/registration").permitAll()
+                        .requestMatchers("/auth/registration").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/client/**", "/swagger-ui/**").hasAnyRole("ADMIN", "USER")
                         .anyRequest().authenticated())
