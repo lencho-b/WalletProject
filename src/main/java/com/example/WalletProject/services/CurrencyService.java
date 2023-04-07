@@ -26,7 +26,7 @@ public class CurrencyService
                 anyMatch(rates -> rates.getIdFromApi().compareTo(rate.getCur_ID())==0)).toList();
     }
 
-    public BigDecimal exchangeValue(Long transactionValue, Rate firstRate,Rate secondRate) throws IOException {
+    public BigDecimal exchangeValue(Long transactionValue, Rate firstRate,Rate secondRate) {
      return new BigDecimal(transactionValue)
              .multiply(firstRate.getCur_OfficialRate())
              .divide(new BigDecimal(firstRate.getCur_Scale()),RoundingMode.HALF_UP)

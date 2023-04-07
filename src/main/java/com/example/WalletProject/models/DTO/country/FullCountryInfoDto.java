@@ -1,17 +1,19 @@
 package com.example.WalletProject.models.DTO.country;
 import com.example.WalletProject.Messages;
+import com.example.WalletProject.models.DTO.DocumentFormatDto;
+import com.example.WalletProject.models.Entity.DocumentFormat;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 
 public class FullCountryInfoDto {
     @NotBlank(message = Messages.EMPTY_COUNTRY_NAME)
-    @Pattern(regexp = "[a-zа-я]",message = Messages.INVALID_COUNTRY_NAME)
+    @Pattern(regexp = "^[а-яА-Я]+$",message = Messages.INVALID_COUNTRY_NAME)
     private String name;
     @NotBlank(message = Messages.EMPTY_PHONE_CODE)
-    @Pattern(regexp = "[0-9]",message = Messages.INVALID_PHONE_CODE)
     private String phoneCode;
-    @NotBlank(message = Messages.EMPTY_DOCUMENT_FORMAT)
-    private String documentFormat;
+    @NotNull(message = Messages.EMPTY_DOCUMENT_FORMAT)
+    private DocumentFormatDto documentFormat;
 
 
     public String getName() {
@@ -30,11 +32,11 @@ public class FullCountryInfoDto {
         this.phoneCode = phoneCode;
     }
 
-    public String getDocumentFormat() {
+    public DocumentFormatDto getDocumentFormat() {
         return documentFormat;
     }
 
-    public void setDocumentFormat(String documentFormat) {
+    public void setDocumentFormat(DocumentFormatDto documentFormat) {
         this.documentFormat = documentFormat;
     }
 }

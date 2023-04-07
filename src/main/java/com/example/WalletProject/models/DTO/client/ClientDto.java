@@ -81,4 +81,48 @@ public class ClientDto implements Serializable {
                 "isDelete = " + isDelete + ", " +
                 "isVerify = " + isVerify + ")";
     }
+
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
+    }
+
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
+    }
+
+    public void setPatronymic(String patronymic) {
+        this.patronymic = patronymic;
+    }
+
+    public void setDateOfBirth(LocalDate dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public void setCreatedAt(LocalDate createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public void setUpdatedAt(LocalDate updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public void setFrozen(boolean frozen) {
+        this.frozen = frozen;
+    }
+
+    public void setDelete(boolean delete) {
+        isDelete = delete;
+    }
+
+    public void setVerify(boolean verify) {
+        isVerify = verify;
+    }
 }

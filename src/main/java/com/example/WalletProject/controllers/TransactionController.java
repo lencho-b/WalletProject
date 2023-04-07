@@ -4,15 +4,14 @@ import com.example.WalletProject.models.DTO.transaction.TransactionDto;
 import com.example.WalletProject.models.DTO.transaction.TransactionRequestDto;
 import com.example.WalletProject.models.DTO.transaction.TransactionShortDto;
 import com.example.WalletProject.models.DTO.transaction.TransactionTypeDto;
-import com.example.WalletProject.models.Entity.Transaction;
 import com.example.WalletProject.services.TransactionService;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/{idAcc}/transaction")
+@RequestMapping("/{idAcc}/")
 public class TransactionController {
 
 
@@ -22,21 +21,20 @@ public class TransactionController {
         this.transactionService = transactionService;
     }
 
-    @GetMapping
+    @GetMapping("/transaction")
     public List<TransactionShortDto> getAllByAccountId(@PathVariable("idAcc") Long accountId) {
         return transactionService.getAllByAccountId(accountId);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/transaction/{id}")
     public TransactionDto getTransactionDtoForClientById(@PathVariable("idAcc") Long accountId,
                                                          @PathVariable("id") Long transactionId) {
         return transactionService.getOneTransactionById(accountId, transactionId);
     }
 
-    @PostMapping
+    @PostMapping("/transaction")
     public TransactionDto saveNewTransaction(@PathVariable("idAcc") Long accountIdFrom,
-                                          @RequestBody TransactionRequestDto transactionRequestDto) throws IOException {
-        //поменять на дто
+                                          @RequestBody TransactionRequestDto transactionRequestDto) {
         return transactionService.saveNewTransactionInRepo(accountIdFrom, transactionRequestDto);
     }
 
