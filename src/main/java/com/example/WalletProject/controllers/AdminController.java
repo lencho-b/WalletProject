@@ -73,7 +73,7 @@ public class AdminController {
     }
 
     @DeleteMapping("/country")
-    public void deleteCountry(@RequestBody String country) {
+    public void deleteCountry(@RequestParam String country) {
         countryService.deleteCountry(country);
     }
 
